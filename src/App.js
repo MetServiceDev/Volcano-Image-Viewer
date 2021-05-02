@@ -20,11 +20,7 @@ function App({classes}) {
 
   return (
     <Router>
-      <Route exact path='/'>
-        <div>
-          <VolcanoMap/>
-        </div>
-      </Route>
+      <Route exact path='/' component={VolcanoMap}/>
       <Route exact path='/:volcano' component={VolcanoOverview}/>
     </Router>
     

@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import VolcanoThumbnails from './VolcanoThumbnails';
 import { Volcanoes } from '../Volcanoes';
 import { withStyles } from '@material-ui/styles';
+import MetaTags from 'react-meta-tags';
 
 const styles = {
     root: {
@@ -20,6 +21,9 @@ const VolcanoOverview = ({classes}) => {
 
     return(
         <div className={classes.root}>
+            <MetaTags>
+                <title>{name}</title>
+            </MetaTags>
             <Typography variant='h3'>{name}</Typography>
             <div className={classes.imgContainer}>
                 <VolcanoThumbnails volcano={volcanoObject}/>

@@ -43,9 +43,9 @@ const styles = {
 const VolcanoMap = ({classes}) => {
     return (
         <div className={classes.root}>
-            {Volcanoes.map((volcano, index) => {
+            {Volcanoes.map(volcano => {
                 const name = volcano.name.replace(/_/g, ' ') 
-                return <Link className={classes.link} to={volcano.name} target='_blank' key={index}>
+                return <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
                             <Paper className={classes.div} elevation={3}>
                                 <div className={classes.header}>
                                     <Typography variant='h4' className={classes.nameText}>{name}</Typography>
