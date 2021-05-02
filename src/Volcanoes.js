@@ -17,11 +17,13 @@ export const Volcanoes = [
     },
     {
         name: 'Ngauruhoe',
-        code: 'NG'
+        code: 'NG',
+        relatedVolcanoes: ['NGRU']
     },
     {
         name: 'Ngauruhoe_Ruapehu',
-        code: 'NGRU'
+        code: 'NGRU',
+        relatedVolcanoes: ['NG']
     },
     {
         name:'Raoul',
@@ -29,11 +31,13 @@ export const Volcanoes = [
     },
     {
         name: 'Ruapehu_N',
-        code: 'RUN'
+        code: 'RUN',
+        relatedVolcanoes: ['RUS']
     },
     {
         name: 'Ruapehu_S',
-        code: 'RUS'
+        code: 'RUS',
+        relatedVolcanoes: ['RUN']
     },
     {
         name: 'Taranaki',
@@ -41,27 +45,33 @@ export const Volcanoes = [
     },
     {
         name: 'Tongariro',
-        code: 'TNG'
+        code: 'TNG',
+        relatedVolcanoes: ['TMC']
     },
     {
         name: 'Tongariro_TMC',
-        code: 'TMC'
+        code: 'TMC',
+        relatedVolcanoes: ['TNG']
     },
     {
         name: 'White_Island',
-        code: 'WI'
+        code: 'WI',
+        relatedVolcanoes: ['WICF', 'WICR', 'WIWR']
     },
     {
         name: 'White_Island_CF',
-        code: 'WICF'
+        code: 'WICF',
+        relatedVolcanoes: ['WI', 'WICR', 'WIWR']
     },
     {
         name: 'White_Island_CR',
-        code: 'WICR'
+        code: 'WICR',
+        relatedVolcanoes: ['WI', 'WICF', 'WIWR']
     },
     {
         name: 'White_Island_WR',
-        code: 'WIWR'
+        code: 'WIWR',
+        relatedVolcanoes: ['WI', 'WICF', 'WICR']
     },
     {
         name: 'Yasur',
