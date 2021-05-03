@@ -1,4 +1,3 @@
-import { Volcanoes } from '../Volcanoes';
 import { Link } from 'react-router-dom';
 import VolcanoThumbnails from './VolcanoThumbnails';
 import { withStyles } from '@material-ui/styles';
@@ -10,7 +9,6 @@ const styles = {
     root: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        width:'100%'
     },
     div: {
         margin:'10px',
@@ -40,22 +38,22 @@ const styles = {
     }
 }
 
-const VolcanoMap = ({classes}) => {
+const VolcanoMap = ({classes, volcanoes}) => {
     return (
         <div className={classes.root}>
-            {Volcanoes.map(volcano => {
-                const name = volcano.name.replace(/_/g, ' ') 
-                return <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
-                            <Paper className={classes.div} elevation={3}>
-                                <div className={classes.header}>
-                                    <Typography variant='h4' className={classes.nameText}>{name}</Typography>
-                                    <OpenInNewIcon className={classes.icon}/>
-                                </div>
-                                <VolcanoThumbnails volcano={volcano}/>
-                            </Paper>
-                        </Link>
-            })}
-        </div>
+                {volcanoes.map(volcano => {
+                    const name = volcano.name.replace(/_/g, ' ') 
+                    return <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code} name='volcano-item'>
+                                <Paper className={classes.div} elevation={3}>
+                                    <div className={classes.header}>
+                                        <Typography variant='h4' className={classes.nameText} name='volcano-text'>{name}</Typography>
+                                        <OpenInNewIcon className={classes.icon}/>
+                                    </div>
+                                    <VolcanoThumbnails volcano={volcano}/>
+                                </Paper>
+                            </Link>
+                })}
+            </div>  
     )
 }
 

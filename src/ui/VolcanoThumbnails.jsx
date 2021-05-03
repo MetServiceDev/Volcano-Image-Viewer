@@ -20,7 +20,7 @@ const styles = {
     indexDisplay: {
         position:'absolute',
         top:'5%',
-        right: '10%',
+        right: '5%',
         backgroundColor: 'rgba(219, 219, 219, 0.5)',
         borderRadius: '5px',
         padding: '10px',
@@ -31,6 +31,10 @@ const styles = {
         position: 'relative',
         left:'40%',
         top:'5%'
+    },
+    thumbnailGrid: {
+        display:'grid',
+        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'
     }
 }
 
@@ -47,28 +51,27 @@ const VolcanoThumbnail = ({classes, volcano}) => {
             .catch((e) => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
     },[thumbnail, volcano.code, volcano.name]);
 
-    if(!isLoaded){
-        return <CircularProgress className={classes.loader} size={96}/>
-    }
+    if(!isLoaded){ return <CircularProgress className={classes.loader} size={96}/> }
 
     return(
         <div className={classes.root} onMouseLeave={()=>{toggleExpand(false)}}>
             {expand && <Typography className={classes.indexDisplay}>{`${thumbnail === '' ? '1' : thumbnail}/12`}</Typography>}
                 {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
-                <br/>
-                {!isError.val && expand && imgList.map((val, index) => {
-                    return(
-                        <Zoom in={expand} key={index}>
-                            <img          
-                                src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS${val}.jpg`} 
-                                alt={volcano.name} 
-                                width='8.3%'
-                                onMouseOver={()=>{setThumbnail(val)}}
-                                className={classes.root}
-                            />
-                        </Zoom>                  
-                    );
-                })}
+                <div className={classes.thumbnailGrid}>
+                    {!isError.val && expand && imgList.map((val, index) => {
+                        return(
+                            <Zoom in={expand} key={index}>
+                                <img          
+                                    src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS${val}.jpg`} 
+                                    alt={volcano.name} 
+                                    width='100%'
+                                    onMouseOver={()=>{setThumbnail(val)}}
+                                    className={classes.root}
+                                />
+                            </Zoom>                  
+                        );
+                    })}
+                </div>
         </div>    
     );
 };

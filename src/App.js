@@ -1,30 +1,30 @@
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import VolcanoMap from './ui/VolcanoMap';
-import VolcanoOverview from './ui/VolcanoOverview';
-import { withStyles } from '@material-ui/styles';
 import './App.css'
-
-const styles = {
-  root: {
-  },
-  volcanoMap: {
-   width:'100%',
-   position:'absolute',
-   left:'0%',
-   top:'10%'
-  }
-}
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import VolcanoOverview from './ui/VolcanoOverview';
+import Navbar from './ui//Navbar';
+import Sidebar from './ui/Sidebar';
+import { Volcanoes } from './Volcanoes';
+import LandingPage from './ui/LandingPage';
+import { useState } from 'react';
 
 
-function App({classes}) {
+function App() {
+
+  const [toggle, setToggle] = useState(true);
 
   return (
     <Router>
-      <Route exact path='/' component={VolcanoMap}/>
-      <Route exact path='/:volcano' component={VolcanoOverview}/>
+      <Route exact path='/'>
+        <Navbar 
+          volcanoes={[].concat(Volcanoes.map(volcano => { return volcano.name.replace(/_/g, ' '); }))}
+          showVAAC={()=>{setToggle(true)}} showSO2={()=>{setToggle(false)}}
+        />
+        <Sidebar/>
+        <LandingPage volcanoes={Volcanoes} toggle={toggle}/>
+      </Route>
+      <Route exact path='/:volcano' render={(props) => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
     </Router>
-    
   );
-}
+};
 
-export default withStyles(styles)(App);
+export default App;
