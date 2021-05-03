@@ -13,7 +13,9 @@ const styles = {
     content: {
         position: 'relative',
         top:'7%',
-        padding:'5px'
+        padding:'5px',
+        height: '100vh',
+        overflow: 'auto'
     },
 };
 

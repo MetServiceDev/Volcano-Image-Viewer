@@ -28,6 +28,9 @@ const styles = {
     link: {
         textDecoration: 'none',
         color: '#404040'
+    },
+    headerText: {
+        margin:'10px'
     }
 }
 
@@ -41,7 +44,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
             <MetaTags>
                 <title>{name}</title>
             </MetaTags>
-            <Typography variant='h3'>{name}</Typography>
+            <Typography variant='h3' className={classes.headerText}>{name}</Typography>
             <div className={classes.topSec}>
                 <div className={classes.imgContainer}>
                     <VolcanoThumbnails volcano={volcanoObject}/>

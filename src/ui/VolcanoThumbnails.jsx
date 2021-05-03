@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/styles';
 import Zoom  from '@material-ui/core/Zoom';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorMessage from './ErrorMessage';
 
 const styles = {
@@ -35,6 +35,15 @@ const styles = {
     thumbnailGrid: {
         display:'grid',
         gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'
+    },
+    loader: {
+        width: '100%',
+        bottom:'0%',
+        position: 'absolute'
+    },
+    loadingDiv: {
+        height:'24vh',
+        textAlign:'center'
     }
 }
 
@@ -51,7 +60,13 @@ const VolcanoThumbnail = ({classes, volcano}) => {
             .catch((e) => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
     },[thumbnail, volcano.code, volcano.name]);
 
-    if(!isLoaded){ return <CircularProgress className={classes.loader} size={96}/> }
+    if(!isLoaded){ 
+        return (
+            <div className={classes.loadingDiv}>
+                <LinearProgress className={classes.loader}/>
+            </div>
+        );
+    };
 
     return(
         <div className={classes.root} onMouseLeave={()=>{toggleExpand(false)}}>
