@@ -4,6 +4,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { withStyles } from '@material-ui/styles';
 import { filter } from '../FilterSearch';
 import MapToggle from './MapToggle';
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -47,6 +48,12 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
             />
         </div>
     );
+};
+
+Navbar.propTypes = {
+    classes: PropTypes.object.isRequired,
+    showVAAC: PropTypes.func.isRequired,
+    showSO2: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Navbar);

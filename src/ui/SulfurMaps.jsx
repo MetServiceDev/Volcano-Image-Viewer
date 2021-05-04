@@ -1,9 +1,9 @@
-import { sulfurMaps } from '../SulfurMaps';
 import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -39,7 +39,7 @@ const styles = {
     }
 }
 
-const SulfurMaps = ({classes}) => {
+const SulfurMaps = ({classes, sulfurMaps}) => {
     return (
         <div className={classes.root}>
             {sulfurMaps.map((so2, index) => { 
@@ -57,6 +57,10 @@ const SulfurMaps = ({classes}) => {
             })}
         </div>
     )
+};
+
+SulfurMaps.propTypes = {
+    classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(SulfurMaps);

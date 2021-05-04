@@ -5,22 +5,29 @@ import Navbar from './ui//Navbar';
 import Sidebar from './ui/Sidebar';
 import { Volcanoes } from './Volcanoes';
 import LandingPage from './ui/LandingPage';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { SulfurMaps } from './SulfurMaps';
 
 
 function App() {
 
   const [toggle, setToggle] = useState(true);
 
+  useEffect(() => {
+    setInterval(() => {
+      window.location.reload();
+    },60000*10);
+  },[]);
+
   return (
     <Router>
       <Route exact path='/'>
-        <Navbar 
-          volcanoes={[].concat(Volcanoes.map(volcano => { return volcano.name.replace(/_/g, ' '); }))}
-          showVAAC={()=>{setToggle(true)}} showSO2={()=>{setToggle(false)}}
+        <Navbar
+          showVAAC={()=>{setToggle(true)}}
+          showSO2={()=>{setToggle(false)}}
         />
         <Sidebar/>
-        <LandingPage volcanoes={Volcanoes} toggle={toggle}/>
+        <LandingPage volcanoes={Volcanoes} toggle={toggle} sulfurMaps={SulfurMaps}/>
       </Route>
       <Route exact path='/:volcano' render={(props) => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
     </Router>

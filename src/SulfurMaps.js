@@ -1,4 +1,4 @@
-export const sulfurMaps = [
+export const SulfurMaps = [
     {
         name: 'Vanuatu',
         img: 'https://satepsanone.nesdis.noaa.gov/pub/OMI/OMISO2/images/vanuatu.gif',

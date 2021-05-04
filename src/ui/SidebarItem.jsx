@@ -4,6 +4,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { useState } from 'react';
 import { withStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -51,13 +52,18 @@ const SidebarItem = ({classes, link}) => {
                 }
                 return (
                     <div style={style}>
-                        {li.map(item => {
-                            return <Link className={classes.link} to={{pathname: item.link}} target='_blank'><Typography variant='body2' >{item.name}</Typography></Link>
+                        {li.map((item, index) => {
+                            return <Link key={index} className={classes.link} to={{pathname: item.link}} target='_blank'><Typography variant='body2'>{item.name}</Typography></Link>
                         })}
                     </div>
             )})}
         </div>
     )
+};
+
+SidebarItem.propTypes = {
+    classes: PropTypes.object.isRequired,
+    link: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(SidebarItem);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/styles';
-import Zoom  from '@material-ui/core/Zoom';
+import Zoom from '@material-ui/core/Zoom';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -9,13 +9,6 @@ import ErrorMessage from './ErrorMessage';
 const styles = {
     root: {
         position:'relative',
-    },
-    overlay: {
-        position: 'absolute',
-        top: '20px',
-        left: '20px',
-        color: 'black',
-        backgroundColor: 'white'
     },
     indexDisplay: {
         position:'absolute',
@@ -26,15 +19,16 @@ const styles = {
         padding: '10px',
         fontSize: '22px'
     },
-    loader: {
-        padding:'10px',
-        position: 'relative',
-        left:'40%',
-        top:'5%'
-    },
     thumbnailGrid: {
         display:'grid',
         gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'
+    },
+    thumbnailImg: {
+        position:'relative',
+        opacity: '0.5',
+        '&:hover': {
+            opacity: '1'
+        },
     },
     loader: {
         width: '100%',
@@ -48,11 +42,11 @@ const styles = {
 }
 
 const VolcanoThumbnail = ({classes, volcano}) => {
-    const [thumbnail, setThumbnail] = useState('12')
-    const imgList = ['', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-    const [expand, toggleExpand] = useState(false)
-    const [isError, setError] = useState({val: false, msg: ''})
-    const [isLoaded, setLoading] = useState(false)
+    const [thumbnail, setThumbnail] = useState('12');
+    const imgList = ['', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+    const [expand, toggleExpand] = useState(false);
+    const [isError, setError] = useState({val: false, msg: ''});
+    const [isLoaded, setLoading] = useState(false);
 
     useEffect(() => {
         fetch(`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`)
@@ -70,24 +64,24 @@ const VolcanoThumbnail = ({classes, volcano}) => {
 
     return(
         <div className={classes.root} onMouseLeave={()=>{toggleExpand(false)}}>
-            {expand && <Typography className={classes.indexDisplay}>{`${thumbnail === '' ? '1' : thumbnail}/12`}</Typography>}
-                {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
-                <div className={classes.thumbnailGrid}>
-                    {!isError.val && expand && imgList.map((val, index) => {
-                        return(
-                            <Zoom in={expand} key={index}>
-                                <img          
-                                    src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS${val}.jpg`} 
-                                    alt={volcano.name} 
-                                    width='100%'
-                                    onMouseOver={()=>{setThumbnail(val)}}
-                                    className={classes.root}
-                                />
-                            </Zoom>                  
-                        );
-                    })}
-                </div>
-        </div>    
+            {expand && <Typography className={classes.indexDisplay}>{`${!!thumbnail ? thumbnail : '1'}/12`}</Typography>}
+            {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
+            <div className={classes.thumbnailGrid}>
+                {!isError.val && expand && imgList.map((val, index) => {
+                    return(
+                        <Zoom in={expand} key={index}>
+                            <img          
+                                src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS${val}.jpg`} 
+                                alt={volcano.name} 
+                                width='100%'
+                                onMouseOver={()=>{setThumbnail(val)}}
+                                className={classes.thumbnailImg}
+                            />
+                        </Zoom>         
+                    );
+                })}
+            </div>
+        </div>
     );
 };
 

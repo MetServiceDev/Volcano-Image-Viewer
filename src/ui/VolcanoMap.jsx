@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -42,11 +43,10 @@ const VolcanoMap = ({classes, volcanoes}) => {
     return (
         <div className={classes.root}>
                 {volcanoes.map(volcano => {
-                    const name = volcano.name.replace(/_/g, ' ') 
                     return <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code} name='volcano-item'>
                                 <Paper className={classes.div} elevation={3}>
                                     <div className={classes.header}>
-                                        <Typography variant='h4' className={classes.nameText} name='volcano-text'>{name}</Typography>
+                                        <Typography variant='h4' className={classes.nameText} name='volcano-text'>{volcano.displayName || volcano.name}</Typography>
                                         <OpenInNewIcon className={classes.icon}/>
                                     </div>
                                     <VolcanoThumbnails volcano={volcano}/>
@@ -55,6 +55,11 @@ const VolcanoMap = ({classes, volcanoes}) => {
                 })}
             </div>  
     )
-}
+};
+
+VolcanoMap.propTypes = {
+    classes: PropTypes.object.isRequired,
+    volcanoes: PropTypes.array.isRequired,
+};
 
 export default withStyles(styles)(VolcanoMap);

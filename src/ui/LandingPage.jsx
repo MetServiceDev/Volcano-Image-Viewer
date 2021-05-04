@@ -1,6 +1,8 @@
 import VolcanoMap from './VolcanoMap';
 import SulfurMaps from './SulfurMaps';
 import { withStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
+import LightningAlerts from './LightningAlerts';
 
 const styles = {
     root: {
@@ -12,12 +14,24 @@ const styles = {
     },
 }
 
-const LandingPage = ({classes, volcanoes, toggle}) => {
+const LandingPage = ({classes, volcanoes, toggle, sulfurMaps}) => {
     return (
         <div className={classes.root}>
-            {toggle ? <VolcanoMap volcanoes={volcanoes}/> : <SulfurMaps/>}
+            <LightningAlerts/>
+            {toggle ? <VolcanoMap volcanoes={volcanoes}/> : <SulfurMaps sulfurMaps={sulfurMaps}/>}
         </div>
     )
+};
+
+LandingPage.propTypes = {
+    classes: PropTypes.object.isRequired,
+    volcanoes: PropTypes.array.isRequired,
+    toggle: PropTypes.bool.isRequired,
+    sulfurMaps: PropTypes.array.isRequired,
+};
+
+LandingPage.defaultProps = {
+    toggle: true
 };
 
 export default withStyles(styles)(LandingPage)

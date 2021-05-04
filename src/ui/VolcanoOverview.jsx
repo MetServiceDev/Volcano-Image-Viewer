@@ -4,6 +4,8 @@ import VolcanoThumbnails from './VolcanoThumbnails';
 import { withStyles } from '@material-ui/styles';
 import MetaTags from 'react-meta-tags';
 import { Link } from 'react-router-dom';
+import Grow from '@material-ui/core/Grow';
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -35,10 +37,9 @@ const styles = {
 }
 
 const VolcanoOverview = ({classes, volcanoes}) => {
-    const { volcano } = useParams()
+    const { volcano } = useParams();
     const volcanoObject = volcanoes.find(v => v.name === volcano);
-    const name = volcanoObject.name.replace(/_/g, ' ');
-
+    const name = volcanoObject.displayName || volcanoObject.name
     return(
         <div className={classes.root}>
             <MetaTags>
@@ -52,18 +53,27 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                 {volcanoObject.drumLink && <img src={volcanoObject.drumLink} alt={volcanoObject.name} width='100%'/>}
             </div>
             <div className={classes.bottomSec}>
-                {volcanoObject.relatedVolcanoes && volcanoObject.relatedVolcanoes.map(vol => {
+                {volcanoObject.relatedVolcanoes && volcanoObject.relatedVolcanoes.map((vol, index) => {
                     const volcano = volcanoes.find(v => v.code === vol);
                     return (
-                        <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}><div>
-                            <img src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS12.jpg`} alt={volcano.name} width='50%'/>
-                            <Typography variant='h4'>{volcano.name.replace(/_/g, ' ')}</Typography>
-                        </div></Link>
+                        <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
+                            <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
+                                <div>
+                                    <img src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS12.jpg`} alt={volcano.name} width='50%'/>
+                                    <Typography variant='h4'>{volcano.displayName || volcano.name}</Typography>
+                                </div>
+                            </Grow>
+                        </Link>
                     )
                 })}
             </div>
         </div>
     );
+};
+
+VolcanoOverview.propTypes = {
+    classes: PropTypes.object.isRequired,
+    volcanoes: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(VolcanoOverview);

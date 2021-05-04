@@ -1,6 +1,7 @@
 import Typography from '@material-ui/core/Typography';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { withStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -20,6 +21,11 @@ const ErrorMessage = ({classes, msg}) => {
             <Typography>{msg}</Typography>
         </div>
     );
+};
+
+ErrorMessage.propTypes = {
+    classes: PropTypes.object.isRequired,
+    msg: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(ErrorMessage);

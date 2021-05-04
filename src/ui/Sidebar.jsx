@@ -1,6 +1,7 @@
 import { withStyles } from '@material-ui/styles';
 import { ExternalLinks } from '../ExternalLinks';
 import SidebarItem from './SidebarItem';
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -29,4 +30,8 @@ const Sidebar = ({classes}) => {
     );
 };
 
-export default withStyles(styles)(Sidebar)
+Sidebar.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(Sidebar);
