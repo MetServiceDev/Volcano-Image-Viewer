@@ -13,7 +13,7 @@ const styles = {
     },
     content: {
         position: 'relative',
-        top:'7%',
+        top:'9%',
         padding:'5px',
         height: '100vh',
         overflow: 'auto'
