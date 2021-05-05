@@ -22,6 +22,7 @@ const styles = {
     },
     menuIcon: {
         cursor: 'pointer',
+        verticalAlign: 'middle',
         fontSize: '28px'
     },
 };

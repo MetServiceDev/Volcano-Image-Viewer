@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import PropTypes from 'prop-types';
+import { Fragment } from 'react';
 
 const styles = {
     root: {
@@ -39,27 +40,42 @@ const styles = {
     }
 }
 
-const VolcanoMap = ({classes, volcanoes}) => {
+const VolcanoMap = ({classes, volcanoes, showNZ, showVA}) => {
+
+    const renderVolcano = (volcano) => {
+        return (
+            <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code} name='volcano-item'>
+                <Paper className={classes.div} elevation={3}>
+                    <div className={classes.header}>
+                        <Typography variant='h4' className={classes.nameText} name='volcano-text'>{volcano.displayName || volcano.name}</Typography>
+                        <OpenInNewIcon className={classes.icon}/>
+                    </div>
+                    <VolcanoThumbnails volcano={volcano}/>
+                </Paper>
+            </Link>
+        );
+    };
+
     return (
         <div className={classes.root}>
                 {volcanoes.map(volcano => {
-                    return <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code} name='volcano-item'>
-                                <Paper className={classes.div} elevation={3}>
-                                    <div className={classes.header}>
-                                        <Typography variant='h4' className={classes.nameText} name='volcano-text'>{volcano.displayName || volcano.name}</Typography>
-                                        <OpenInNewIcon className={classes.icon}/>
-                                    </div>
-                                    <VolcanoThumbnails volcano={volcano}/>
-                                </Paper>
-                            </Link>
+                    return(
+                        <Fragment>
+                            {volcano.location === 'Vanuatu' && showVA && renderVolcano(volcano)}
+                            {volcano.location === 'NZ' && showNZ && renderVolcano(volcano)}
+                        </Fragment>
+                    )
+                    
                 })}
-            </div>  
-    )
+            </div>
+    );
 };
 
 VolcanoMap.propTypes = {
     classes: PropTypes.object.isRequired,
     volcanoes: PropTypes.array.isRequired,
+    showNZ: PropTypes.bool.isRequired,
+    showVA: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(VolcanoMap);

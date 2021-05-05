@@ -10,7 +10,9 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Switch from '@material-ui/core/Switch';
+import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 const styles = {
     root: {
@@ -29,22 +31,31 @@ const styles = {
     },
     toggleButton: {
         position: 'relative',
-        left:'90%',
+        left:'85%',
         backgroundColor: 'white'
     },
     filterButton: {
         position: 'relative',
-        left:'91%',
+        left:'86%',
         color: '#404040',
         display:'inline',
         verticalAlign: 'middle',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        borderRadius: '100%'
     },
     filterMenu: {
         width:'10%',
         position:'fixed',
-        left:'90%',
+        left:'87%',
         top:'4%',
+    },
+    menuItem: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+    },
+    switch: {
+        position:'absolute',
+        left:'70%'
     }
 };
 
@@ -55,11 +66,11 @@ const Navbar = ({classes, showVAAC, showSO2, showNZ, showVA, toggleNZ, toggleVA}
     return (
         <div className={classes.root}>
             <span className={classes.toggleButton}><MapToggle showVAAC={showVAAC} showSO2={showSO2}/></span>
-            <FilterListIcon className={classes.filterButton} onClick={()=>{toggleFilter(!showFilter)}}/>
+            <ButtonBase className={classes.filterButton}><FilterListIcon onClick={()=>{toggleFilter(!showFilter)}}/></ButtonBase>
             {showFilter && <Paper className={classes.filterMenu}>
                 <MenuList>
-                    <MenuItem>New Zealand <Switch checked={showNZ} onChange={toggleNZ}/></MenuItem>
-                    <MenuItem>Vanuatu <Switch checked={showVA} onChange={toggleVA}/></MenuItem>
+                    <MenuItem className={classes.menuItem}><Typography>New Zealand</Typography><Switch className={classes.switch} checked={showNZ} onChange={toggleNZ} color="primary"/></MenuItem>
+                    <MenuItem className={classes.menuItem}><Typography>Vanuatu</Typography><Switch className={classes.switch} checked={showVA} onChange={toggleVA} color="primary"/></MenuItem>
                 </MenuList>
             </Paper>}
             <TextField
@@ -84,6 +95,10 @@ Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
     showVAAC: PropTypes.func.isRequired,
     showSO2: PropTypes.func.isRequired,
+    showNZ: PropTypes.bool.isRequired,
+    showVA: PropTypes.bool.isRequired,
+    toggleNZ: PropTypes.func.isRequired,
+    toggleVA: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Navbar);

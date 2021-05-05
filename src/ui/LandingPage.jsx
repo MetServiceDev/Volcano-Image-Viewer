@@ -14,16 +14,16 @@ const styles = {
     },
 }
 
-const LandingPage = ({classes, volcanoes, toggle, sulfurMaps, expand}) => {
+const LandingPage = ({classes, volcanoes, toggle, sulfurMaps, expand, showNZ, showVA}) => {
     const style = {
         width: `${expand ? '98':'85'}%`
-    }
+    };
     return (
         <div className={classes.root} style={style}>
             <LightningAlerts/>
-            {toggle ? <VolcanoMap volcanoes={volcanoes}/> : <SulfurMaps sulfurMaps={sulfurMaps}/>}
+            {toggle ? <VolcanoMap volcanoes={volcanoes} showNZ={showNZ} showVA={showVA}/> : <SulfurMaps sulfurMaps={sulfurMaps}/>}
         </div>
-    )
+    );
 };
 
 LandingPage.propTypes = {
@@ -32,6 +32,8 @@ LandingPage.propTypes = {
     toggle: PropTypes.bool.isRequired,
     sulfurMaps: PropTypes.array.isRequired,
     expand: PropTypes.bool.isRequired,
+    showNZ: PropTypes.bool.isRequired,
+    showVA: PropTypes.bool.isRequired,
 };
 
 LandingPage.defaultProps = {

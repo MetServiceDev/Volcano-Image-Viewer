@@ -16,6 +16,7 @@ export const Volcanoes = [
     {
         name: 'Erebus',
         code:'ERB',
+        location:'NZ'
     },
     {
         name: 'Lopevi',
