@@ -3,13 +3,15 @@ export const Volcanoes = [
         name:'Ambrym',
         code:'AMB1',
         drumLink: 'https://www.vmgd.gov.vu/vmgdMedia/geoHazard/drumplots/AMB1_drumplot.jpg',
-        relatedVolcanoes: ['LVVL', 'LPV', 'YASH']
+        relatedVolcanoes: ['LVVL', 'LPV', 'YASH'],
+        location:'Vanuatu'
     },
     {
         name: 'Aoba',
         code: 'LVVL',
         drumLink: 'https://www.vmgd.gov.vu/vmgdMedia/geoHazard/drumplots/ABNG_drumplot.jpg',
-        relatedVolcanoes: ['AMB1', 'LPV', 'YASH']
+        relatedVolcanoes: ['AMB1', 'LPV', 'YASH'],
+        location:'Vanuatu'
     },
     {
         name: 'Erebus',
@@ -19,50 +21,58 @@ export const Volcanoes = [
         name: 'Lopevi',
         code: 'LPV',
         drumLink: 'https://www.vmgd.gov.vu/vmgdMedia/geoHazard/drumplots/LPV_drumplot.png',
-        relatedVolcanoes: ['AMB1', 'LVVL', 'YASH']
+        relatedVolcanoes: ['AMB1', 'LVVL', 'YASH'],
+        location:'Vanuatu'
     },
     {
         name: 'Ngauruhoe',
         code: 'NG',
-        relatedVolcanoes: ['NGRU'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/otvz-seismic-drum.png',
+        relatedVolcanoes: ['NGRU', 'RUN', 'RUS'],
+        location:'NZ'
     },
     {
         name: 'Ngauruhoe_Ruapehu',
         displayName: 'Ngauruhoe Ruapehu',
         code: 'NGRU',
-        relatedVolcanoes: ['NG'],
+        relatedVolcanoes: ['NG', 'RUN', 'RUS'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/otvz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name:'Raoul',
         code: 'RI',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/riz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'Ruapehu_N',
         displayName: 'Ruapehu North',
         code: 'RUN',
-        relatedVolcanoes: ['RUS'],
+        relatedVolcanoes: ['NGRU', 'NG', 'RUS'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wnvz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'Ruapehu_S',
         displayName: 'Ruapehu South',
         code: 'RUS',
-        relatedVolcanoes: ['RUN'],
+        relatedVolcanoes: ['NGRU', 'NG', 'RUN'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wnvz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'Taranaki',
         code: 'TKI',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/pke-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'Tongariro',
         code: 'TNG',
         relatedVolcanoes: ['TMC'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/tmvz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'Tongariro_TMC',
@@ -70,6 +80,7 @@ export const Volcanoes = [
         code: 'TMC',
         relatedVolcanoes: ['TNG'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/tmvz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'White_Island',
@@ -77,6 +88,7 @@ export const Volcanoes = [
         code: 'WI',
         relatedVolcanoes: ['WICF', 'WICR', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'White_Island_CF',
@@ -84,6 +96,7 @@ export const Volcanoes = [
         code: 'WICF',
         relatedVolcanoes: ['WI', 'WICR', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'White_Island_CR',
@@ -91,6 +104,7 @@ export const Volcanoes = [
         code: 'WICR',
         relatedVolcanoes: ['WI', 'WICF', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'White_Island_WR',
@@ -98,11 +112,13 @@ export const Volcanoes = [
         code: 'WIWR',
         relatedVolcanoes: ['WI', 'WICF', 'WICR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
+        location:'NZ'
     },
     {
         name: 'Yasur',
         code: 'YASH',
         drumLink: 'https://www.vmgd.gov.vu/vmgdMedia/geoHazard/drumplots/YASH_drumplot.jpg',
-        relatedVolcanoes: ['AMB1', 'LVVL', 'LPV']
+        relatedVolcanoes: ['AMB1', 'LVVL', 'LPV'],
+        location:'Vanuatu'
     }
 ];

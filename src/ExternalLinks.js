@@ -143,14 +143,84 @@ export const ExternalLinks = [
         title: 'VAAC Loopy Favourites',
         li: [
             [
-                
-            ]
+                {name: 'Vanuatu'}
+            ],
+            [
+                {
+                    name: 'True Color',
+                    link: 'http://10.100.21.161:4000/VAAC/Vanuatu/Vanuatu True-colour10min.LPY'
+                },
+                {
+                    name: 'Ash',
+                    link: 'http://10.100.21.161:4000/VAAC/Vanuatu/Vanuatu Ash 10min - EU.LPY'
+                },
+                {
+                    name: 'Dust',
+                    link: 'http://10.100.21.161:4000/VAAC/Vanuatu/Vanuatu Dust 10min.LPY'
+                }
+            ],
+            [
+                {name: 'Tonga'}
+            ],
+            [
+                {
+                    name: 'True Color',
+                    link: 'http://10.100.21.161:4000/VAAC/Tonga/Tonga True-Colour 10min.LPY'
+                },
+                {
+                    name: 'Ash',
+                    link: 'http://10.100.21.161:4000/VAAC/Tonga/Tonga Ash 10min - EU.LPY'
+                },
+                {
+                    name: 'Dust',
+                    link: 'http://10.100.21.161:4000/VAAC/Tonga/Tonga Dust 10min.LPY'
+                }
+            ],
+            [
+                {name: 'Tropics'}
+            ],
+            [
+                {
+                    name: 'True Color',
+                    link: 'http://10.100.21.161:4000/VAAC/Tropics True Colour 10min.LPY'
+                },
+                {
+                    name: 'Ash',
+                    link: 'http://10.100.21.161:4000/VAAC/Tropics Ash 10min - EU.LPY'
+                },
+                {
+                    name: 'Dust',
+                    link: 'http://10.100.21.161:4000/VAAC/Tropics Dust 10min.LPY'
+                }
+            ],
+            [
+                {name: 'NZ/Tasman'}
+            ],
+            [
+                {
+                    name: 'True Color',
+                    link: 'http://10.100.21.161:4000/RGB/NZ True-Colour 10min .LPY'
+                },
+                {
+                    name: 'Ash',
+                    link: 'http://10.100.21.161:4000/VAAC/NWPTAS Ash RGB 10min.LPY'
+                },
+                {
+                    name: 'Dust',
+                    link: 'http://10.100.21.161:4000/VAAC/NWPTAS Dust 10min.LPY'
+                }
+            ],
         ]
     },
     {
         title: 'Google Earth',
         li: [
-        
+            [
+                {
+                    name: 'WWLLN Data',
+                    link: 'http://10.100.21.161:4000/WWLLN.kmz'
+                }
+            ]
         ]
     }
 ]

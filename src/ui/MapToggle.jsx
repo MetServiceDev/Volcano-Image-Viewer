@@ -7,8 +7,12 @@ import PropTypes from 'prop-types';
 
 const styles = {
     root: {
-        backgroundColor: '#f0f0f0'
+        backgroundColor: '#f0f0f0',
+        verticalAlign: 'middle',
     },
+    button:{
+        height:'4vh'
+    }
   }
 
 const MapToggle = ({classes, showVAAC, showSO2}) => {
@@ -20,8 +24,8 @@ const MapToggle = ({classes, showVAAC, showSO2}) => {
 
     return (
         <ToggleButtonGroup className={classes.root} value={alignment} exclusive onChange={handleAlignment}>
-            <ToggleButton onClick={showVAAC} value="left" aria-label="left aligned"><DashboardIcon/></ToggleButton>
-            <ToggleButton onClick={showSO2} value="right" aria-label="right aligned">So2</ToggleButton>
+            <ToggleButton onClick={showVAAC} value="left" aria-label="left aligned" className={classes.button}><DashboardIcon/></ToggleButton>
+            <ToggleButton onClick={showSO2} value="right" aria-label="right aligned" className={classes.button}>So2</ToggleButton>
         </ToggleButtonGroup>
     );
 };

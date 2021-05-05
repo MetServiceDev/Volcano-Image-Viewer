@@ -41,7 +41,7 @@ const SidebarItem = ({classes, link}) => {
         <div className={classes.root}>
             {expand ? <ArrowDropDownIcon className={classes.expandButton} onClick={toggle}/> : <ArrowRightIcon className={classes.expandButton} onClick={toggle}/>}
             <Typography className={classes.textHeader}>{link.title}</Typography>
-            {expand && link.li && link.li.map(li => {
+            {expand && link.li && link.li.map((li, index) => {
                 const style = {
                     display: 'grid',
                     gridTemplateColumns: `repeat(${li.length}, 1fr)`,
@@ -51,9 +51,10 @@ const SidebarItem = ({classes, link}) => {
                     textAlign: 'left'
                 }
                 return (
-                    <div style={style}>
-                        {li.map((item, index) => {
-                            return <Link key={index} className={classes.link} to={{pathname: item.link}} target='_blank'><Typography variant='body2'>{item.name}</Typography></Link>
+                    <div style={style} key={index}>
+                        {li.map((item, index) => {return item.link ? 
+                            <Link key={index} className={classes.link} to={{pathname: item.link}} target='_blank'><Typography variant='body2'>{item.name}</Typography></Link> : 
+                            <Typography variant='body1' style={{fontWeight:'bold'}}>{item.name}</Typography>
                         })}
                     </div>
             )})}

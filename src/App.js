@@ -12,6 +12,10 @@ import { SulfurMaps } from './SulfurMaps';
 function App() {
 
   const [toggle, setToggle] = useState(true);
+  const [showSidebar, toggleSidebar]= useState(true)
+
+  const [showNZ, filterNZ] = useState(true)
+  const [showVA, filterVA] = useState(true)
 
   useEffect(() => {
     setInterval(() => {
@@ -25,9 +29,13 @@ function App() {
         <Navbar
           showVAAC={()=>{setToggle(true)}}
           showSO2={()=>{setToggle(false)}}
+          showNZ={showNZ}
+          showVA={showVA}
+          toggleNZ={()=>{filterNZ(!showNZ)}}
+          toggleVA={()=>{filterVA(!showVA)}}
         />
-        <Sidebar/>
-        <LandingPage volcanoes={Volcanoes} toggle={toggle} sulfurMaps={SulfurMaps}/>
+        <Sidebar showMenu={showSidebar} toggle={()=>{toggleSidebar(!showSidebar)}}/>
+        <LandingPage volcanoes={Volcanoes} toggle={toggle} sulfurMaps={SulfurMaps} expand={!showSidebar}/>
       </Route>
       <Route exact path='/:volcano' render={(props) => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
     </Router>

@@ -32,9 +32,15 @@ const styles = {
         color: '#404040'
     },
     headerText: {
-        margin:'10px'
-    }
-}
+        margin:'20px'
+    },
+    relatedVolcanoes: {
+        transition: '0.5s',
+        '&:hover':{
+            boxShadow: '4px 4px 8px #404040'
+        }
+    },
+};
 
 const VolcanoOverview = ({classes, volcanoes}) => {
     const { volcano } = useParams();
@@ -59,7 +65,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                         <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
                             <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
                                 <div>
-                                    <img src={`http://10.100.21.161:4000/${volcano.name}/${volcano.code}_PICS12.jpg`} alt={volcano.name} width='50%'/>
+                                    <img src={`http://10.100.21.161:4000/Volcano/${volcano.name}/${volcano.code}_PICS12.jpg`} alt={volcano.name} width='50%' className={classes.relatedVolcanoes}/>
                                     <Typography variant='h4'>{volcano.displayName || volcano.name}</Typography>
                                 </div>
                             </Grow>

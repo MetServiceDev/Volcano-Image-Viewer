@@ -5,6 +5,12 @@ import { withStyles } from '@material-ui/styles';
 import { filter } from '../FilterSearch';
 import MapToggle from './MapToggle';
 import PropTypes from 'prop-types';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import Switch from '@material-ui/core/Switch';
+import { useState } from 'react';
 
 const styles = {
     root: {
@@ -26,12 +32,36 @@ const styles = {
         left:'90%',
         backgroundColor: 'white'
     },
+    filterButton: {
+        position: 'relative',
+        left:'91%',
+        color: '#404040',
+        display:'inline',
+        verticalAlign: 'middle',
+        cursor: 'pointer'
+    },
+    filterMenu: {
+        width:'10%',
+        position:'fixed',
+        left:'90%',
+        top:'4%',
+    }
 };
 
-const Navbar = ({classes, showVAAC, showSO2}) => {
+const Navbar = ({classes, showVAAC, showSO2, showNZ, showVA, toggleNZ, toggleVA}) => {
+
+    const [showFilter, toggleFilter] = useState(false)
+
     return (
         <div className={classes.root}>
             <span className={classes.toggleButton}><MapToggle showVAAC={showVAAC} showSO2={showSO2}/></span>
+            <FilterListIcon className={classes.filterButton} onClick={()=>{toggleFilter(!showFilter)}}/>
+            {showFilter && <Paper className={classes.filterMenu}>
+                <MenuList>
+                    <MenuItem>New Zealand <Switch checked={showNZ} onChange={toggleNZ}/></MenuItem>
+                    <MenuItem>Vanuatu <Switch checked={showVA} onChange={toggleVA}/></MenuItem>
+                </MenuList>
+            </Paper>}
             <TextField
                 label="Search"
                 size='small'
