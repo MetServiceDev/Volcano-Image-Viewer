@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorMessage from './ErrorMessage';
+import endpoint from '../ServerEndpoint';
 
 const styles = {
     root: {
@@ -49,7 +50,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     const [isLoaded, setLoading] = useState(false);
 
     useEffect(() => {
-       fetch(`http://10.100.21.161:4000/Volcano/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`)
+       fetch(`${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`)
             .then(() => { setLoading(true); return; })
             .catch((e) => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
     },[thumbnail, volcano.code, volcano.name]);
@@ -65,13 +66,13 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     return(
         <div className={classes.root} onMouseLeave={()=>{toggleExpand(false)}}>
             {expand && <Typography className={classes.indexDisplay}>{`${!!thumbnail ? thumbnail : '1'}/12`}</Typography>}
-            {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={`http://10.100.21.161:4000/Volcano/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
+            {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={`${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
             <div className={classes.thumbnailGrid}>
                 {!isError.val && expand && imgList.map((val, index) => {
                     return(
                         <Zoom in={expand} key={index}>
                             <img          
-                                src={`http://10.100.21.161:4000/Volcano/${volcano.name}/${volcano.code}_PICS${val}.jpg`} 
+                                src={`${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${val}.jpg`} 
                                 alt={volcano.name} 
                                 width='100%'
                                 onMouseOver={()=>{setThumbnail(val)}}

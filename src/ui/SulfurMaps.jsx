@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const styles = {
     root: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: '1fr 1fr 1fr',
         cursor: 'pointer'
     },
     header: {

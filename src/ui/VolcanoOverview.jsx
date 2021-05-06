@@ -6,6 +6,7 @@ import MetaTags from 'react-meta-tags';
 import { Link } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import PropTypes from 'prop-types';
+import endpoint from '../ServerEndpoint';
 
 const styles = {
     root: {
@@ -65,7 +66,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                         <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
                             <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
                                 <div>
-                                    <img src={`http://10.100.21.161:4000/Volcano/${volcano.name}/${volcano.code}_PICS12.jpg`} alt={volcano.name} width='50%' className={classes.relatedVolcanoes}/>
+                                    <img src={`${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS12.jpg`} alt={volcano.name} width='50%' className={classes.relatedVolcanoes}/>
                                     <Typography variant='h4'>{volcano.displayName || volcano.name}</Typography>
                                 </div>
                             </Grow>

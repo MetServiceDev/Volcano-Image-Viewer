@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import VolcanoOverview from './ui/VolcanoOverview';
 import Navbar from './ui//Navbar';
@@ -7,15 +7,13 @@ import { Volcanoes } from './Volcanoes';
 import LandingPage from './ui/LandingPage';
 import { useState, useEffect } from 'react';
 import { SulfurMaps } from './SulfurMaps';
+import { Provider } from 'react-redux';
+import {store} from './redux';
 
 
 function App() {
 
   const [toggle, setToggle] = useState(true);
-  const [showSidebar, toggleSidebar]= useState(true);
-
-  const [showNZ, filterNZ] = useState(true);
-  const [showVA, filterVA] = useState(true);
 
   useEffect(() => {
     setInterval(() => {
@@ -29,17 +27,21 @@ function App() {
         <Navbar
           showVAAC={()=>{setToggle(true)}}
           showSO2={()=>{setToggle(false)}}
-          showNZ={showNZ}
-          showVA={showVA}
-          toggleNZ={()=>{filterNZ(!showNZ)}}
-          toggleVA={()=>{filterVA(!showVA)}}
         />
-        <Sidebar showMenu={showSidebar} toggle={()=>{toggleSidebar(!showSidebar)}}/>
-        <LandingPage volcanoes={Volcanoes} toggle={toggle} sulfurMaps={SulfurMaps} expand={!showSidebar} showNZ={showNZ} showVA={showVA}/>
+        <Sidebar/>
+        <LandingPage volcanoes={Volcanoes} toggle={toggle} sulfurMaps={SulfurMaps}/>
       </Route>
-      <Route exact path='/:volcano' render={(props) => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
+      <Route exact path='/:volcano' render={props => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
     </Router>
   );
 };
 
-export default App;
+const Wrapper = () => {
+  return(
+    <Provider store={store}>
+      <App/>
+    </Provider>
+  );
+};
+
+export default Wrapper;

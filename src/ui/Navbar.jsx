@@ -13,6 +13,9 @@ import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import { useDispatch, useSelector  } from 'react-redux';
+import { handleGridDisplay, handleNZFilter, handleVAFilter } from '../redux/actions';
+import Select from '@material-ui/core/Select';
 
 const styles = {
     root: {
@@ -31,12 +34,12 @@ const styles = {
     },
     toggleButton: {
         position: 'relative',
-        left:'85%',
+        left:'2%',
         backgroundColor: 'white'
     },
     filterButton: {
         position: 'relative',
-        left:'86%',
+        left:'72%',
         color: '#404040',
         display:'inline',
         verticalAlign: 'middle',
@@ -46,8 +49,9 @@ const styles = {
     filterMenu: {
         width:'10%',
         position:'fixed',
-        left:'87%',
+        left:'72%',
         top:'4%',
+        zIndex: 5,
     },
     menuItem: {
         display: 'grid',
@@ -56,12 +60,28 @@ const styles = {
     switch: {
         position:'absolute',
         left:'70%'
-    }
+    },
+    selectRows: {
+        height: '4vh',
+        padding:'0px',
+        position:'absolute',
+        left:'10%',
+        fontSize: '16px',
+        outline: 'white',
+        backgroundColor: 'white'
+    },
 };
 
-const Navbar = ({classes, showVAAC, showSO2, showNZ, showVA, toggleNZ, toggleVA}) => {
+const Navbar = ({classes, showVAAC, showSO2}) => {
+    const dispatch = useDispatch();
 
-    const [showFilter, toggleFilter] = useState(false)
+    const [showFilter, toggleFilter] = useState(false);
+    const setGridDisplay = size => dispatch(handleGridDisplay(size));
+    const toggleNZ = val => dispatch(handleNZFilter(val));
+    const toggleVA = val => dispatch(handleVAFilter(val));
+    const gridDisplay = useSelector(state => state.gridDisplay);
+    const showNZ = useSelector(state => state.showNZ);
+    const showVA = useSelector(state => state.showVA);
 
     return (
         <div className={classes.root}>
@@ -69,10 +89,13 @@ const Navbar = ({classes, showVAAC, showSO2, showNZ, showVA, toggleNZ, toggleVA}
             <ButtonBase className={classes.filterButton}><FilterListIcon onClick={()=>{toggleFilter(!showFilter)}}/></ButtonBase>
             {showFilter && <Paper className={classes.filterMenu}>
                 <MenuList>
-                    <MenuItem className={classes.menuItem}><Typography>New Zealand</Typography><Switch className={classes.switch} checked={showNZ} onChange={toggleNZ} color="primary"/></MenuItem>
-                    <MenuItem className={classes.menuItem}><Typography>Vanuatu</Typography><Switch className={classes.switch} checked={showVA} onChange={toggleVA} color="primary"/></MenuItem>
+                    <MenuItem className={classes.menuItem}><Typography>New Zealand</Typography><Switch className={classes.switch} checked={showNZ} onChange={()=>{toggleNZ(!showNZ)}} color="primary"/></MenuItem>
+                    <MenuItem className={classes.menuItem}><Typography>Vanuatu</Typography><Switch className={classes.switch} checked={showVA} onChange={()=>{toggleVA(!showVA)}} color="primary"/></MenuItem>
                 </MenuList>
             </Paper>}
+            <Select variant="outlined" value={gridDisplay} onChange={(e)=>{setGridDisplay(Number(e.target.value))}} className={classes.selectRows}>
+                {[2, 4, 6].map(n => { return <option key={n} value={n} style={{cursor:'pointer'}}>{`View ${n} per row`}</option>})}
+            </Select>
             <TextField
                 label="Search"
                 size='small'
@@ -95,10 +118,6 @@ Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
     showVAAC: PropTypes.func.isRequired,
     showSO2: PropTypes.func.isRequired,
-    showNZ: PropTypes.bool.isRequired,
-    showVA: PropTypes.bool.isRequired,
-    toggleNZ: PropTypes.func.isRequired,
-    toggleVA: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Navbar);

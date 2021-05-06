@@ -1,15 +1,16 @@
 import Alert from '@material-ui/lab/Alert';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import ReplayIcon from '@material-ui/icons/Replay';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = {
     root: {
-        width:'99%',
-        marginLeft:'10px'
+        width:'100%',
+        marginLeft:'2px',
+        marginBottom: '10px'
     },
     alert: {
         boxShadow: '1px 1px 2px #404040',
@@ -39,38 +40,38 @@ const LightningAlerts = ({classes}) => {
         fetch(`http://10.100.21.161:4000/${route}`)
             .then(res => res.json())
             .then(data => {
-                const { alertCheck, innerCheck, alertNames, innerNames } = data;
+                const { alertCheck, innerCheck, alertNames, innerNames, areas } = data;
                 if(alertCheck === 0 && innerCheck === 0){
                     setAlerts({severity: 'success', msg: 'No current lightning alerts for possible eruptions'});
                 } else if(alertCheck > 0 && innerCheck > 0){
-                    setAlerts({severity: 'error', msg: `Possible eruption at ${alertNames.map(name => {return `${name}`})} --- Lightning also reported within 20km of ${innerNames.map(name => {return `${name}`})}`});
+                    setAlerts({severity: 'error', msg: `${areas}: Possible eruption at ${alertNames.map(name => {return `${name}`})} --- ${data.twentyKStrikes} lightning strikes also reported within 20km of ${innerNames.map(name => {return `${name}`})}`});
                 } else if(alertCheck > 0 && innerCheck === 0){
-                    setAlerts({severity: 'warning', msg: `Lightning data indicates possible eruption happening at ${alertNames.map(name => {return `${name}`})}  --- Please check latest imagery!`});
+                    setAlerts({severity: 'warning', msg: `${areas}: Lightning data indicates possible eruption happening at ${alertNames.map(name => {return `${name}`})}  --- Please check latest imagery!`});
                 } else if(alertCheck === 0 && innerCheck > 0){
-                    setAlerts({severity: 'warning', msg: `Lightning data shows strikes within 20km of ${innerNames.map(name => {return `${name}`})}  Please check latest imagery.`});
+                    setAlerts({severity: 'warning', msg: `${areas}: Lightning data shows ${data.twentyKStrikes} strikes within 20km and ${data.hundredKStrikes} strikes within 100km of ${innerNames.map(name => {return `${name}`})}  Please check latest imagery.`});
                 };
                 setLoaded(true);
             }).catch(() => { setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'}); setLoaded(true); })  
     }
 
-    useEffect(() => { fetchData('lightning-data') },[])
+    useEffect(() => { fetchData('lightning-data') },[]);
 
     if(!loaded){
         return (
-            <Fragment>
+            <div className={classes.root}>
                 <CircularProgress size={24} className={classes.loader}/>
                 <Typography className={classes.text}>Loading lightning data, please wait...</Typography>
-            </Fragment>
-        )
-    }
+            </div>
+        );
+    };
 
     return (
-       <Fragment>
+       <div>
            {loaded && 
             <div className={classes.root}>
                 <Alert className={classes.alert} severity={alerts.severity} action={<ReplayIcon onClick={()=>{fetchData('poll-lightning-data')}} className={classes.reload}/>}>{alerts.msg}</Alert>
             </div>}
-       </Fragment>
+       </div>
     );
 };
 

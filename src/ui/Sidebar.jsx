@@ -4,6 +4,8 @@ import SidebarItem from './SidebarItem';
 import PropTypes from 'prop-types';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleSidebar } from '../redux/actions';
 
 const styles = {
     root: {
@@ -27,14 +29,17 @@ const styles = {
     },
 };
 
-const Sidebar = ({classes, showMenu, toggle}) => {
+const Sidebar = ({classes}) => {
+    const dispatch = useDispatch()
+    const showMenu = useSelector(state => state.expandSidebar)
+    const toggle = val => dispatch(handleSidebar(val))
     const style = {
         width: `${showMenu ? '15':'2'}%`
     };
     return (
         <div className={classes.root} style={style}>
             <div className={classes.content}>
-                {showMenu ? <MenuOpenIcon className={classes.menuIcon} onClick={toggle}/> : <MenuIcon className={classes.menuIcon} onClick={toggle}/>}
+                {showMenu ? <MenuOpenIcon className={classes.menuIcon} onClick={()=>{toggle(!showMenu)}}/> : <MenuIcon className={classes.menuIcon} onClick={()=>{toggle(!showMenu)}}/>}
                 {showMenu && ExternalLinks.map((link, index) => {return <SidebarItem link={link} key={index}/>})}
             </div>
         </div>
@@ -43,8 +48,6 @@ const Sidebar = ({classes, showMenu, toggle}) => {
 
 Sidebar.propTypes = {
     classes: PropTypes.object.isRequired,
-    showMenu: PropTypes.bool.isRequired,
-    toggle: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Sidebar);

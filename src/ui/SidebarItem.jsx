@@ -54,7 +54,7 @@ const SidebarItem = ({classes, link}) => {
                     <div style={style} key={index}>
                         {li.map((item, index) => {return item.link ? 
                             <Link key={index} className={classes.link} to={{pathname: item.link}} target='_blank'><Typography variant='body2'>{item.name}</Typography></Link> : 
-                            <Typography variant='body1' style={{fontWeight:'bold'}}>{item.name}</Typography>
+                            <Typography variant='body1' key={index} style={{fontWeight:'bold'}}>{item.name}</Typography>
                         })}
                     </div>
             )})}

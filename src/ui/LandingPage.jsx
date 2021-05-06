@@ -3,10 +3,11 @@ import SulfurMaps from './SulfurMaps';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import LightningAlerts from './LightningAlerts';
+import { useSelector } from 'react-redux';
 
 const styles = {
     root: {
-        marginTop:'80px',
+        marginTop:'70px',
         cursor: 'pointer',
         position:'absolute',
         right: '0%',
@@ -14,14 +15,17 @@ const styles = {
     },
 }
 
-const LandingPage = ({classes, volcanoes, toggle, sulfurMaps, expand, showNZ, showVA}) => {
+const LandingPage = ({classes, volcanoes, toggle, sulfurMaps}) => {
+
+    const expand = useSelector((state) => state.expandSidebar)
+
     const style = {
-        width: `${expand ? '98':'85'}%`
+        width: `${!expand ? '98':'85'}%`
     };
     return (
         <div className={classes.root} style={style}>
             <LightningAlerts/>
-            {toggle ? <VolcanoMap volcanoes={volcanoes} showNZ={showNZ} showVA={showVA}/> : <SulfurMaps sulfurMaps={sulfurMaps}/>}
+            {toggle ? <VolcanoMap volcanoes={volcanoes}/> : <SulfurMaps sulfurMaps={sulfurMaps}/>}
         </div>
     );
 };
@@ -31,14 +35,10 @@ LandingPage.propTypes = {
     volcanoes: PropTypes.array.isRequired,
     toggle: PropTypes.bool.isRequired,
     sulfurMaps: PropTypes.array.isRequired,
-    expand: PropTypes.bool.isRequired,
-    showNZ: PropTypes.bool.isRequired,
-    showVA: PropTypes.bool.isRequired,
 };
 
 LandingPage.defaultProps = {
     toggle: true,
-    expand: false
 };
 
 export default withStyles(styles)(LandingPage)

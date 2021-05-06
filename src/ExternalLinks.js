@@ -1,3 +1,5 @@
+import endpoint from './ServerEndpoint';
+
 export const ExternalLinks = [
     {
         title: 'NOAA/CIMSS Observations',
@@ -148,15 +150,15 @@ export const ExternalLinks = [
             [
                 {
                     name: 'True Color',
-                    link: 'http://10.100.21.161:4000/VAAC/Vanuatu/Vanuatu True-colour10min.LPY'
+                    link: `${endpoint}/VAAC/Vanuatu/Vanuatu True-colour10min.LPY`
                 },
                 {
                     name: 'Ash',
-                    link: 'http://10.100.21.161:4000/VAAC/Vanuatu/Vanuatu Ash 10min - EU.LPY'
+                    link: `${endpoint}/VAAC/Vanuatu/Vanuatu Ash 10min - EU.LPY`
                 },
                 {
                     name: 'Dust',
-                    link: 'http://10.100.21.161:4000/VAAC/Vanuatu/Vanuatu Dust 10min.LPY'
+                    link: `${endpoint}/VAAC/Vanuatu/Vanuatu Dust 10min.LPY`
                 }
             ],
             [
@@ -165,15 +167,15 @@ export const ExternalLinks = [
             [
                 {
                     name: 'True Color',
-                    link: 'http://10.100.21.161:4000/VAAC/Tonga/Tonga True-Colour 10min.LPY'
+                    link: `${endpoint}/VAAC/Tonga/Tonga True-Colour 10min.LPY`
                 },
                 {
                     name: 'Ash',
-                    link: 'http://10.100.21.161:4000/VAAC/Tonga/Tonga Ash 10min - EU.LPY'
+                    link: `${endpoint}/VAAC/Tonga/Tonga Ash 10min - EU.LPY`
                 },
                 {
                     name: 'Dust',
-                    link: 'http://10.100.21.161:4000/VAAC/Tonga/Tonga Dust 10min.LPY'
+                    link: `${endpoint}/VAAC/Tonga/Tonga Dust 10min.LPY`
                 }
             ],
             [
@@ -182,15 +184,15 @@ export const ExternalLinks = [
             [
                 {
                     name: 'True Color',
-                    link: 'http://10.100.21.161:4000/VAAC/Tropics True Colour 10min.LPY'
+                    link: `${endpoint}/VAAC/Tropics True Colour 10min.LPY`
                 },
                 {
                     name: 'Ash',
-                    link: 'http://10.100.21.161:4000/VAAC/Tropics Ash 10min - EU.LPY'
+                    link: `${endpoint}/VAAC/Tropics Ash 10min - EU.LPY`
                 },
                 {
                     name: 'Dust',
-                    link: 'http://10.100.21.161:4000/VAAC/Tropics Dust 10min.LPY'
+                    link: `${endpoint}/VAAC/Tropics Dust 10min.LPY`
                 }
             ],
             [
@@ -199,15 +201,15 @@ export const ExternalLinks = [
             [
                 {
                     name: 'True Color',
-                    link: 'http://10.100.21.161:4000/RGB/NZ True-Colour 10min .LPY'
+                    link: `${endpoint}/RGB/NZ True-Colour 10min .LPY`
                 },
                 {
                     name: 'Ash',
-                    link: 'http://10.100.21.161:4000/VAAC/NWPTAS Ash RGB 10min.LPY'
+                    link: `${endpoint}/VAAC/NWPTAS Ash RGB 10min.LPY`
                 },
                 {
                     name: 'Dust',
-                    link: 'http://10.100.21.161:4000/VAAC/NWPTAS Dust 10min.LPY'
+                    link: `${endpoint}/VAAC/NWPTAS Dust 10min.LPY`
                 }
             ],
         ]
@@ -218,7 +220,7 @@ export const ExternalLinks = [
             [
                 {
                     name: 'WWLLN Data',
-                    link: 'http://10.100.21.161:4000/WWLLN.kmz'
+                    link: `${endpoint}/WWLLN.kmz`
                 }
             ]
         ]
