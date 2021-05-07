@@ -35,26 +35,27 @@ const LightningAlerts = ({classes}) => {
     const [alerts, setAlerts] = useState({severity:'success', msg: ''})
     const [loaded, setLoaded] = useState(false)
 
-    const fetchData = (route) => {
+    const fetchData = () => {
         setLoaded(false);
-        fetch(`http://10.100.21.161:4000/${route}`)
+        fetch(`https://io8flgqkmk.execute-api.ap-southeast-2.amazonaws.com/dev/lightning-data`)
             .then(res => res.json())
             .then(data => {
-                const { alertCheck, innerCheck, alertNames, innerNames, areas } = data;
+                const res = JSON.parse(data.responseBody)
+                const { alertCheck, innerCheck, alertNames, innerNames, areas, twentyKStrikes, hundredKStrikes } = res;
                 if(alertCheck === 0 && innerCheck === 0){
                     setAlerts({severity: 'success', msg: 'No current lightning alerts for possible eruptions'});
                 } else if(alertCheck > 0 && innerCheck > 0){
-                    setAlerts({severity: 'error', msg: `${areas}: Possible eruption at ${alertNames.map(name => {return `${name}`})} --- ${data.twentyKStrikes} lightning strikes also reported within 20km of ${innerNames.map(name => {return `${name}`})}`});
+                    setAlerts({severity: 'error', msg: `${areas}: Possible eruption at ${alertNames.map(name => {return `${name}`})} --- ${twentyKStrikes} lightning strikes also reported within 20km of ${innerNames.map(name => {return `${name}`})}`});
                 } else if(alertCheck > 0 && innerCheck === 0){
                     setAlerts({severity: 'warning', msg: `${areas}: Lightning data indicates possible eruption happening at ${alertNames.map(name => {return `${name}`})}  --- Please check latest imagery!`});
                 } else if(alertCheck === 0 && innerCheck > 0){
-                    setAlerts({severity: 'warning', msg: `${areas}: Lightning data shows ${data.twentyKStrikes} strikes within 20km and ${data.hundredKStrikes} strikes within 100km of ${innerNames.map(name => {return `${name}`})}  Please check latest imagery.`});
+                    setAlerts({severity: 'warning', msg: `${areas}: Lightning data shows ${twentyKStrikes} strikes within 20km and ${hundredKStrikes} strikes within 100km of ${innerNames.map(name => {return `${name}`})}  Please check latest imagery.`});
                 };
                 setLoaded(true);
             }).catch(() => { setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'}); setLoaded(true); })  
     }
 
-    useEffect(() => { fetchData('lightning-data') },[]);
+    useEffect(() => { fetchData() },[]);
 
     if(!loaded){
         return (
@@ -69,7 +70,7 @@ const LightningAlerts = ({classes}) => {
        <div>
            {loaded && 
             <div className={classes.root}>
-                <Alert className={classes.alert} severity={alerts.severity} action={<ReplayIcon onClick={()=>{fetchData('poll-lightning-data')}} className={classes.reload}/>}>{alerts.msg}</Alert>
+                <Alert className={classes.alert} severity={alerts.severity} action={<ReplayIcon onClick={fetchData} className={classes.reload}/>}>{alerts.msg}</Alert>
             </div>}
        </div>
     );
