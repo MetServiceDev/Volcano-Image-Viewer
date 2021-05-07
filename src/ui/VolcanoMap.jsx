@@ -42,20 +42,22 @@ const styles = {
 
 const VolcanoMap = ({classes, volcanoes}) => {
 
-    const gridDisplay = useSelector(state => state.gridDisplay)
-    const showNZ = useSelector(state => state.showNZ)
-    const showVA = useSelector(state => state.showVA)
+    const gridDisplay = useSelector(state => state.gridDisplay);
+    const showNZ = useSelector(state => state.showNZ);
+    const showVA = useSelector(state => state.showVA);
+    const showCNI = useSelector(state => state.showCNI);
+    const showWI = useSelector(state => state.showWI);
 
-    const style = {
+    const gridLayout = {
         gridTemplateColumns: `repeat(${gridDisplay}, 1fr)`,
-    }
+    };
 
-    const fontSize = gridDisplay === 6 ? '20px' : '28px'
+    const fontSize = gridDisplay === 6 ? '20px' : '28px';
 
-    const renderVolcano = (volcano) => {
+    const renderVolcano = volcano => {
         return (
             <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code} name='volcano-item'>
-                <Paper className={classes.div} elevation={3} >
+                <Paper className={classes.div} elevation={3}>
                     <div className={classes.header}>
                         <Typography variant='h4' className={classes.nameText} name='volcano-text' style={{fontSize:fontSize}}>{volcano.displayName || volcano.name}</Typography>
                         <OpenInNewIcon className={classes.icon} style={{fontSize:fontSize}}/>
@@ -67,12 +69,14 @@ const VolcanoMap = ({classes, volcanoes}) => {
     };
 
     return (
-        <div className={classes.root} style={style}>
+        <div className={classes.root} style={gridLayout}>
                 {volcanoes.map(volcano => {
                     return(
-                        <Fragment>
+                        <Fragment key={volcano.code}>
                             {volcano.location === 'Vanuatu' && showVA && renderVolcano(volcano)}
                             {volcano.location === 'NZ' && showNZ && renderVolcano(volcano)}
+                            {volcano.location === 'Central NI' && showCNI && renderVolcano(volcano)}
+                            {volcano.location === 'WI' && showWI && renderVolcano(volcano)}
                         </Fragment>
                     ); 
                 })}

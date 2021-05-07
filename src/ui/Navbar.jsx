@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector  } from 'react-redux';
-import { handleGridDisplay, handleNZFilter, handleVAFilter } from '../redux/actions';
+import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../redux/actions';
 import Select from '@material-ui/core/Select';
 
 const styles = {
@@ -79,9 +79,19 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
     const setGridDisplay = size => dispatch(handleGridDisplay(size));
     const toggleNZ = val => dispatch(handleNZFilter(val));
     const toggleVA = val => dispatch(handleVAFilter(val));
+    const toggleCNI = val => dispatch(handleCNIFilter(val));
+    const toggleWI = val => dispatch(handleWIFilter(val));
     const gridDisplay = useSelector(state => state.gridDisplay);
     const showNZ = useSelector(state => state.showNZ);
     const showVA = useSelector(state => state.showVA);
+    const showCNI = useSelector(state => state.showCNI);
+    const showWI = useSelector(state => state.showWI);
+
+    const setGrid = (e) => {
+        const size = Number(e.target.value);
+        setGridDisplay(size);
+        localStorage.setItem('gridSize', size);
+    }
 
     return (
         <div className={classes.root}>
@@ -91,9 +101,11 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
                 <MenuList>
                     <MenuItem className={classes.menuItem}><Typography>New Zealand</Typography><Switch className={classes.switch} checked={showNZ} onChange={()=>{toggleNZ(!showNZ)}} color="primary"/></MenuItem>
                     <MenuItem className={classes.menuItem}><Typography>Vanuatu</Typography><Switch className={classes.switch} checked={showVA} onChange={()=>{toggleVA(!showVA)}} color="primary"/></MenuItem>
+                    <MenuItem className={classes.menuItem}><Typography>Central NI</Typography><Switch className={classes.switch} checked={showCNI} onChange={()=>{toggleCNI(!showCNI)}} color="primary"/></MenuItem>
+                    <MenuItem className={classes.menuItem}><Typography>White Island</Typography><Switch className={classes.switch} checked={showWI} onChange={()=>{toggleWI(!showWI)}} color="primary"/></MenuItem>
                 </MenuList>
             </Paper>}
-            <Select variant="outlined" value={gridDisplay} onChange={(e)=>{setGridDisplay(Number(e.target.value))}} className={classes.selectRows}>
+            <Select variant="outlined" value={gridDisplay} onChange={(e)=>{setGrid(e)}} className={classes.selectRows}>
                 {[2, 4, 6].map(n => { return <option key={n} value={n} style={{cursor:'pointer'}}>{`View ${n} per row`}</option>})}
             </Select>
             <TextField

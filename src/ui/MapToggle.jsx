@@ -12,8 +12,8 @@ const styles = {
     },
     button:{
         height:'4vh'
-    }
-  }
+    },
+};
 
 const MapToggle = ({classes, showVAAC, showSO2}) => {
     const [alignment, setAlignment] = useState('left');

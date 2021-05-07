@@ -8,6 +8,8 @@ const initialState = {
   gridDisplay:4,
   showNZ: true,
   showVA: true,
+  showCNI: true,
+  showWI: true,
   expandSidebar: true
 };
 
@@ -36,6 +38,16 @@ function reducer(state, action) {
             ...state,
             showVA: action.payload
         }
+    case 'SET_CNI_FILTER':
+        return {
+            ...state,
+            showCNI: action.payload
+        }
+    case 'SET_WI_FILTER':
+        return {
+            ...state,
+            showWI: action.payload
+        } 
     case 'EXPAND_SIDEBAR':
         return {
             ...state,

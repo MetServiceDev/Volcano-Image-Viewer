@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import PropTypes from 'prop-types';
 import endpoint from '../ServerEndpoint';
+import HomeIcon from '@material-ui/icons/Home';
+import Button from '@material-ui/core/Button';
 
 const styles = {
     root: {
@@ -32,8 +34,17 @@ const styles = {
         textDecoration: 'none',
         color: '#404040'
     },
+    headerDiv: {
+        margin:'20px',
+    },
+    homeIcon: {
+        borderRadius: '5px',
+        border: '1px solid #404040',
+        marginRight:'10px'
+    },
     headerText: {
-        margin:'20px'
+        display:'inline',
+        verticalAlign:'middle'
     },
     relatedVolcanoes: {
         transition: '0.5s',
@@ -52,7 +63,10 @@ const VolcanoOverview = ({classes, volcanoes}) => {
             <MetaTags>
                 <title>{name}</title>
             </MetaTags>
-            <Typography variant='h3' className={classes.headerText}>{name}</Typography>
+            <div className={classes.headerDiv}>
+                <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'36px'}}/></Button></Link>
+                <Typography variant='h3' className={classes.headerText}>{name}</Typography>
+            </div>
             <div className={classes.topSec}>
                 <div className={classes.imgContainer}>
                     <VolcanoThumbnails volcano={volcanoObject}/>

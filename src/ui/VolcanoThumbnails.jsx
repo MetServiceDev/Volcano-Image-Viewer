@@ -22,7 +22,9 @@ const styles = {
     },
     thumbnailGrid: {
         display:'grid',
-        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'
+        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+        position:'absolute',
+        bottom:'0%'
     },
     thumbnailImg: {
         position:'relative',
@@ -71,6 +73,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
                 {!isError.val && expand && imgList.map((val, index) => {
                     return(
                         <Zoom in={expand} key={index}>
+                            <div style={{backgroundColor:'white', width:'100%'}}>
                             <img          
                                 src={`${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${val}.jpg`} 
                                 alt={volcano.name} 
@@ -78,6 +81,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
                                 onMouseOver={()=>{setThumbnail(val)}}
                                 className={classes.thumbnailImg}
                             />
+                            </div>
                         </Zoom>         
                     );
                 })}

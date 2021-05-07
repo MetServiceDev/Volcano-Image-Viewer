@@ -9,21 +9,35 @@ import { useState, useEffect } from 'react';
 import { SulfurMaps } from './SulfurMaps';
 import { Provider } from 'react-redux';
 import {store} from './redux';
-
+import MetaTags from 'react-meta-tags';
+import { useDispatch } from 'react-redux';
+import { handleSidebar, handleGridDisplay } from './redux/actions';
 
 function App() {
 
   const [toggle, setToggle] = useState(true);
+  const dispatch = useDispatch()
+  const setSidebar = val => dispatch(handleSidebar(val))
+  const setGridDisplay = size => dispatch(handleGridDisplay(size));
 
   useEffect(() => {
+    const expandSidebar = localStorage.getItem('expandSidebar');
+    const gridSize = localStorage.getItem('gridSize');
+    if(expandSidebar){
+      setSidebar(JSON.parse(expandSidebar.toLowerCase()));
+    };
+    if(gridSize){
+      setGridDisplay(Number(gridSize));
+    };
     setInterval(() => {
       window.location.reload();
     },60000*10);
-  },[]);
+  });
 
   return (
     <Router>
       <Route exact path='/'>
+        <MetaTags><title>Volcano Webcam Monitor</title></MetaTags>
         <Navbar
           showVAAC={()=>{setToggle(true)}}
           showSO2={()=>{setToggle(false)}}

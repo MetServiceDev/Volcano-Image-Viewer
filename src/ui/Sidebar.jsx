@@ -36,10 +36,16 @@ const Sidebar = ({classes}) => {
     const style = {
         width: `${showMenu ? '15':'2'}%`
     };
+
+    const setSidebar = _ => {
+        toggle(!showMenu);
+        localStorage.setItem('expandSidebar', !showMenu);
+    }
+
     return (
         <div className={classes.root} style={style}>
             <div className={classes.content}>
-                {showMenu ? <MenuOpenIcon className={classes.menuIcon} onClick={()=>{toggle(!showMenu)}}/> : <MenuIcon className={classes.menuIcon} onClick={()=>{toggle(!showMenu)}}/>}
+                {showMenu ? <MenuOpenIcon className={classes.menuIcon} onClick={setSidebar}/> : <MenuIcon className={classes.menuIcon} onClick={setSidebar}/>}
                 {showMenu && ExternalLinks.map((link, index) => {return <SidebarItem link={link} key={index}/>})}
             </div>
         </div>
