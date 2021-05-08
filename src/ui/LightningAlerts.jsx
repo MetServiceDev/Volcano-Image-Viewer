@@ -37,7 +37,11 @@ const LightningAlerts = ({classes}) => {
 
     const fetchData = () => {
         setLoaded(false);
-        fetch(`https://io8flgqkmk.execute-api.ap-southeast-2.amazonaws.com/dev/lightning-data`)
+        fetch(`https://io8flgqkmk.execute-api.ap-southeast-2.amazonaws.com/dev/lightning-data`, {
+            headers: {
+                'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq'
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 const res = JSON.parse(data.responseBody)
