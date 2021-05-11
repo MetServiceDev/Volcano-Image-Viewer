@@ -31,7 +31,7 @@ export const Volcanoes = [
         name: 'Taranaki',
         code: 'TKI',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/pke-seismic-drum.png',
-        location:'NZ'
+        location:'NZ',
     },
     {
         name: 'Ngauruhoe',

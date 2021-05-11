@@ -27,3 +27,8 @@ export const handleSidebar = bool => ({
     type: 'EXPAND_SIDEBAR',
     payload: bool
 })
+
+export const handleTimestamps = array => ({
+    type: 'SET_TIMESTAMPS',
+    payload: array
+})

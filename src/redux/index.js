@@ -10,7 +10,8 @@ const initialState = {
   showVA: true,
   showCNI: true,
   showWI: true,
-  expandSidebar: true
+  expandSidebar: true,
+  timestamps: []
 };
 
 export const store = createStore(
@@ -52,6 +53,11 @@ function reducer(state, action) {
         return {
             ...state,
             expandSidebar: action.payload
+        }
+    case 'SET_TIMESTAMPS':
+        return {
+            ...state,
+            timestamps: action.payload
         }
     default:
       return state;
