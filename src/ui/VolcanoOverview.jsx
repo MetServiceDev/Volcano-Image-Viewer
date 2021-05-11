@@ -6,7 +6,7 @@ import MetaTags from 'react-meta-tags';
 import { Link } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import PropTypes from 'prop-types';
-import { endpoint } from '../ServerEndpoint';
+import { endpoint, s3Endpoint } from '../ServerEndpoint';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
 
@@ -76,11 +76,13 @@ const VolcanoOverview = ({classes, volcanoes}) => {
             <div className={classes.bottomSec}>
                 {volcanoObject.relatedVolcanoes && volcanoObject.relatedVolcanoes.map((vol, index) => {
                     const volcano = volcanoes.find(v => v.code === vol);
+                    const s3Tag = volcano.s3Link || ''
+                    const src = volcano.location === 'Vanuatu' || volcano.code === 'ERB' ? `${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS12.jpg` : `${s3Endpoint}/${s3Tag}/${s3Tag}-12.jpg`
                     return (
                         <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
                             <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
                                 <div>
-                                    <img src={`${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS12.jpg`} alt={volcano.name} width='50%' className={classes.relatedVolcanoes}/>
+                                    <img src={src} alt={volcano.name} width='50%' className={classes.relatedVolcanoes}/>
                                     <Typography variant='h4'>{volcano.displayName || volcano.name}</Typography>
                                 </div>
                             </Grow>

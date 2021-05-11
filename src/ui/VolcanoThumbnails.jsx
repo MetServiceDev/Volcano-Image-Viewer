@@ -54,14 +54,12 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     const [isError, setError] = useState({val: false, msg: ''});
     const [isLoaded, setLoading] = useState(false);
 
-    const s3Tag = volcano.displayName ? volcano.displayName.toLowerCase().replace(/ /g, '') : volcano.name.toLowerCase();
-    const src = volcano.location === 'Vanuatu' ? `${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg` : `${s3Endpoint}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`
+    const s3Tag = volcano.s3Link || ''
+    const src = volcano.location === 'Vanuatu' || volcano.code === 'ERB' ? `${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg` : `${s3Endpoint}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`
 
     useEffect(() => {
-       fetch(`${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg`)
-            .then(() => { setLoading(true); return; })
-            .catch(e => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
-    },[thumbnail, volcano.code, volcano.name]);
+       fetch(src, { mode: 'no-cors' }).then(() => { setLoading(true); return; }).catch(e => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
+    },[thumbnail, volcano.code, volcano.name, src]);
 
     if(!isLoaded){
         return (

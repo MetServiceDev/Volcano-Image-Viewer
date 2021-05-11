@@ -47,7 +47,7 @@ const styles = {
         borderRadius: '100%'
     },
     filterMenu: {
-        width:'10%',
+        width:'15%',
         position:'fixed',
         left:'72%',
         top:'4%',
@@ -99,8 +99,8 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
             <ButtonBase className={classes.filterButton}><FilterListIcon onClick={()=>{toggleFilter(!showFilter)}}/></ButtonBase>
             {showFilter && <Paper className={classes.filterMenu}>
                 <MenuList>
-                    <MenuItem className={classes.menuItem}><Typography>New Zealand</Typography><Switch className={classes.switch} checked={showNZ} onChange={()=>{toggleNZ(!showNZ)}} color="primary"/></MenuItem>
                     <MenuItem className={classes.menuItem}><Typography>Vanuatu</Typography><Switch className={classes.switch} checked={showVA} onChange={()=>{toggleVA(!showVA)}} color="primary"/></MenuItem>
+                    <MenuItem className={classes.menuItem}><Typography>New Zealand</Typography><Switch className={classes.switch} checked={showNZ} onChange={()=>{toggleNZ(!showNZ)}} color="primary"/></MenuItem>
                     <MenuItem className={classes.menuItem}><Typography>Central NI</Typography><Switch className={classes.switch} checked={showCNI} onChange={()=>{toggleCNI(!showCNI)}} color="primary"/></MenuItem>
                     <MenuItem className={classes.menuItem}><Typography>White Island</Typography><Switch className={classes.switch} checked={showWI} onChange={()=>{toggleWI(!showWI)}} color="primary"/></MenuItem>
                 </MenuList>

@@ -39,6 +39,7 @@ function App() {
       .then(data => {
         setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
       })
+  // eslint-disable-next-line
   },[]);
 
   return (

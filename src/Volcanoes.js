@@ -32,13 +32,15 @@ export const Volcanoes = [
         code: 'TKI',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/pke-seismic-drum.png',
         location:'NZ',
+        s3Link: 'taranaki'
     },
     {
         name: 'Ngauruhoe',
         code: 'NG',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/otvz-seismic-drum.png',
         relatedVolcanoes: ['NGRU', 'RUN', 'RUS'],
-        location:'Central NI'
+        location:'Central NI',
+        s3Link: 'ngauruhoe'
     },
     {
         name: 'Ngauruhoe_Ruapehu',
@@ -46,7 +48,8 @@ export const Volcanoes = [
         code: 'NGRU',
         relatedVolcanoes: ['NG', 'RUN', 'RUS'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/otvz-seismic-drum.png',
-        location:'Central NI'
+        location:'Central NI',
+        s3Link: 'ruapehungauruhoe'
     },
     {
         name: 'Ruapehu_N',
@@ -54,7 +57,8 @@ export const Volcanoes = [
         code: 'RUN',
         relatedVolcanoes: ['NGRU', 'NG', 'RUS'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wnvz-seismic-drum.png',
-        location:'Central NI'
+        location:'Central NI',
+        s3Link: 'ruapehunorth'
     },
     {
         name: 'Ruapehu_S',
@@ -62,14 +66,16 @@ export const Volcanoes = [
         code: 'RUS',
         relatedVolcanoes: ['NGRU', 'NG', 'RUN'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wnvz-seismic-drum.png',
-        location:'Central NI'
+        location:'Central NI',
+        s3Link: 'ruapehusouth'
     },
     {
         name: 'Tongariro',
         code: 'TNG',
         relatedVolcanoes: ['TMC'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/tmvz-seismic-drum.png',
-        location:'Central NI'
+        location:'Central NI',
+        s3Link: 'tongariro'
     },
     {
         name: 'Tongariro_TMC',
@@ -77,7 +83,8 @@ export const Volcanoes = [
         code: 'TMC',
         relatedVolcanoes: ['TNG'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/tmvz-seismic-drum.png',
-        location:'Central NI'
+        location:'Central NI',
+        s3Link: 'tongarirotemaaricrater'
     },
     {
         name: 'White_Island',
@@ -85,7 +92,8 @@ export const Volcanoes = [
         code: 'WI',
         relatedVolcanoes: ['WICF', 'WICR', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
-        location:'WI'
+        location:'WI',
+        s3Link: 'whakatane'
     },
     {
         name: 'White_Island_CF',
@@ -93,7 +101,8 @@ export const Volcanoes = [
         code: 'WICF',
         relatedVolcanoes: ['WI', 'WICR', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
-        location:'WI'
+        location:'WI',
+        s3Link: 'whiteislandcraterfloor'
     },
     {
         name: 'White_Island_CR',
@@ -101,7 +110,8 @@ export const Volcanoes = [
         code: 'WICR',
         relatedVolcanoes: ['WI', 'WICF', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
-        location:'WI'
+        location:'WI',
+        s3Link: 'whiteislandcraterrim'
     },
     {
         name: 'White_Island_WR',
@@ -109,13 +119,16 @@ export const Volcanoes = [
         code: 'WIWR',
         relatedVolcanoes: ['WI', 'WICF', 'WICR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
-        location:'WI'
+        location:'WI',
+        s3Link: 'whiteislandwestrim'
     },
     {
-        name:'Raoul',
+        name:'Raoul_Island',
+        displayName: 'Raoul Island',
         code: 'RI',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/riz-seismic-drum.png',
-        location:'NZ'
+        location:'NZ',
+        s3Link: 'raoulisland'
     },
     {
         name: 'Erebus',
