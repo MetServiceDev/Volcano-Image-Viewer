@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import ReplayIcon from '@material-ui/icons/Replay';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { apiEndpoint } from '../ServerEndpoint';
 
 const styles = {
     root: {
@@ -37,7 +38,7 @@ const LightningAlerts = ({classes}) => {
 
     const fetchData = () => {
         setLoaded(false);
-        fetch(`https://io8flgqkmk.execute-api.ap-southeast-2.amazonaws.com/dev/lightning-data`, {
+        fetch(`${apiEndpoint}/lightning-data`, {
             headers: {
                 'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq'
             }

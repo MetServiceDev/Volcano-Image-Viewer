@@ -6,7 +6,7 @@ import MetaTags from 'react-meta-tags';
 import { Link } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import PropTypes from 'prop-types';
-import endpoint from '../ServerEndpoint';
+import { endpoint } from '../ServerEndpoint';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
 

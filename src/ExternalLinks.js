@@ -1,4 +1,4 @@
-import endpoint from './ServerEndpoint';
+import { endpoint } from './ServerEndpoint';
 
 export const ExternalLinks = [
     {
