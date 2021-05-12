@@ -8,7 +8,7 @@ const styles = {
         width:'20%',
         display:'inline-block',
         verticalAlign:'middle',
-        marginLeft:'10px'
+        marginLeft:'20px'
     },
     alert: {
         boxShadow: '1px 1px 2px #404040',

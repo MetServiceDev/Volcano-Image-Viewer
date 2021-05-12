@@ -41,7 +41,6 @@ const styles = {
     },
     homeIcon: {
         borderRadius: '5px',
-        border: '1px solid #404040',
         marginRight:'10px'
     },
     headerText: {
@@ -61,8 +60,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
     const volcanoObject = volcanoes.find(v => v.name === volcano);
     const name = volcanoObject.name
     const alerts = useSelector(state => state.eruptionAlerts) || {};
-    const eruptionAlerts = alerts.find(v => v.volcano === name);
-    console.log(eruptionAlerts);
+    const eruptionAlerts = alerts.find(v => v.volcano === volcanoObject.mountain);
     return(
         <div className={classes.root}>
             <MetaTags>
@@ -71,7 +69,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
             <div className={classes.headerDiv}>
                 <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'36px'}}/></Button></Link>
                 <Typography variant='h3' className={classes.headerText}>{name}</Typography>
-                <EruptionAlert data={eruptionAlerts}/>
+                {eruptionAlerts && <EruptionAlert data={eruptionAlerts}/>}
             </div>
             <div className={classes.topSec}>
                 <div className={classes.imgContainer}>
