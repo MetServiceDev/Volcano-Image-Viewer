@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorMessage from './ErrorMessage';
-import { endpoint, s3Endpoint } from '../ServerEndpoint';
+import { imageBucket } from '../Endpoints';
 import { useSelector } from 'react-redux';
 
 const styles = {
@@ -48,14 +48,13 @@ const styles = {
 const VolcanoThumbnail = ({classes, volcano}) => {
     const timestamps = useSelector(state => state.timestamps);
     const [thumbnail, setThumbnail] = useState('12');
-    const imgList = ['', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     const indexList = [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
     const [expand, toggleExpand] = useState(false);
     const [isError, setError] = useState({val: false, msg: ''});
     const [isLoaded, setLoading] = useState(false);
 
-    const s3Tag = volcano.s3Link || ''
-    const src = volcano.location === 'Vanuatu' || volcano.code === 'ERB' ? `${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${thumbnail}.jpg` : `${s3Endpoint}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`
+    const s3Tag = volcano.s3Link;
+    const src = `${imageBucket}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`
 
     useEffect(() => {
        fetch(src, { mode: 'no-cors' }).then(() => { setLoading(true); return; }).catch(e => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
@@ -70,40 +69,20 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     };
 
     const returnThumnails = () => {
-        if (volcano.location === 'Vanuatu'){
-            return imgList.map((val, index) => {
-                return(
-                    <Zoom in={expand} key={index}>
-                        <div style={{backgroundColor:'white', width:'100%'}}>
-                        <img          
-                            src={`${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS${val}.jpg`} 
-                            alt={volcano.name} 
-                            width='100%'
-                            onMouseOver={()=>{setThumbnail(val)}}
-                            className={classes.thumbnailImg}
-                        />
-                        </div>
-                    </Zoom>         
-                );
-            })
-        } else {
-            return indexList.map((val, index) => {
-                return(
-                    <Zoom in={expand} key={index}>
-                        <div style={{backgroundColor:'white', width:'100%'}}>
-                        <img          
-                            src={`${s3Endpoint}/${s3Tag}/${s3Tag}-${val}.jpg`} 
-                            alt={volcano.name} 
-                            width='100%'
-                            onMouseOver={()=>{setThumbnail(val)}}
-                            className={classes.thumbnailImg}
-                        />
-                        </div>
-                    </Zoom>         
-                );
-            })
-        }
-    }
+        return indexList.map((val, index) => (
+            <Zoom in={expand} key={index}>
+                <div style={{backgroundColor:'white', width:'100%'}}>
+                <img          
+                    src={`${imageBucket}/${s3Tag}/${s3Tag}-${val}.jpg`} 
+                    alt={volcano.name} 
+                    width='100%'
+                    onMouseOver={()=>{setThumbnail(val)}}
+                    className={classes.thumbnailImg}
+                />
+                </div>
+            </Zoom>
+        ));
+    };
 
     return(
         <div className={classes.root} onMouseLeave={()=>{toggleExpand(false)}}>

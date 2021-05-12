@@ -32,3 +32,8 @@ export const handleTimestamps = array => ({
     type: 'SET_TIMESTAMPS',
     payload: array
 })
+
+export const handleEruptionAlerts = array => ({
+    type: 'SET_ERUPTION_ALERTS',
+    payload: array
+})

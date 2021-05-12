@@ -11,8 +11,8 @@ import { Provider } from 'react-redux';
 import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch } from 'react-redux';
-import { handleSidebar, handleGridDisplay, handleTimestamps } from './redux/actions';
-import { apiEndpoint } from './ServerEndpoint';
+import { handleSidebar, handleGridDisplay, handleTimestamps, handleEruptionAlerts } from './redux/actions';
+import { apiEndpoint } from './Endpoints';
 
 function App() {
 
@@ -21,6 +21,7 @@ function App() {
   const setSidebar = val => dispatch(handleSidebar(val));
   const setGridDisplay = size => dispatch(handleGridDisplay(size));
   const setTimestamps = array => dispatch(handleTimestamps(array));
+  const setEruptionAlerts = array => dispatch(handleEruptionAlerts(array));
 
   useEffect(() => {
     const expandSidebar = localStorage.getItem('expandSidebar');
@@ -41,6 +42,18 @@ function App() {
       })
   // eslint-disable-next-line
   },[]);
+
+  useEffect(() => {
+    const currentAlerts = JSON.parse(localStorage.getItem('eruptionAlerts'));
+    setEruptionAlerts(currentAlerts)
+    fetch(`${apiEndpoint}/volcano-alerts`, {
+      headers: { 'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq' }
+    }).then(res => res.json())
+    .then(data => {
+      localStorage.setItem('eruptionAlerts', JSON.stringify(data.alertData));
+    });
+    // eslint-disable-next-line
+  },[])
 
   return (
     <Router>

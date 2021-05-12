@@ -6,9 +6,10 @@ import MetaTags from 'react-meta-tags';
 import { Link } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import PropTypes from 'prop-types';
-import { endpoint, s3Endpoint } from '../ServerEndpoint';
+import { imageBucket } from '../Endpoints';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
+import EruptionAlert from './EruptionAlert';
 
 const styles = {
     root: {
@@ -57,7 +58,9 @@ const styles = {
 const VolcanoOverview = ({classes, volcanoes}) => {
     const { volcano } = useParams();
     const volcanoObject = volcanoes.find(v => v.name === volcano);
-    const name = volcanoObject.displayName || volcanoObject.name
+    const name = volcanoObject.name
+    const alerts = JSON.parse(localStorage.getItem('eruptionAlerts'));
+    const eruptionAlerts = alerts.find(v => v.volcano === name);
     return(
         <div className={classes.root}>
             <MetaTags>
@@ -66,6 +69,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
             <div className={classes.headerDiv}>
                 <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'36px'}}/></Button></Link>
                 <Typography variant='h3' className={classes.headerText}>{name}</Typography>
+                <EruptionAlert data={eruptionAlerts}/>
             </div>
             <div className={classes.topSec}>
                 <div className={classes.imgContainer}>
@@ -77,13 +81,13 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                 {volcanoObject.relatedVolcanoes && volcanoObject.relatedVolcanoes.map((vol, index) => {
                     const volcano = volcanoes.find(v => v.code === vol);
                     const s3Tag = volcano.s3Link || ''
-                    const src = volcano.location === 'Vanuatu' || volcano.code === 'ERB' ? `${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS12.jpg` : `${s3Endpoint}/${s3Tag}/${s3Tag}-12.jpg`
+                    const src = `${imageBucket}/${s3Tag}/${s3Tag}-12.jpg`
                     return (
                         <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
                             <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
                                 <div>
                                     <img src={src} alt={volcano.name} width='50%' className={classes.relatedVolcanoes}/>
-                                    <Typography variant='h4'>{volcano.displayName || volcano.name}</Typography>
+                                    <Typography variant='h4'>{volcano.name}</Typography>
                                 </div>
                             </Grow>
                         </Link>

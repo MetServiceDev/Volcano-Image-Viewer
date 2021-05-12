@@ -59,7 +59,7 @@ const VolcanoMap = ({classes, volcanoes}) => {
             <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code} name='volcano-item'>
                 <Paper className={classes.div} elevation={3}>
                     <div className={classes.header}>
-                        <Typography variant='h4' className={classes.nameText} name='volcano-text' style={{fontSize:fontSize}}>{volcano.displayName || volcano.name}</Typography>
+                        <Typography variant='h4' className={classes.nameText} name='volcano-text' style={{fontSize:fontSize}}>{volcano.name}</Typography>
                         <OpenInNewIcon className={classes.icon} style={{fontSize:fontSize}}/>
                     </div>
                     <VolcanoThumbnails volcano={volcano}/>
