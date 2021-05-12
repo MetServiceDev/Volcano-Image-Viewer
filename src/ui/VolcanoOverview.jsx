@@ -10,6 +10,7 @@ import { imageBucket } from '../Endpoints';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
 import EruptionAlert from './EruptionAlert';
+import { useSelector } from 'react-redux';
 
 const styles = {
     root: {
@@ -59,8 +60,9 @@ const VolcanoOverview = ({classes, volcanoes}) => {
     const { volcano } = useParams();
     const volcanoObject = volcanoes.find(v => v.name === volcano);
     const name = volcanoObject.name
-    const alerts = JSON.parse(localStorage.getItem('eruptionAlerts'));
+    const alerts = useSelector(state => state.eruptionAlerts) || {};
     const eruptionAlerts = alerts.find(v => v.volcano === name);
+    console.log(eruptionAlerts);
     return(
         <div className={classes.root}>
             <MetaTags>

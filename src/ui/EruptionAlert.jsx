@@ -40,11 +40,13 @@ const EruptionAlert = ({classes, data}) => {
         setAlert(alertStatus);
     },[data])
 
+    if(!data){
+        return null
+    }
     return (
         <div className={classes.root}>
             <Alert className={classes.alert} severity={alert.severity}>Alert level {data.alertLevel} - {alert.msg}</Alert>
-        </div>
-        
+        </div> 
     )
 };
 

@@ -44,13 +44,11 @@ function App() {
   },[]);
 
   useEffect(() => {
-    const currentAlerts = JSON.parse(localStorage.getItem('eruptionAlerts'));
-    setEruptionAlerts(currentAlerts)
-    fetch(`${apiEndpoint}/volcano-alerts`, {
+    fetch(`https://geonet-volcano-images.s3-ap-southeast-2.amazonaws.com/volcano-eruption-alerts.json`, {
       headers: { 'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq' }
     }).then(res => res.json())
     .then(data => {
-      localStorage.setItem('eruptionAlerts', JSON.stringify(data.alertData));
+      setEruptionAlerts(data)
     });
     // eslint-disable-next-line
   },[])
