@@ -51,7 +51,7 @@ const styles = {
     filterMenu: {
         width:'15%',
         position:'fixed',
-        left:'72%',
+        left:'62%',
         top:'4%',
         zIndex: 5,
     },
