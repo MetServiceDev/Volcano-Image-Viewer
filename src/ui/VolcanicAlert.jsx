@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import MinimizeIcon from '@material-ui/icons/Minimize';
+import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 
 const styles = {
     root: {
@@ -25,8 +26,8 @@ const styles = {
 const setAlertStatus = (data) => {
     switch(data.alertLevel){
         case '0':
-            return {severity: 'success', msg: data.alertMsg}
         case '1':
+            return {severity: 'success', msg: data.alertMsg, icon:<ReportProblemOutlinedIcon/> }
         case '2':
             return {severity: 'warning', msg: data.alertMsg}
         case '3':
@@ -39,7 +40,7 @@ const setAlertStatus = (data) => {
 };
 
 const VolcanicAlert = ({classes, data, toggle}) => {
-    const [alert, setAlert] = useState({severity:'success', msg: ''});
+    const [alert, setAlert] = useState({severity:'success', msg: ''})
 
     useEffect(() => {
         const alertStatus = setAlertStatus(data)
@@ -51,7 +52,7 @@ const VolcanicAlert = ({classes, data, toggle}) => {
     }
     return (
         <div className={classes.root}>
-            <Alert className={classes.alert} severity={alert.severity} action={<MinimizeIcon onClick={toggle} className={classes.minimize}/>}>
+            <Alert className={classes.alert} icon={alert.icon} severity={alert.severity} action={<MinimizeIcon onClick={toggle} className={classes.minimize}/>}>
                 Alert level {data.alertLevel} - {alert.msg}
             </Alert>       
         </div> 
