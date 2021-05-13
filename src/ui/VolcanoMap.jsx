@@ -70,15 +70,11 @@ const VolcanoMap = ({classes, volcanoes}) => {
                 </TableRow>
             );
         })
-    }
-
-    const handleClick = (e) => {
-        console.log( e.latlng )
-    }
+    };
 
     const map = () => {
         return (
-            <MapContainer center={[-39.156833, 175.632167]} zoom={6} onMouseOver={handleClick}>
+            <MapContainer center={[-39.156833, 175.632167]} zoom={6}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
