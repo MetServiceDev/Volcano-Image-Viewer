@@ -29,8 +29,8 @@ const setAlertStatus = (data) => {
         case '1':
             return {severity: 'success', msg: data.alertMsg, icon:<ReportProblemOutlinedIcon/> }
         case '2':
-            return {severity: 'warning', msg: data.alertMsg}
         case '3':
+            return {severity: 'warning', msg: data.alertMsg}
         case '4':
         case '5':
             return {severity: 'error', msg: data.alertMsg}

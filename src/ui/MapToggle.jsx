@@ -1,5 +1,6 @@
 import { withStyles } from '@material-ui/styles';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import MapIcon from '@material-ui/icons/Map';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import { useState } from 'react';
@@ -25,7 +26,8 @@ const MapToggle = ({classes, showVAAC, showSO2}) => {
     return (
         <ToggleButtonGroup className={classes.root} value={alignment} exclusive onChange={handleAlignment}>
             <ToggleButton onClick={showVAAC} value="left" aria-label="left aligned" className={classes.button}><DashboardIcon/></ToggleButton>
-            <ToggleButton onClick={showSO2} value="right" aria-label="right aligned" className={classes.button}>So2</ToggleButton>
+            <ToggleButton onClick={showSO2} value="center" aria-label="center aligned" className={classes.button}>So2</ToggleButton>
+            <ToggleButton onClick={showSO2} value="right" aria-label="right aligned" className={classes.button}><MapIcon/></ToggleButton>
         </ToggleButtonGroup>
     );
 };

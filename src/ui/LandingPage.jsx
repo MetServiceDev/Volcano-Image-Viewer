@@ -1,9 +1,10 @@
-import VolcanoMap from './VolcanoMap';
+import VolcanoMatrix from './VolcanoMatrix';
 import SulfurMaps from './SulfurMaps';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import LightningAlerts from './LightningAlerts';
 import { useSelector } from 'react-redux';
+import VolcanoMap from './VolcanoMap';
 
 const styles = {
     root: {
@@ -24,8 +25,8 @@ const LandingPage = ({classes, volcanoes, toggle, sulfurMaps}) => {
     };
     return (
         <div className={classes.root} style={style}>
-            <LightningAlerts/>
-            {toggle ? <VolcanoMap volcanoes={volcanoes}/> : <SulfurMaps sulfurMaps={sulfurMaps}/>}
+            <VolcanoMap volcanoes={volcanoes}/>
+            
         </div>
     );
 };
