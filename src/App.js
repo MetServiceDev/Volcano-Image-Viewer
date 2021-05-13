@@ -11,8 +11,8 @@ import { Provider } from 'react-redux';
 import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch } from 'react-redux';
-import { handleSidebar, handleGridDisplay, handleTimestamps, handleEruptionAlerts } from './redux/actions';
-import { apiEndpoint } from './Endpoints';
+import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts } from './redux/actions';
+import apiCall from './APICall';
 
 function App() {
 
@@ -21,7 +21,7 @@ function App() {
   const setSidebar = val => dispatch(handleSidebar(val));
   const setGridDisplay = size => dispatch(handleGridDisplay(size));
   const setTimestamps = array => dispatch(handleTimestamps(array));
-  const setEruptionAlerts = array => dispatch(handleEruptionAlerts(array));
+  const setVolcanicAlerts = array => dispatch(handleVolcanicAlerts(array));
 
   useEffect(() => {
     const expandSidebar = localStorage.getItem('expandSidebar');
@@ -34,12 +34,9 @@ function App() {
   });
 
   useEffect(() => {
-    fetch(`${apiEndpoint}/metadata`, {
-      headers: { 'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq' }
-    }).then(res => res.json())
-      .then(data => {
-        setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
-      })
+    apiCall('metadata').then(data => {
+      setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
+    })
   // eslint-disable-next-line
   },[]);
 
@@ -48,7 +45,7 @@ function App() {
       headers: { 'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq' }
     }).then(res => res.json())
     .then(data => {
-      setEruptionAlerts(data)
+      setVolcanicAlerts(data)
     });
     // eslint-disable-next-line
   },[])

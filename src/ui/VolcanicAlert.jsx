@@ -2,10 +2,11 @@ import Alert from '@material-ui/lab/Alert';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import MinimizeIcon from '@material-ui/icons/Minimize';
 
 const styles = {
     root: {
-        width:'20%',
+        width:'25%',
         display:'inline-block',
         verticalAlign:'middle',
         marginLeft:'20px'
@@ -14,6 +15,11 @@ const styles = {
         boxShadow: '1px 1px 2px #404040',
         cursor: 'auto'
     },
+    minimize: {
+        position: 'relative',
+        top: '-25%',
+        cursor: 'pointer'
+    }
 }
 
 const setAlertStatus = (data) => {
@@ -32,7 +38,7 @@ const setAlertStatus = (data) => {
     };
 };
 
-const EruptionAlert = ({classes, data}) => {
+const VolcanicAlert = ({classes, data, toggle}) => {
     const [alert, setAlert] = useState({severity:'success', msg: ''})
 
     useEffect(() => {
@@ -45,14 +51,17 @@ const EruptionAlert = ({classes, data}) => {
     }
     return (
         <div className={classes.root}>
-            <Alert className={classes.alert} severity={alert.severity}>Alert level {data.alertLevel} - {alert.msg}</Alert>
+            <Alert className={classes.alert} severity={alert.severity} action={<MinimizeIcon onClick={toggle} className={classes.minimize}/>}>
+                Alert level {data.alertLevel} - {alert.msg}
+            </Alert>       
         </div> 
     )
 };
 
-EruptionAlert.propTypes = {
+VolcanicAlert.propTypes = {
     classes: PropTypes.object,
-    data: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired,
+    toggle: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(EruptionAlert);
+export default withStyles(styles)(VolcanicAlert);

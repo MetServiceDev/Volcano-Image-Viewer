@@ -1,15 +1,9 @@
-import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 
 const styles = {
-    root: {
-        position:'absolute',
-        right:'10%',
-        top:'1%'
-    },
     noWarning : {
         color: '#03fc77'
     },
@@ -21,13 +15,14 @@ const styles = {
     }
 }
 
-const AlertIcon = ({classes, data, showAlert, fontSize}) => {
+const AlertIcon = ({classes, data, showAlert, hideAlert, fontSize, toggle}) => {
     
     const getIcon = () => {
         switch(data.alertLevel){
             case '0':
-                return <CheckCircleOutlineOutlinedIcon className={classes.noWarning} style={{fontSize}}/>
+                return <ReportProblemOutlinedIcon className={classes.noWarning} style={{fontSize}}/>
             case '1':
+                return <ReportProblemOutlinedIcon className={classes.noWarning} style={{fontSize}}/>
             case '2':
                 return <ReportProblemOutlinedIcon className={classes.mediumWarning} style={{fontSize}}/>
             case '3':
@@ -40,7 +35,7 @@ const AlertIcon = ({classes, data, showAlert, fontSize}) => {
     }
 
     return (
-        <div className={classes.root} onMouseEnter={showAlert} onMouseLeave={showAlert}>
+        <div onMouseEnter={showAlert} onMouseLeave={hideAlert} onClick={toggle}>
             {getIcon()}
         </div>     
     );
@@ -50,11 +45,16 @@ AlertIcon.propTypes = {
     classes: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     showAlert: PropTypes.func,
-    fontSize: PropTypes.string.isRequired
+    hideAlert: PropTypes.func,
+    fontSize: PropTypes.string,
+    toggle: PropTypes.func,
 };
 
 AlertIcon.defaultProps = {
     showAlert: () => {},
+    hideAlert: () => {},
+    toggle: () => {},
+    fontSize: '28px'
 };
 
 export default withStyles(styles)(AlertIcon);

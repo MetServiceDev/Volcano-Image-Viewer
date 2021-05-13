@@ -22,7 +22,7 @@ const VolcanoMap = ({classes, volcanoes}) => {
         gridTemplateColumns: `repeat(${gridDisplay}, 1fr)`,
     };
 
-    const fontSize = gridDisplay === 6 ? '20px' : '28px';
+    const fontSize = gridDisplay === 6 ? '16px' : '24px';
 
     return (
         <div className={classes.root} style={gridLayout}>

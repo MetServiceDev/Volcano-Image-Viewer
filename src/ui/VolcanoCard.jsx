@@ -36,41 +36,66 @@ const styles = {
         right:'1%',
         top:'1%'
     },
+    alerIcon: {
+        position:'absolute',
+        right:'10%',
+        top:'1%'
+    },
     alertBulletin: {
         position:'absolute',
-        height:'10vh',
-        width:'50%',
+        height:'5vh',
         zIndex:'5',
         right:'-10%',
-        padding:'10px'
+        padding:'10px',
     }
 };
 
+const setBG = (level) => {
+    switch(level){
+        case '0':
+            case '1':
+            return 'rgba(3, 252, 119, 1)'
+        case '2':
+            return 'rgba(252, 190, 3, 1)'
+        case '3':
+        case '4':
+        case '5':
+            return 'rgba(255, 46, 46, 1)'
+        default:
+            return
+    };
+}
+
 const VolcanoCard = ({classes, volcano, fontSize}) => {
 
-    const eruptionAlerts = useSelector(state => state.eruptionAlerts);
+    const volcanicAlerts = useSelector(state => state.volcanicAlerts);
+    const gridDisplay = useSelector(state => state.gridDisplay);
+    const alertFontSize = gridDisplay === 6 ? '14px' : '16px';
+    const bulletinWidth = gridDisplay === 6 ? '70%' : '50%'
     const [showAlert, setAlertVisibility] = useState(false)
 
     const renderAlertBulletin = alert => {
         return (
             <div>
                 {alert && showAlert &&
-                <Paper elevation={3} className={classes.alertBulletin}>
+                <Paper elevation={3} className={classes.alertBulletin} style={{border:`1px solid ${setBG(alert.alertLevel)}`,width:bulletinWidth}}>
                     <Typography>Alert level {alert.alertLevel}</Typography>
-                    <Typography>{alert.alertMsg}</Typography>
+                    <Typography style={{fontWeight:'bold',fontSize:alertFontSize}}>{alert.alertMsg}</Typography>
                 </Paper>}
             </div>
         )
     }
 
     const renderVolcano = () => {
-        const alert = eruptionAlerts.find(v => v.volcano === volcano.mountain);
+        const alert = volcanicAlerts.find(v => v.volcano === volcano.mountain);
         return (
             <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code} name='volcano-item'>
                 <Paper className={classes.div} elevation={3}>
                     <div className={classes.header}>
                         <Typography variant='h4' className={classes.nameText} name='volcano-text' style={{fontSize:fontSize}}>{volcano.name}</Typography>
-                        {alert && <AlertIcon data={alert} showAlert={() => {setAlertVisibility(!showAlert)}} fontSize={fontSize}/>}
+                        <span className={classes.alerIcon}>{alert && 
+                            <AlertIcon data={alert} showAlert={() => {setAlertVisibility(true)}} hideAlert={() => {setAlertVisibility(false)}} fontSize={fontSize}/>}
+                        </span>
                         {renderAlertBulletin(alert)}
                         <OpenInNewIcon className={classes.icon} style={{fontSize:fontSize}}/>
                     </div>
@@ -80,13 +105,7 @@ const VolcanoCard = ({classes, volcano, fontSize}) => {
         );
     };
 
-
-
-    return (
-        <div>
-            {renderVolcano()}
-        </div>
-    );
+    return renderVolcano();
 };
 
 VolcanoCard.propTypes = {

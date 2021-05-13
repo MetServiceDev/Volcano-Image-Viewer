@@ -9,8 +9,10 @@ import PropTypes from 'prop-types';
 import { imageBucket } from '../Endpoints';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
-import EruptionAlert from './EruptionAlert';
+import VolcanicAlert from './VolcanicAlert';
+import AlertIcon from './AlertIcon';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 const styles = {
     root: {
@@ -53,14 +55,22 @@ const styles = {
             boxShadow: '4px 4px 8px #404040'
         }
     },
+    alerIcon: {
+        display:'inline-block',
+        verticalAlign:'middle',
+        marginLeft:'20px',
+        cursor: 'pointer'
+    }
 };
 
 const VolcanoOverview = ({classes, volcanoes}) => {
     const { volcano } = useParams();
     const volcanoObject = volcanoes.find(v => v.name === volcano);
     const name = volcanoObject.name
-    const alerts = useSelector(state => state.eruptionAlerts) || {};
-    const eruptionAlerts = alerts.find(v => v.volcano === volcanoObject.mountain);
+    const volcanicAlerts = useSelector(state => state.volcanicAlerts) || {};
+    const volcanoAlert = volcanicAlerts.find(v => v.volcano === volcanoObject.mountain);
+    const [showAlert, toggleAlert] = useState(true)
+
     return(
         <div className={classes.root}>
             <MetaTags>
@@ -69,7 +79,10 @@ const VolcanoOverview = ({classes, volcanoes}) => {
             <div className={classes.headerDiv}>
                 <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'36px'}}/></Button></Link>
                 <Typography variant='h3' className={classes.headerText}>{name}</Typography>
-                {eruptionAlerts && <EruptionAlert data={eruptionAlerts}/>}
+                {volcanoAlert && showAlert ? 
+                    <VolcanicAlert data={volcanoAlert} toggle={()=>{toggleAlert(!showAlert)}}/> : volcanoAlert && 
+                    <span className={classes.alerIcon}><AlertIcon data={volcanoAlert} toggle={()=>{toggleAlert(!showAlert)}}/></span>
+                }
             </div>
             <div className={classes.topSec}>
                 <div className={classes.imgContainer}>

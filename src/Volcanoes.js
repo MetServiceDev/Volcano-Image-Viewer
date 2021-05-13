@@ -138,7 +138,8 @@ export const Volcanoes = [
         code: 'RI',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/riz-seismic-drum.png',
         location:'NZ',
-        s3Link: 'raoulisland'
+        s3Link: 'raoulisland',
+        mountain: 'Kermadec Islands'
     },
     {
         name: 'Erebus',

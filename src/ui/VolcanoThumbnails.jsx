@@ -85,7 +85,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     };
 
     return(
-        <div className={classes.root} onMouseLeave={()=>{toggleExpand(false)}}>
+        <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setThumbnail('12')}}>
             {expand && <Typography className={classes.indexDisplay}>{timestamps[thumbnail === '' ? 0 : (thumbnail-1)]}</Typography>}
             {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={src} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
             <div className={classes.thumbnailGrid}>
