@@ -39,7 +39,7 @@ const setAlertStatus = (data) => {
 };
 
 const VolcanicAlert = ({classes, data, toggle}) => {
-    const [alert, setAlert] = useState({severity:'success', msg: ''})
+    const [alert, setAlert] = useState({severity:'success', msg: ''});
 
     useEffect(() => {
         const alertStatus = setAlertStatus(data)
