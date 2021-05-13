@@ -32,3 +32,8 @@ export const handleTimestamps = array => ({
     type: 'SET_TIMESTAMPS',
     payload: array
 })
+
+export const handleVolcanicAlerts = array => ({
+    type: 'SET_VOLCANIC_ALERTS',
+    payload: array
+})

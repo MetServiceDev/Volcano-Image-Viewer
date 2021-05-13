@@ -6,9 +6,13 @@ import MetaTags from 'react-meta-tags';
 import { Link } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import PropTypes from 'prop-types';
-import { endpoint, s3Endpoint } from '../ServerEndpoint';
+import { imageBucket } from '../Endpoints';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
+import VolcanicAlert from './VolcanicAlert';
+import AlertIcon from './AlertIcon';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 const styles = {
     root: {
@@ -39,7 +43,6 @@ const styles = {
     },
     homeIcon: {
         borderRadius: '5px',
-        border: '1px solid #404040',
         marginRight:'10px'
     },
     headerText: {
@@ -52,12 +55,22 @@ const styles = {
             boxShadow: '4px 4px 8px #404040'
         }
     },
+    alerIcon: {
+        display:'inline-block',
+        verticalAlign:'middle',
+        marginLeft:'20px',
+        cursor: 'pointer'
+    }
 };
 
 const VolcanoOverview = ({classes, volcanoes}) => {
     const { volcano } = useParams();
     const volcanoObject = volcanoes.find(v => v.name === volcano);
-    const name = volcanoObject.displayName || volcanoObject.name
+    const name = volcanoObject.name
+    const volcanicAlerts = useSelector(state => state.volcanicAlerts) || {};
+    const volcanoAlert = volcanicAlerts.find(v => v.volcano === volcanoObject.mountain);
+    const [showAlert, toggleAlert] = useState(true)
+
     return(
         <div className={classes.root}>
             <MetaTags>
@@ -66,6 +79,10 @@ const VolcanoOverview = ({classes, volcanoes}) => {
             <div className={classes.headerDiv}>
                 <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'36px'}}/></Button></Link>
                 <Typography variant='h3' className={classes.headerText}>{name}</Typography>
+                {volcanoAlert && showAlert ? 
+                    <VolcanicAlert data={volcanoAlert} toggle={()=>{toggleAlert(!showAlert)}}/> : volcanoAlert && 
+                    <span className={classes.alerIcon}><AlertIcon data={volcanoAlert} toggle={()=>{toggleAlert(!showAlert)}}/></span>
+                }
             </div>
             <div className={classes.topSec}>
                 <div className={classes.imgContainer}>
@@ -77,13 +94,13 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                 {volcanoObject.relatedVolcanoes && volcanoObject.relatedVolcanoes.map((vol, index) => {
                     const volcano = volcanoes.find(v => v.code === vol);
                     const s3Tag = volcano.s3Link || ''
-                    const src = volcano.location === 'Vanuatu' || volcano.code === 'ERB' ? `${endpoint}/Volcano/${volcano.name}/${volcano.code}_PICS12.jpg` : `${s3Endpoint}/${s3Tag}/${s3Tag}-12.jpg`
+                    const src = `${imageBucket}/${s3Tag}/${s3Tag}-12.jpg`
                     return (
                         <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
                             <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
                                 <div>
                                     <img src={src} alt={volcano.name} width='50%' className={classes.relatedVolcanoes}/>
-                                    <Typography variant='h4'>{volcano.displayName || volcano.name}</Typography>
+                                    <Typography variant='h4'>{volcano.name}</Typography>
                                 </div>
                             </Grow>
                         </Link>

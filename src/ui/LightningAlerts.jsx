@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import ReplayIcon from '@material-ui/icons/Replay';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { apiEndpoint } from '../ServerEndpoint';
+import apiCall from '../APICall';
 
 const styles = {
     root: {
@@ -38,14 +38,8 @@ const LightningAlerts = ({classes}) => {
 
     const fetchData = () => {
         setLoaded(false);
-        fetch(`${apiEndpoint}/lightning-data`, {
-            headers: {
-                'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq'
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                const res = JSON.parse(data.responseBody)
+        apiCall('lightning-data').then(data => {
+            const res = JSON.parse(data.responseBody)
                 const { alertCheck, innerCheck, alertNames, innerNames, areas, twentyKStrikes, hundredKStrikes } = res;
                 if(alertCheck === 0 && innerCheck === 0){
                     setAlerts({severity: 'success', msg: 'No current lightning alerts for possible eruptions'});
@@ -57,7 +51,7 @@ const LightningAlerts = ({classes}) => {
                     setAlerts({severity: 'warning', msg: `${areas}: Lightning data shows ${twentyKStrikes} strikes within 20km and ${hundredKStrikes} strikes within 100km of ${innerNames.map(name => {return `${name}`})}  Please check latest imagery.`});
                 };
                 setLoaded(true);
-            }).catch(() => { setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'}); setLoaded(true); })  
+        }).catch(() => { setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'}); setLoaded(true); })  
     }
 
     useEffect(() => { fetchData() },[]);

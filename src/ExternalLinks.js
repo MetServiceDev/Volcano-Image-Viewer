@@ -1,4 +1,4 @@
-import { endpoint } from './ServerEndpoint';
+import { loopyBucket } from './Endpoints';
 
 export const ExternalLinks = [
     {
@@ -150,15 +150,15 @@ export const ExternalLinks = [
             [
                 {
                     name: 'True Color',
-                    link: `${endpoint}/VAAC/Vanuatu/Vanuatu True-colour10min.LPY`
+                    link: `${loopyBucket}/Vanuatu+True-colour10min.LPY`
                 },
                 {
                     name: 'Ash',
-                    link: `${endpoint}/VAAC/Vanuatu/Vanuatu Ash 10min - EU.LPY`
+                    link: `${loopyBucket}/Vanuatu+Ash+10min+-+EU.LPY`
                 },
                 {
                     name: 'Dust',
-                    link: `${endpoint}/VAAC/Vanuatu/Vanuatu Dust 10min.LPY`
+                    link: `${loopyBucket}/Vanuatu+Dust+10min.LPY`
                 }
             ],
             [
@@ -167,15 +167,15 @@ export const ExternalLinks = [
             [
                 {
                     name: 'True Color',
-                    link: `${endpoint}/VAAC/Tonga/Tonga True-Colour 10min.LPY`
+                    link: `${loopyBucket}/Tonga+True-Colour+10min.LPY`
                 },
                 {
                     name: 'Ash',
-                    link: `${endpoint}/VAAC/Tonga/Tonga Ash 10min - EU.LPY`
+                    link: `${loopyBucket}/Tonga+Ash+10min+-+EU.LPY`
                 },
                 {
                     name: 'Dust',
-                    link: `${endpoint}/VAAC/Tonga/Tonga Dust 10min.LPY`
+                    link: `${loopyBucket}/Tonga+Dust+10min.LPY`
                 }
             ],
             [
@@ -184,15 +184,15 @@ export const ExternalLinks = [
             [
                 {
                     name: 'True Color',
-                    link: `${endpoint}/VAAC/Tropics True Colour 10min.LPY`
+                    link: `${loopyBucket}/Tropics+True+Colour+10min.LPY`
                 },
                 {
                     name: 'Ash',
-                    link: `${endpoint}/VAAC/Tropics Ash 10min - EU.LPY`
+                    link: `${loopyBucket}/Tropics+Ash+10min+-+EU.LPY`
                 },
                 {
                     name: 'Dust',
-                    link: `${endpoint}/VAAC/Tropics Dust 10min.LPY`
+                    link: `${loopyBucket}/Tropics+Dust+10min.LPY`
                 }
             ],
             [
@@ -201,15 +201,15 @@ export const ExternalLinks = [
             [
                 {
                     name: 'True Color',
-                    link: `${endpoint}/RGB/NZ True-Colour 10min .LPY`
+                    link: `${loopyBucket}/NZ+True-Colour+10min+.LPY`
                 },
                 {
                     name: 'Ash',
-                    link: `${endpoint}/VAAC/NWPTAS Ash RGB 10min.LPY`
+                    link: `${loopyBucket}/NWPTAS+Ash+RGB+10min.LPY`
                 },
                 {
                     name: 'Dust',
-                    link: `${endpoint}/VAAC/NWPTAS Dust 10min.LPY`
+                    link: `${loopyBucket}/NWPTAS+Dust+10min.LPY`
                 }
             ],
         ]
@@ -220,7 +220,7 @@ export const ExternalLinks = [
             [
                 {
                     name: 'WWLLN Data',
-                    link: `${endpoint}/WWLLN.kmz`
+                    link: `${loopyBucket}/WWLLN.kmz`
                 }
             ]
         ]

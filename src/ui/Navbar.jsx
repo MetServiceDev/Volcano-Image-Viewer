@@ -16,6 +16,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector  } from 'react-redux';
 import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../redux/actions';
 import Select from '@material-ui/core/Select';
+import Alert from '@material-ui/lab/Alert';
+import MinimizeIcon from '@material-ui/icons/Minimize';
 
 const styles = {
     root: {
@@ -27,7 +29,7 @@ const styles = {
         zIndex: '5'
     },
     searchField: {
-        width:'50%',
+        width:'40%',
         backgroundColor: 'white',
         left:'20%',
         position: 'relative',
@@ -39,7 +41,7 @@ const styles = {
     },
     filterButton: {
         position: 'relative',
-        left:'72%',
+        left:'62%',
         color: '#404040',
         display:'inline',
         verticalAlign: 'middle',
@@ -70,6 +72,17 @@ const styles = {
         outline: 'white',
         backgroundColor: 'white'
     },
+    refreshWarning: {
+        width: '20%',
+        float:'right',
+        marginRight:'40px',
+        padding:'0px 10px 0px 5px'
+    },
+    minimize: {
+        position: 'relative',
+        top: '-25%',
+        cursor: 'pointer'
+    }
 };
 
 const Navbar = ({classes, showVAAC, showSO2}) => {
@@ -86,6 +99,7 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
     const showVA = useSelector(state => state.showVA);
     const showCNI = useSelector(state => state.showCNI);
     const showWI = useSelector(state => state.showWI);
+    const [showRefreshWarning, toggleRefreshWarning] = useState(true)
 
     const setGrid = (e) => {
         const size = Number(e.target.value);
@@ -122,6 +136,10 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
                     ),
                 }}
             />
+            {showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
+                action={<MinimizeIcon className={classes.minimize} onClick={()=>{toggleRefreshWarning(false)}}/>}>
+                This page refreshes every 10 minutes
+            </Alert>}
         </div>
     );
 };

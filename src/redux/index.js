@@ -11,7 +11,8 @@ const initialState = {
   showCNI: true,
   showWI: true,
   expandSidebar: true,
-  timestamps: []
+  timestamps: [],
+  volcanicAlerts: []
 };
 
 export const store = createStore(
@@ -58,6 +59,11 @@ function reducer(state, action) {
         return {
             ...state,
             timestamps: action.payload
+        }
+    case 'SET_VOLCANIC_ALERTS':
+        return {
+            ...state,
+            volcanicAlerts: action.payload
         }
     default:
       return state;

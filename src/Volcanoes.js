@@ -4,35 +4,44 @@ export const Volcanoes = [
         code:'AMB1',
         drumLink: 'https://www.vmgd.gov.vu/vmgdMedia/geoHazard/drumplots/AMB1_drumplot.jpg',
         relatedVolcanoes: ['LVVL', 'LPV', 'YASH'],
-        location:'Vanuatu'
+        location:'Vanuatu',
+        s3Link: 'AMB1',
+        mountain: 'Ambrym',
     },
     {
         name: 'Aoba',
         code: 'LVVL',
         drumLink: 'https://www.vmgd.gov.vu/vmgdMedia/geoHazard/drumplots/ABNG_drumplot.jpg',
         relatedVolcanoes: ['AMB1', 'LPV', 'YASH'],
-        location:'Vanuatu'
+        location:'Vanuatu',
+        s3Link: 'LVVL',
+        mountain: 'Aoba',
     },
     {
         name: 'Lopevi',
         code: 'LPV',
         drumLink: 'https://www.vmgd.gov.vu/vmgdMedia/geoHazard/drumplots/LPV_drumplot.png',
         relatedVolcanoes: ['AMB1', 'LVVL', 'YASH'],
-        location:'Vanuatu'
+        location:'Vanuatu',
+        s3Link: 'LPV',
+        mountain: 'Lopevi',
     },
     {
         name: 'Yasur',
         code: 'YASH',
         drumLink: 'https://www.vmgd.gov.vu/vmgdMedia/geoHazard/drumplots/YASH_drumplot.jpg',
         relatedVolcanoes: ['AMB1', 'LVVL', 'LPV'],
-        location:'Vanuatu'
+        location:'Vanuatu',
+        s3Link: 'YASH',
+        mountain: 'Yasur',
     },
     {
         name: 'Taranaki',
         code: 'TKI',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/pke-seismic-drum.png',
         location:'NZ',
-        s3Link: 'taranaki'
+        s3Link: 'taranaki',
+        mountain: 'Taranaki'
     },
     {
         name: 'Ngauruhoe',
@@ -40,34 +49,35 @@ export const Volcanoes = [
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/otvz-seismic-drum.png',
         relatedVolcanoes: ['NGRU', 'RUN', 'RUS'],
         location:'Central NI',
-        s3Link: 'ngauruhoe'
+        s3Link: 'ngauruhoe',
+        mountain: 'Ngauruhoe',
     },
     {
-        name: 'Ngauruhoe_Ruapehu',
-        displayName: 'Ngauruhoe Ruapehu',
+        name: 'Ngauruhoe Ruapehu',
         code: 'NGRU',
         relatedVolcanoes: ['NG', 'RUN', 'RUS'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/otvz-seismic-drum.png',
         location:'Central NI',
-        s3Link: 'ruapehungauruhoe'
+        s3Link: 'ruapehungauruhoe',
+        mountain: 'Ngauruhoe',
     },
     {
-        name: 'Ruapehu_N',
-        displayName: 'Ruapehu North',
+        name: 'Ruapehu North',
         code: 'RUN',
         relatedVolcanoes: ['NGRU', 'NG', 'RUS'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wnvz-seismic-drum.png',
         location:'Central NI',
-        s3Link: 'ruapehunorth'
+        s3Link: 'ruapehunorth',
+        mountain: 'Ruapehu',
     },
     {
-        name: 'Ruapehu_S',
-        displayName: 'Ruapehu South',
+        name: 'Ruapehu South',
         code: 'RUS',
         relatedVolcanoes: ['NGRU', 'NG', 'RUN'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wnvz-seismic-drum.png',
         location:'Central NI',
-        s3Link: 'ruapehusouth'
+        s3Link: 'ruapehusouth',
+        mountain: 'Ruapehu',
     },
     {
         name: 'Tongariro',
@@ -75,64 +85,66 @@ export const Volcanoes = [
         relatedVolcanoes: ['TMC'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/tmvz-seismic-drum.png',
         location:'Central NI',
-        s3Link: 'tongariro'
+        s3Link: 'tongariro',
+        mountain: 'Tongariro',
     },
     {
-        name: 'Tongariro_TMC',
-        displayName: 'Tongariro Te Maari Crater',
+        name: 'Tongariro Te Maari Crater',
         code: 'TMC',
         relatedVolcanoes: ['TNG'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/tmvz-seismic-drum.png',
         location:'Central NI',
-        s3Link: 'tongarirotemaaricrater'
+        s3Link: 'tongarirotemaaricrater',
+        mountain: 'Tongariro',
     },
     {
-        name: 'White_Island',
-        displayName: 'White Island',
+        name: 'White Island',
         code: 'WI',
         relatedVolcanoes: ['WICF', 'WICR', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
         location:'WI',
-        s3Link: 'whakatane'
+        s3Link: 'whakatane',
+        mountain: 'White Island',
     },
     {
-        name: 'White_Island_CF',
-        displayName: 'White Island Crater Floor',
+        name: 'White Island Crater Floor',
         code: 'WICF',
         relatedVolcanoes: ['WI', 'WICR', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
         location:'WI',
-        s3Link: 'whiteislandcraterfloor'
+        s3Link: 'whiteislandcraterfloor',
+        mountain: 'White Island',
     },
     {
-        name: 'White_Island_CR',
-        displayName: 'White Island Crater Rim',
+        name: 'White Island Crater Rim',
         code: 'WICR',
         relatedVolcanoes: ['WI', 'WICF', 'WIWR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
         location:'WI',
-        s3Link: 'whiteislandcraterrim'
+        s3Link: 'whiteislandcraterrim',
+        mountain: 'White Island',
     },
     {
-        name: 'White_Island_WR',
-        displayName: 'White Island West Rim',
+        name: 'White Island West Rim',
         code: 'WIWR',
         relatedVolcanoes: ['WI', 'WICF', 'WICR'],
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/wsrz-seismic-drum.png',
         location:'WI',
-        s3Link: 'whiteislandwestrim'
+        s3Link: 'whiteislandwestrim',
+        mountain: 'White Island',
     },
     {
-        name:'Raoul_Island',
-        displayName: 'Raoul Island',
+        name:'Raoul Island',
         code: 'RI',
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/riz-seismic-drum.png',
         location:'NZ',
-        s3Link: 'raoulisland'
+        s3Link: 'raoulisland',
+        mountain: 'Kermadec Islands'
     },
     {
         name: 'Erebus',
         code:'ERB',
-        location:'NZ'
+        location:'NZ',
+        s3Link: 'erebus',
     },
 ];
