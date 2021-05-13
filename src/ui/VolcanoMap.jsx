@@ -1,8 +1,14 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { useSelector } from 'react-redux';
 import * as L from 'leaflet';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import PropTypes from 'prop-types';
 
 const LeafIcon = L.Icon.extend({options: {}});
 
@@ -39,8 +45,13 @@ const styles = {
         left:'0%' ,
         height: '100vh',
         backgroundColor: 'white',
-        zIndex:'-2'
-    }
+        zIndex:'-2',
+    },
+    tableRow: {
+        '&:nth-of-type(odd)': {
+          backgroundColor: '#f0f0f0',
+        },
+    },
 }
 
 const VolcanoMap = ({classes, volcanoes}) => {
@@ -48,18 +59,26 @@ const VolcanoMap = ({classes, volcanoes}) => {
     const volcanicAlerts = useSelector(state => state.volcanicAlerts);
 
     const alertTable = () => {
-        volcanicAlerts.map(volcano => {
+        const array = volcanicAlerts.map(va => { return volcanoes.find(v => { return v.mountain === va.volcano }) }).filter(x => { return x !== undefined})
+        return array.map(volcano => {
+            const alert = volcanicAlerts.find(v => v.volcano === volcano.mountain)
             return(
-                <div>
-                    <Typography>{volcano.volcano}</Typography>
-                </div>
+                <TableRow className={classes.tableRow} key={volcano.code}>
+                    <TableCell>{volcano.mountain}</TableCell>
+                    <TableCell>{alert.alertLevel}</TableCell>
+                    <TableCell>{alert.alertMsg}</TableCell>
+                </TableRow>
             );
         })
     }
 
+    const handleClick = (e) => {
+        console.log( e.latlng )
+    }
+
     const map = () => {
         return (
-            <MapContainer center={[-39.156833, 175.632167]} zoom={6}>
+            <MapContainer center={[-39.156833, 175.632167]} zoom={6} onMouseOver={handleClick}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -70,7 +89,7 @@ const VolcanoMap = ({classes, volcanoes}) => {
                     const { alertLevel, alertMsg } = alerts || ''
                     const icon = getIcon(alertLevel)
                     return (
-                        <Marker position={[lat, long]} icon={icon}>
+                        <Marker position={[lat, long]} icon={icon} key={volcano.code}>
                             <Popup>
                                 {volcano.mountain} - Alert level {alertLevel} - {alertMsg}
                             </Popup>
@@ -83,10 +102,28 @@ const VolcanoMap = ({classes, volcanoes}) => {
 
     return (
         <div>
-            <div className={classes.alertTable}>{alertTable()}</div>
+            <div className={classes.alertTable}>
+                <TableContainer>
+                    <Table className={classes.table} aria-label="customized table">
+                        <TableHead>
+                            <TableRow style={{backgroundColor:'#404040'}}>
+                                <TableCell style={{color: 'white', fontWeight: 'bold'}}>Volcano</TableCell>
+                                <TableCell style={{color: 'white', fontWeight: 'bold'}}>Level</TableCell>
+                                <TableCell style={{color: 'white', fontWeight: 'bold'}}>Volcanic Activity</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>{alertTable()}</TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
             <div className={classes.mapContainer}>{map()}</div>
         </div>
     )
-}
+};
+
+VolcanoMap.propTypes = {
+    classes: PropTypes.object,
+    volcanoes: PropTypes.array.isRequired
+};
 
 export default withStyles(styles)(VolcanoMap);

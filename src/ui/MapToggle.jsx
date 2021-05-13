@@ -5,6 +5,8 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch  } from 'react-redux';
+import { handleCurrentDisplay } from '../redux/actions';
 
 const styles = {
     root: {
@@ -16,8 +18,10 @@ const styles = {
     },
 };
 
-const MapToggle = ({classes, showVAAC, showSO2}) => {
+const MapToggle = ({classes}) => {
+    const dispatch = useDispatch()
     const [alignment, setAlignment] = useState('left');
+    const setCurrentDisplay = string => dispatch(handleCurrentDisplay(string))
     
     const handleAlignment = (event, newAlignment) => {
         setAlignment(newAlignment);
@@ -25,17 +29,15 @@ const MapToggle = ({classes, showVAAC, showSO2}) => {
 
     return (
         <ToggleButtonGroup className={classes.root} value={alignment} exclusive onChange={handleAlignment}>
-            <ToggleButton onClick={showVAAC} value="left" aria-label="left aligned" className={classes.button}><DashboardIcon/></ToggleButton>
-            <ToggleButton onClick={showSO2} value="center" aria-label="center aligned" className={classes.button}>So2</ToggleButton>
-            <ToggleButton onClick={showSO2} value="right" aria-label="right aligned" className={classes.button}><MapIcon/></ToggleButton>
+            <ToggleButton onClick={()=>{setCurrentDisplay('VOLCANO_MATRIX')}} value="left" aria-label="left aligned" className={classes.button}><DashboardIcon/></ToggleButton>
+            <ToggleButton onClick={()=>{setCurrentDisplay('SULFUR_MAPS')}} value="center" aria-label="center aligned" className={classes.button}>So2</ToggleButton>
+            <ToggleButton onClick={()=>{setCurrentDisplay('ALERT_MAP')}} value="right" aria-label="right aligned" className={classes.button}><MapIcon/></ToggleButton>
         </ToggleButtonGroup>
     );
 };
 
 MapToggle.propTypes = {
-    classes: PropTypes.object.isRequired,
-    showVAAC: PropTypes.func.isRequired,
-    showSO2: PropTypes.func.isRequired,
-};
+    classes: PropTypes.object
+}
 
 export default withStyles(styles)(MapToggle);

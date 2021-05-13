@@ -67,7 +67,7 @@ const styles = {
         height: '4vh',
         padding:'0px',
         position:'absolute',
-        left:'10%',
+        left:'15%',
         fontSize: '16px',
         outline: 'white',
         backgroundColor: 'white'
@@ -76,7 +76,8 @@ const styles = {
         width: '20%',
         float:'right',
         marginRight:'40px',
-        padding:'0px 10px 0px 5px'
+        padding:'0px 10px 0px 5px',
+        fontSize:'12px'
     },
     minimize: {
         position: 'relative',
@@ -85,7 +86,7 @@ const styles = {
     }
 };
 
-const Navbar = ({classes, showVAAC, showSO2}) => {
+const Navbar = ({classes}) => {
     const dispatch = useDispatch();
 
     const [showFilter, toggleFilter] = useState(false);
@@ -109,7 +110,7 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
 
     return (
         <div className={classes.root}>
-            <span className={classes.toggleButton}><MapToggle showVAAC={showVAAC} showSO2={showSO2}/></span>
+            <span className={classes.toggleButton}><MapToggle/></span>
             <ButtonBase className={classes.filterButton}><FilterListIcon onClick={()=>{toggleFilter(!showFilter)}}/></ButtonBase>
             {showFilter && <Paper className={classes.filterMenu}>
                 <MenuList>
@@ -146,8 +147,6 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
 
 Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
-    showVAAC: PropTypes.func.isRequired,
-    showSO2: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Navbar);
