@@ -33,11 +33,14 @@ const getIcon = (alertLevel) => {
 };
 
 const styles = {
+    root: {
+        marginTop:'60px'
+    },
     mapContainer: {
         width:'70%',
         position:'absolute',
         right:'0%',
-        zIndex:'-2'
+        zIndex:'-2',   
     },
     alertTable: {
         width:'30%',
@@ -95,7 +98,7 @@ const VolcanoMap = ({classes, volcanoes}) => {
     };
 
     return (
-        <div>
+        <div className={classes.root}>
             <div className={classes.alertTable}>
                 <TableContainer>
                     <Table>

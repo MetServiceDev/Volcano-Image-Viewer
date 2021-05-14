@@ -8,13 +8,12 @@ import VolcanoMap from './VolcanoMap';
 
 const styles = {
     root: {
-        marginTop:'70px',
         cursor: 'pointer',
         position:'absolute',
         right: '0%',
         transition: '0.5s'
     },
-}
+};
 
 const LandingPage = ({classes, volcanoes, sulfurMaps}) => {
 
@@ -24,9 +23,10 @@ const LandingPage = ({classes, volcanoes, sulfurMaps}) => {
     const style = {
         width: `${!expand ? '98':'85'}%`
     };
+
     return (
         <div className={classes.root} style={style}>
-            <LightningAlerts/>
+            {currentDisplay !== 'ALERT_MAP' && <div style={{marginTop:'70px'}}><LightningAlerts/></div>}
             {(() => {
                 switch(currentDisplay){
                     case 'VOLCANO_MATRIX':
