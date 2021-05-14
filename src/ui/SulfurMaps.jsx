@@ -50,7 +50,7 @@ const SulfurMaps = ({classes, sulfurMaps}) => {
                                 <Typography variant='h4' className={classes.nameText} name='volcano-text'>{so2.name}</Typography>
                                 <OpenInNewIcon className={classes.icon}/>            
                             </div>
-                            <img src={so2.img} alt={so2.name} width='100%'/> 
+                            <img src={so2.img} alt={so2.name} width='100%'/>
                         </Paper>
                     </Link>
                 )

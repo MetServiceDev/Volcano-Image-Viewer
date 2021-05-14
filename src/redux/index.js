@@ -12,7 +12,8 @@ const initialState = {
   showWI: true,
   expandSidebar: true,
   timestamps: [],
-  volcanicAlerts: []
+  volcanicAlerts: [],
+  currentDisplay: 'VOLCANO_MATRIX'
 };
 
 export const store = createStore(
@@ -64,6 +65,11 @@ function reducer(state, action) {
         return {
             ...state,
             volcanicAlerts: action.payload
+        }
+    case 'SET_CURRENT_DISPLAY':
+        return {
+            ...state,
+            currentDisplay: action.payload
         }
     default:
       return state;

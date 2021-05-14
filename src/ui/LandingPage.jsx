@@ -1,9 +1,10 @@
-import VolcanoMap from './VolcanoMap';
+import VolcanoMatrix from './VolcanoMatrix';
 import SulfurMaps from './SulfurMaps';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import LightningAlerts from './LightningAlerts';
 import { useSelector } from 'react-redux';
+import VolcanoMap from './VolcanoMap';
 
 const styles = {
     root: {
@@ -15,9 +16,10 @@ const styles = {
     },
 }
 
-const LandingPage = ({classes, volcanoes, toggle, sulfurMaps}) => {
+const LandingPage = ({classes, volcanoes, sulfurMaps}) => {
 
-    const expand = useSelector((state) => state.expandSidebar)
+    const expand = useSelector(state => state.expandSidebar)
+    const currentDisplay = useSelector(state => state.currentDisplay)
 
     const style = {
         width: `${!expand ? '98':'85'}%`
@@ -25,7 +27,18 @@ const LandingPage = ({classes, volcanoes, toggle, sulfurMaps}) => {
     return (
         <div className={classes.root} style={style}>
             <LightningAlerts/>
-            {toggle ? <VolcanoMap volcanoes={volcanoes}/> : <SulfurMaps sulfurMaps={sulfurMaps}/>}
+            {(() => {
+                switch(currentDisplay){
+                    case 'VOLCANO_MATRIX':
+                        return <VolcanoMatrix volcanoes={volcanoes}/>
+                    case 'SULFUR_MAPS':
+                        return <SulfurMaps sulfurMaps={sulfurMaps}/>
+                    case 'ALERT_MAP':
+                        return <VolcanoMap volcanoes={volcanoes}/>
+                    default:
+                        return
+                }
+            })()}            
         </div>
     );
 };
@@ -33,12 +46,7 @@ const LandingPage = ({classes, volcanoes, toggle, sulfurMaps}) => {
 LandingPage.propTypes = {
     classes: PropTypes.object.isRequired,
     volcanoes: PropTypes.array.isRequired,
-    toggle: PropTypes.bool.isRequired,
     sulfurMaps: PropTypes.array.isRequired,
-};
-
-LandingPage.defaultProps = {
-    toggle: true,
 };
 
 export default withStyles(styles)(LandingPage)

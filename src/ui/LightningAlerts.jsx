@@ -28,13 +28,13 @@ const styles = {
         verticalAlign: 'middle',
         display: 'inline',
         marginLeft:'10px'
-    }
+    },
 };
 
 const LightningAlerts = ({classes}) => {
 
-    const [alerts, setAlerts] = useState({severity:'success', msg: ''})
-    const [loaded, setLoaded] = useState(false)
+    const [alerts, setAlerts] = useState({severity:'success', msg: ''});
+    const [loaded, setLoaded] = useState(false);
 
     const fetchData = () => {
         setLoaded(false);
@@ -52,7 +52,7 @@ const LightningAlerts = ({classes}) => {
                 };
                 setLoaded(true);
         }).catch(() => { setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'}); setLoaded(true); })  
-    }
+    };
 
     useEffect(() => { fetchData() },[]);
 

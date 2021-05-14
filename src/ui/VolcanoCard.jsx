@@ -38,7 +38,7 @@ const styles = {
     },
     alerIcon: {
         position:'absolute',
-        right:'10%',
+        right:'8%',
         top:'1%'
     },
     alertBulletin: {
@@ -71,8 +71,8 @@ const VolcanoCard = ({classes, volcano, fontSize}) => {
     const volcanicAlerts = useSelector(state => state.volcanicAlerts);
     const gridDisplay = useSelector(state => state.gridDisplay);
     const alertFontSize = gridDisplay === 6 ? '14px' : '16px';
-    const bulletinWidth = gridDisplay === 6 ? '70%' : '50%'
-    const [showAlert, setAlertVisibility] = useState(false)
+    const bulletinWidth = gridDisplay === 6 ? '70%' : '50%';
+    const [showAlert, setAlertVisibility] = useState(false);
 
     const renderAlertBulletin = alert => {
         return (
@@ -83,8 +83,8 @@ const VolcanoCard = ({classes, volcano, fontSize}) => {
                     <Typography style={{fontWeight:'bold',fontSize:alertFontSize}}>{alert.alertMsg}</Typography>
                 </Paper>}
             </div>
-        )
-    }
+        );
+    };
 
     const renderVolcano = () => {
         const alert = volcanicAlerts.find(v => v.volcano === volcano.mountain);

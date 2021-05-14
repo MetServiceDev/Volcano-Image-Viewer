@@ -25,7 +25,8 @@ const styles = {
     menuIcon: {
         cursor: 'pointer',
         verticalAlign: 'middle',
-        fontSize: '28px'
+        fontSize: '28px',
+        textAlign: 'center'
     },
 };
 

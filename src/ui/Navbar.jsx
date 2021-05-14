@@ -17,7 +17,7 @@ import { useDispatch, useSelector  } from 'react-redux';
 import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../redux/actions';
 import Select from '@material-ui/core/Select';
 import Alert from '@material-ui/lab/Alert';
-import MinimizeIcon from '@material-ui/icons/Minimize';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = {
     root: {
@@ -67,7 +67,7 @@ const styles = {
         height: '4vh',
         padding:'0px',
         position:'absolute',
-        left:'10%',
+        left:'15%',
         fontSize: '16px',
         outline: 'white',
         backgroundColor: 'white'
@@ -76,16 +76,16 @@ const styles = {
         width: '20%',
         float:'right',
         marginRight:'40px',
-        padding:'0px 10px 0px 5px'
+        padding:'0px 10px 0px 5px',
+        fontSize:'12px'
     },
     minimize: {
         position: 'relative',
-        top: '-25%',
         cursor: 'pointer'
     }
 };
 
-const Navbar = ({classes, showVAAC, showSO2}) => {
+const Navbar = ({classes}) => {
     const dispatch = useDispatch();
 
     const [showFilter, toggleFilter] = useState(false);
@@ -109,7 +109,7 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
 
     return (
         <div className={classes.root}>
-            <span className={classes.toggleButton}><MapToggle showVAAC={showVAAC} showSO2={showSO2}/></span>
+            <span className={classes.toggleButton}><MapToggle/></span>
             <ButtonBase className={classes.filterButton}><FilterListIcon onClick={()=>{toggleFilter(!showFilter)}}/></ButtonBase>
             {showFilter && <Paper className={classes.filterMenu}>
                 <MenuList>
@@ -137,7 +137,7 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
                 }}
             />
             {showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
-                action={<MinimizeIcon className={classes.minimize} onClick={()=>{toggleRefreshWarning(false)}}/>}>
+                action={<CloseIcon className={classes.minimize} onClick={()=>{toggleRefreshWarning(false)}}/>}>
                 This page refreshes every 10 minutes
             </Alert>}
         </div>
@@ -146,8 +146,6 @@ const Navbar = ({classes, showVAAC, showSO2}) => {
 
 Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
-    showVAAC: PropTypes.func.isRequired,
-    showSO2: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Navbar);

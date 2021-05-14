@@ -29,8 +29,8 @@ const setAlertStatus = (data) => {
         case '1':
             return {severity: 'success', msg: data.alertMsg, icon:<ReportProblemOutlinedIcon/> }
         case '2':
-            return {severity: 'warning', msg: data.alertMsg}
         case '3':
+            return {severity: 'warning', msg: data.alertMsg}
         case '4':
         case '5':
             return {severity: 'error', msg: data.alertMsg}
@@ -45,10 +45,10 @@ const VolcanicAlert = ({classes, data, toggle}) => {
     useEffect(() => {
         const alertStatus = setAlertStatus(data)
         setAlert(alertStatus);
-    },[data])
+    },[data]);
 
     if(!data){
-        return null
+        return null;
     }
     return (
         <div className={classes.root}>
@@ -56,7 +56,7 @@ const VolcanicAlert = ({classes, data, toggle}) => {
                 Alert level {data.alertLevel} - {alert.msg}
             </Alert>       
         </div> 
-    )
+    );
 };
 
 VolcanicAlert.propTypes = {

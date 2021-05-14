@@ -37,3 +37,8 @@ export const handleVolcanicAlerts = array => ({
     type: 'SET_VOLCANIC_ALERTS',
     payload: array
 })
+
+export const handleCurrentDisplay = string => ({
+    type: 'SET_CURRENT_DISPLAY',
+    payload: string
+})

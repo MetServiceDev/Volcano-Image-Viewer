@@ -7,6 +7,10 @@ export const Volcanoes = [
         location:'Vanuatu',
         s3Link: 'AMB1',
         mountain: 'Ambrym',
+        coordinates: {
+            lat: -16.249999,
+            long: 168.1166662
+        }
     },
     {
         name: 'Aoba',
@@ -16,6 +20,10 @@ export const Volcanoes = [
         location:'Vanuatu',
         s3Link: 'LVVL',
         mountain: 'Aoba',
+        coordinates: {
+            lat: -15.3999984, 
+            long: 167.83333
+        },
     },
     {
         name: 'Lopevi',
@@ -25,6 +33,10 @@ export const Volcanoes = [
         location:'Vanuatu',
         s3Link: 'LPV',
         mountain: 'Lopevi',
+        coordinates: {
+            lat: -16.503997984, 
+            long: 168.34083197
+        }
     },
     {
         name: 'Yasur',
@@ -34,6 +46,10 @@ export const Volcanoes = [
         location:'Vanuatu',
         s3Link: 'YASH',
         mountain: 'Yasur',
+        coordinates: {
+            lat: -19.523664572, 
+            long: 169.442331564
+        }
     },
     {
         name: 'Taranaki',
@@ -41,7 +57,11 @@ export const Volcanoes = [
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/pke-seismic-drum.png',
         location:'NZ',
         s3Link: 'taranaki',
-        mountain: 'Taranaki'
+        mountain: 'Taranaki',
+        coordinates: {
+            lat: -39.296389,
+            long: 174.064722
+        }
     },
     {
         name: 'Ngauruhoe',
@@ -51,6 +71,10 @@ export const Volcanoes = [
         location:'Central NI',
         s3Link: 'ngauruhoe',
         mountain: 'Ngauruhoe',
+        coordinates: {
+            lat: -39.156833, 
+            long: 175.632167
+        }
     },
     {
         name: 'Ngauruhoe Ruapehu',
@@ -60,6 +84,10 @@ export const Volcanoes = [
         location:'Central NI',
         s3Link: 'ruapehungauruhoe',
         mountain: 'Ngauruhoe',
+        coordinates: {
+            lat: -39.156833, 
+            long: 175.632167
+        }
     },
     {
         name: 'Ruapehu North',
@@ -69,6 +97,10 @@ export const Volcanoes = [
         location:'Central NI',
         s3Link: 'ruapehunorth',
         mountain: 'Ruapehu',
+        coordinates: {
+            lat: -39.283333, 
+            long: 175.566667
+        }
     },
     {
         name: 'Ruapehu South',
@@ -78,6 +110,10 @@ export const Volcanoes = [
         location:'Central NI',
         s3Link: 'ruapehusouth',
         mountain: 'Ruapehu',
+        coordinates: {
+            lat: -39.283333, 
+            long: 175.566667
+        }
     },
     {
         name: 'Tongariro',
@@ -87,6 +123,10 @@ export const Volcanoes = [
         location:'Central NI',
         s3Link: 'tongariro',
         mountain: 'Tongariro',
+        coordinates: {
+            lat: -39.1333328,
+            long: 175.6499974 
+        }
     },
     {
         name: 'Tongariro Te Maari Crater',
@@ -96,6 +136,10 @@ export const Volcanoes = [
         location:'Central NI',
         s3Link: 'tongarirotemaaricrater',
         mountain: 'Tongariro',
+        coordinates: {
+            lat: -39.1333328,
+            long: 175.6499974 
+        }
     },
     {
         name: 'White Island',
@@ -105,6 +149,10 @@ export const Volcanoes = [
         location:'WI',
         s3Link: 'whakatane',
         mountain: 'White Island',
+        coordinates: {
+            lat: -37.52,
+            long: 177.1825
+        }
     },
     {
         name: 'White Island Crater Floor',
@@ -114,6 +162,10 @@ export const Volcanoes = [
         location:'WI',
         s3Link: 'whiteislandcraterfloor',
         mountain: 'White Island',
+        coordinates: {
+            lat: -37.52,
+            long: 177.1825
+        }
     },
     {
         name: 'White Island Crater Rim',
@@ -123,6 +175,10 @@ export const Volcanoes = [
         location:'WI',
         s3Link: 'whiteislandcraterrim',
         mountain: 'White Island',
+        coordinates: {
+            lat: -37.52,
+            long: 177.1825
+        }
     },
     {
         name: 'White Island West Rim',
@@ -132,6 +188,10 @@ export const Volcanoes = [
         location:'WI',
         s3Link: 'whiteislandwestrim',
         mountain: 'White Island',
+        coordinates: {
+            lat: -37.52,
+            long: 177.1825
+        }
     },
     {
         name:'Raoul Island',
@@ -139,12 +199,20 @@ export const Volcanoes = [
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/riz-seismic-drum.png',
         location:'NZ',
         s3Link: 'raoulisland',
-        mountain: 'Kermadec Islands'
+        mountain: 'Raoul Island',
+        coordinates: {
+            lat: -29.273522,
+            long: 182.066692
+        }
     },
     {
         name: 'Erebus',
         code:'ERB',
         location:'NZ',
         s3Link: 'erebus',
+        coordinates: {
+            lat: -77.529722,
+            long: 167.153333
+        }
     },
 ];

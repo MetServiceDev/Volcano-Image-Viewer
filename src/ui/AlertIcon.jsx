@@ -12,27 +12,26 @@ const styles = {
     },
     severeWarning: {
         color: '#ff2e2e'
-    }
-}
+    },
+};
 
 const AlertIcon = ({classes, data, showAlert, hideAlert, fontSize, toggle}) => {
     
     const getIcon = () => {
         switch(data.alertLevel){
             case '0':
-                return <ReportProblemOutlinedIcon className={classes.noWarning} style={{fontSize}}/>
             case '1':
-                return <ReportProblemOutlinedIcon className={classes.noWarning} style={{fontSize}}/>
+                return <ReportProblemOutlinedIcon className={classes.noWarning} style={{fontSize}}/>;
             case '2':
-                return <ReportProblemOutlinedIcon className={classes.mediumWarning} style={{fontSize}}/>
             case '3':
+                return <ReportProblemOutlinedIcon className={classes.mediumWarning} style={{fontSize}}/>;
             case '4':
             case '5':
-                return <ErrorOutlineOutlinedIcon className={classes.severeWarning} style={{fontSize}}/>
+                return <ErrorOutlineOutlinedIcon className={classes.severeWarning} style={{fontSize}}/>;
             default:
-                return
+                return;
         };
-    }
+    };
 
     return (
         <div onMouseEnter={showAlert} onMouseLeave={hideAlert} onClick={toggle}>

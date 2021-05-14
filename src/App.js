@@ -5,7 +5,7 @@ import Navbar from './ui//Navbar';
 import Sidebar from './ui/Sidebar';
 import { Volcanoes } from './Volcanoes';
 import LandingPage from './ui/LandingPage';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { SulfurMaps } from './SulfurMaps';
 import { Provider } from 'react-redux';
 import { store } from './redux';
@@ -16,7 +16,6 @@ import apiCall from './APICall';
 
 function App() {
 
-  const [toggle, setToggle] = useState(true);
   const dispatch = useDispatch();
   const setSidebar = val => dispatch(handleSidebar(val));
   const setGridDisplay = size => dispatch(handleGridDisplay(size));
@@ -54,12 +53,9 @@ function App() {
     <Router>
       <Route exact path='/'>
         <MetaTags><title>Volcano Webcam Monitor</title></MetaTags>
-        <Navbar
-          showVAAC={()=>{setToggle(true)}}
-          showSO2={()=>{setToggle(false)}}
-        />
+        <Navbar/>
         <Sidebar/>
-        <LandingPage volcanoes={Volcanoes} toggle={toggle} sulfurMaps={SulfurMaps}/>
+        <LandingPage volcanoes={Volcanoes} sulfurMaps={SulfurMaps}/>
       </Route>
       <Route exact path='/:volcano' render={props => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
     </Router>
