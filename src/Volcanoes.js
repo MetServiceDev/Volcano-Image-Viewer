@@ -199,10 +199,10 @@ export const Volcanoes = [
         drumLink: 'https://images.geonet.org.nz/volcano/drums/latest/riz-seismic-drum.png',
         location:'NZ',
         s3Link: 'raoulisland',
-        mountain: 'Kermadec Islands',
+        mountain: 'Raoul Island',
         coordinates: {
-            lat: -29.266667,
-            long: -177.916667
+            lat: -29.273522,
+            long: 182.066692
         }
     },
     {

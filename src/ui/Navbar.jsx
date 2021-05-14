@@ -17,7 +17,7 @@ import { useDispatch, useSelector  } from 'react-redux';
 import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../redux/actions';
 import Select from '@material-ui/core/Select';
 import Alert from '@material-ui/lab/Alert';
-import MinimizeIcon from '@material-ui/icons/Minimize';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = {
     root: {
@@ -81,7 +81,6 @@ const styles = {
     },
     minimize: {
         position: 'relative',
-        top: '-25%',
         cursor: 'pointer'
     }
 };
@@ -138,7 +137,7 @@ const Navbar = ({classes}) => {
                 }}
             />
             {showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
-                action={<MinimizeIcon className={classes.minimize} onClick={()=>{toggleRefreshWarning(false)}}/>}>
+                action={<CloseIcon className={classes.minimize} onClick={()=>{toggleRefreshWarning(false)}}/>}>
                 This page refreshes every 10 minutes
             </Alert>}
         </div>

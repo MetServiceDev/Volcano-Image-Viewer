@@ -45,10 +45,10 @@ const VolcanicAlert = ({classes, data, toggle}) => {
     useEffect(() => {
         const alertStatus = setAlertStatus(data)
         setAlert(alertStatus);
-    },[data])
+    },[data]);
 
     if(!data){
-        return null
+        return null;
     }
     return (
         <div className={classes.root}>
@@ -56,7 +56,7 @@ const VolcanicAlert = ({classes, data, toggle}) => {
                 Alert level {data.alertLevel} - {alert.msg}
             </Alert>       
         </div> 
-    )
+    );
 };
 
 VolcanicAlert.propTypes = {
