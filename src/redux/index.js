@@ -13,7 +13,9 @@ const initialState = {
   expandSidebar: true,
   timestamps: [],
   volcanicAlerts: [],
-  currentDisplay: 'VOLCANO_MATRIX'
+  currentDisplay: 'VOLCANO_MATRIX',
+  lightningAlerts:{},
+  loggedIn: false
 };
 
 export const store = createStore(
@@ -70,6 +72,16 @@ function reducer(state, action) {
         return {
             ...state,
             currentDisplay: action.payload
+        }
+    case 'SET_LIGHTNING_DATA':
+        return {
+            ...state,
+            lightningAlerts: action.payload
+        }
+    case 'SET_LOGIN':
+        return {
+            ...state,
+            loggedIn: action.payload
         }
     default:
       return state;

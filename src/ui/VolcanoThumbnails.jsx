@@ -7,6 +7,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorMessage from './ErrorMessage';
 import { imageBucket } from '../Endpoints';
 import { useSelector } from 'react-redux';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 
 const styles = {
     root: {
@@ -37,13 +38,22 @@ const styles = {
     loader: {
         width: '100%',
         bottom:'0%',
-        position: 'absolute'
+        position: 'absolute',
+        backgroundColor:'rgba(255, 187, 0, 0.5)',
     },
     loadingDiv: {
         height:'24vh',
         textAlign:'center'
     },
 };
+
+const theme = createMuiTheme({
+    palette: {
+       secondary: {
+           main: '#ffbb00'
+       }
+    }
+});
 
 const VolcanoThumbnail = ({classes, volcano}) => {
     const timestamps = useSelector(state => state.timestamps);
@@ -63,7 +73,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     if(!isLoaded){
         return (
             <div className={classes.loadingDiv}>
-                <LinearProgress className={classes.loader}/>
+                <MuiThemeProvider theme={theme}><LinearProgress className={classes.loader} color='secondary'/></MuiThemeProvider>
             </div>
         );
     };

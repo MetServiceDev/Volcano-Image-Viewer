@@ -40,9 +40,10 @@ const styles = {
 }
 
 const SulfurMaps = ({classes, sulfurMaps}) => {
+
     return (
         <div className={classes.root}>
-            {sulfurMaps.map((so2, index) => { 
+            {sulfurMaps.map((so2, index) => {
                 return (
                     <Link className={classes.link} to={{pathname: so2.link}} target='_blank' key={index}>
                         <Paper className={classes.div} elevation={3}>

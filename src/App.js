@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import VolcanoOverview from './ui/VolcanoOverview';
 import Navbar from './ui//Navbar';
 import Sidebar from './ui/Sidebar';
@@ -10,9 +10,10 @@ import { SulfurMaps } from './SulfurMaps';
 import { Provider } from 'react-redux';
 import { store } from './redux';
 import MetaTags from 'react-meta-tags';
-import { useDispatch } from 'react-redux';
-import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts } from './redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts, handleLogin } from './redux/actions';
 import apiCall from './APICall';
+import Login from './ui/Login';
 
 function App() {
 
@@ -21,31 +22,41 @@ function App() {
   const setGridDisplay = size => dispatch(handleGridDisplay(size));
   const setTimestamps = array => dispatch(handleTimestamps(array));
   const setVolcanicAlerts = array => dispatch(handleVolcanicAlerts(array));
+  const setLogin = bool => dispatch(handleLogin(bool));
+
+  const loggedIn = useSelector(state => state.loggedIn);
+
 
   useEffect(() => {
-    const expandSidebar = localStorage.getItem('expandSidebar');
-    const gridSize = localStorage.getItem('gridSize');
-    if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
-    if(gridSize){ setGridDisplay(Number(gridSize)); };
-    setInterval(() => {
-      window.location.reload();
-    },60000*10);
+    if(loggedIn){
+      const expandSidebar = localStorage.getItem('expandSidebar');
+      const gridSize = localStorage.getItem('gridSize');
+      if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
+      if(gridSize){ setGridDisplay(Number(gridSize)); };
+      setInterval(() => {
+        window.location.reload();
+      },60000*10);
+    };  
   });
 
   useEffect(() => {
-    apiCall('metadata').then(data => {
-      setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
-    })
+    if(loggedIn){
+      apiCall('metadata').then(data => {
+        setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
+      })
+    }
   // eslint-disable-next-line
   },[]);
 
   useEffect(() => {
-    fetch(`https://geonet-volcano-images.s3-ap-southeast-2.amazonaws.com/volcano-eruption-alerts.json`, {
-      headers: { 'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq' }
-    }).then(res => res.json())
-    .then(data => {
-      setVolcanicAlerts(data)
-    });
+    if(loggedIn){
+      fetch(`https://geonet-volcano-images.s3-ap-southeast-2.amazonaws.com/volcano-eruption-alerts.json`, {
+        headers: { 'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq' }
+      }).then(res => res.json())
+      .then(data => {
+        setVolcanicAlerts(data)
+      });
+    }  
     // eslint-disable-next-line
   },[])
 
@@ -53,11 +64,17 @@ function App() {
     <Router>
       <Route exact path='/'>
         <MetaTags><title>Volcano Webcam Monitor</title></MetaTags>
-        <Navbar/>
-        <Sidebar/>
-        <LandingPage volcanoes={Volcanoes} sulfurMaps={SulfurMaps}/>
+        {loggedIn ?
+          <div>
+            <Navbar/>
+            <Sidebar/>
+            <LandingPage volcanoes={Volcanoes} sulfurMaps={SulfurMaps}/>
+          </div> :
+          <Redirect to='/login' />     
+        }
       </Route>
-      <Route exact path='/:volcano' render={props => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
+      <Route exact path='/login' component={Login}/>
+      <Route exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
     </Router>
   );
 };

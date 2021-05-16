@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import VolcanoThumbnails from './VolcanoThumbnails';
 import { withStyles } from '@material-ui/styles';
@@ -63,8 +63,13 @@ const styles = {
     }
 };
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+
 const VolcanoOverview = ({classes, volcanoes}) => {
-    const { volcano } = useParams();
+    let query = useQuery();
+    const volcano = query.get('volcano')
     const volcanoObject = volcanoes.find(v => v.name === volcano);
     const name = volcanoObject.name
     const volcanicAlerts = useSelector(state => state.volcanicAlerts) || {};
