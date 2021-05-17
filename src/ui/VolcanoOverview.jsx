@@ -13,33 +13,60 @@ import VolcanicAlert from './VolcanicAlert';
 import AlertIcon from './AlertIcon';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
+import Slide from '@material-ui/core/Slide';
 
 const styles = {
     root: {
     },
     imgContainer: {
-        width:'100%'
+        width:'50%',
+        position: 'absolute',
+        left: '30%',
+        top: '2%'
     },
-    topSec:{
+    mainPanel:{
+        position: 'absolute',
+        width: '100%',
+        height: '80vh',
+        borderBottom: '1px solid #404040',
+    },
+    sidebar: {
+        width:'10%',
+        backgroundColor:'white',
+        boxShadow: '-2px 0px 8px #404040',
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        margin:'20px',
+        gridTemplateRows: '1fr 1fr 1fr',
+        height: '100%',
+        float:'left'
+    },
+    sideItem:{
+        padding:'20px',
+        opacity:'0.7',
+        transition: '0.5s',
+        cursor: 'pointer',
+        textAlign: 'center',
+        '&:hover': {
+            opacity:'1',
+        }
     },
     bottomSec: {
         width: '100%',
-        borderTop: '1px solid #404040',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr',
         margin:'auto',
         padding: '20px',
-        textAlign: 'center'
+        textAlign: 'center',
+        position: 'absolute',
+        bottom: '-25%',
     },
     link: {
         textDecoration: 'none',
         color: '#404040'
     },
     headerDiv: {
-        margin:'20px',
+        padding:'20px',
+        backgroundColor:'white',
+        borderBottom: '1px solid #404040',
     },
     homeIcon: {
         borderRadius: '5px',
@@ -65,7 +92,7 @@ const styles = {
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
-  }
+}
 
 const VolcanoOverview = ({classes, volcanoes}) => {
     let query = useQuery();
@@ -75,6 +102,19 @@ const VolcanoOverview = ({classes, volcanoes}) => {
     const volcanicAlerts = useSelector(state => state.volcanicAlerts) || {};
     const volcanoAlert = volcanicAlerts.find(v => v.volcano === volcanoObject.mountain);
     const [showAlert, toggleAlert] = useState(true)
+    const [currentDisplay, setCurrentDisplay] = useState('THUMBNAIL')
+    const landingImg = `${imageBucket}/${volcanoObject.s3Link}/${volcanoObject.s3Link}-12.jpg`
+
+    const setDisplay = (currentDisplay) => {
+        switch(currentDisplay){
+            case 'THUMBNAIL':
+                return <div><VolcanoThumbnails volcano={volcanoObject}/></div>;
+            case 'DRUM_GRAPH':
+                return <img src={volcanoObject.location === 'Vanuatu' ? volcanoObject.drumLink : `${volcanoObject.drumLink}-drum.png`} alt={volcanoObject.name} width='100%'/>
+            case 'RSAM':
+                return <img src={`${volcanoObject.drumLink}-combined.png`} alt={volcanoObject.name} width='100%'/>
+        }
+    }
 
     return(
         <div className={classes.root}>
@@ -89,11 +129,35 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                     <span className={classes.alerIcon}><AlertIcon data={volcanoAlert} toggle={()=>{toggleAlert(!showAlert)}}/></span>
                 }
             </div>
-            <div className={classes.topSec}>
-                <div className={classes.imgContainer}>
-                    <VolcanoThumbnails volcano={volcanoObject}/>
+            <div className={classes.mainPanel}>
+                <div className={classes.sidebar}>
+                    <div className={classes.sideItem}>
+                        <img src={landingImg} alt={volcano.name} width='100%' onClick={() => {setCurrentDisplay('THUMBNAIL')}}/>
+                        <Typography>Live Images</Typography>
+                    </div>
+                    {volcanoObject.drumLink &&
+                        <div className={classes.sideItem} >
+                            <img 
+                                src={volcanoObject.location === 'Vanuatu' ? volcanoObject.drumLink : `${volcanoObject.drumLink}-drum.png`} 
+                                alt={volcanoObject.name} 
+                                width='100%' 
+                                onClick={() => {setCurrentDisplay('DRUM_GRAPH')}}
+                            />
+                            <Typography>Drum Plot</Typography>
+                        </div>}
+                    {volcanoObject.location !== 'Vanuatu' && volcanoObject.drumLink && 
+                        <div className={classes.sideItem} >
+                            <img 
+                                src={`${volcanoObject.drumLink}-combined.png`} 
+                                alt={volcanoObject.name} width='100%' 
+                                onClick={() => {setCurrentDisplay('RSAM')}}
+                            />
+                            <Typography>RASM & SSAM</Typography>
+                        </div>}
                 </div>
-                {volcanoObject.drumLink && <img src={volcanoObject.drumLink} alt={volcanoObject.name} width='100%'/>}
+                <div className={classes.imgContainer}>
+                    {setDisplay(currentDisplay)}
+                </div>
             </div>
             <div className={classes.bottomSec}>
                 {volcanoObject.relatedVolcanoes && volcanoObject.relatedVolcanoes.map((vol, index) => {
@@ -104,8 +168,8 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                         <Link className={classes.link} to={volcano.name} target='_blank' key={volcano.code}>
                             <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
                                 <div>
-                                    <img src={src} alt={volcano.name} width='50%' className={classes.relatedVolcanoes}/>
-                                    <Typography variant='h4'>{volcano.name}</Typography>
+                                    <img src={src} alt={volcano.name} width='40%' className={classes.relatedVolcanoes}/>
+                                    <Typography variant='h5'>{volcano.name}</Typography>
                                 </div>
                             </Grow>
                         </Link>
