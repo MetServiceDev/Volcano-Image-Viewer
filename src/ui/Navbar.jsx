@@ -73,18 +73,9 @@ const styles = {
         fontSize: '16px',
         outline: 'white',
         backgroundColor: 'white',
-        '& label.Mui-focused': {
-            color: '#121212',
-          },
-          '& .MuiInput-underline:after': {
-            borderBottomColor: '#ffbb00',
-          },
-          '& .MuiOutlinedInput-root': {
-          
-            '&.Mui-focused fieldset': {
-              borderColor: '#ffbb00',
-            },
-        }
+        "& .MuiSelect-select": {
+            background: 'none',
+        },
     },
     refreshWarning: {
         width: '20%',
@@ -109,10 +100,7 @@ const Navbar = ({classes}) => {
     const toggleCNI = val => dispatch(handleCNIFilter(val));
     const toggleWI = val => dispatch(handleWIFilter(val));
     const gridDisplay = useSelector(state => state.gridDisplay);
-    const showNZ = useSelector(state => state.showNZ);
-    const showVA = useSelector(state => state.showVA);
-    const showCNI = useSelector(state => state.showCNI);
-    const showWI = useSelector(state => state.showWI);
+    const { showNZ, showVA, showCNI, showWI } = useSelector(state => state);
     const [showRefreshWarning, toggleRefreshWarning] = useState(true)
 
     const setGrid = (e) => {

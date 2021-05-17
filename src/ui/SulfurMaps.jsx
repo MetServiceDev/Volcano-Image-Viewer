@@ -36,11 +36,10 @@ const styles = {
         position:'absolute',
         right:'1%',
         top:'1%'
-    }
-}
+    },
+};
 
 const SulfurMaps = ({classes, sulfurMaps}) => {
-
     return (
         <div className={classes.root}>
             {sulfurMaps.map((so2, index) => {
@@ -54,8 +53,8 @@ const SulfurMaps = ({classes, sulfurMaps}) => {
                             <img src={so2.img} alt={so2.name} width='100%'/>
                         </Paper>
                     </Link>
-                )
-            })}
+                );
+            })};
         </div>
     )
 };

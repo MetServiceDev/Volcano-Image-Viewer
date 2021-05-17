@@ -6,9 +6,12 @@ import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import { useState, useRef } from 'react';
-import Typography from '@material-ui/core/Typography';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { handleLogin } from '../redux/actions';
 import { Redirect } from 'react-router-dom';
+import authClient from '../Auth';
+import Alert from '@material-ui/lab/Alert';
+
 
 const styles = {
     root: {
@@ -69,6 +72,12 @@ const styles = {
         width:'100%',
         backgroundColor:'rgba(255, 187, 0, 0.5)',
     },
+    errorMsg: {
+        position: 'fixed',
+        width:'30%',
+        top:'80%',
+        left:'35%'
+    }
 };
 
 const theme = createMuiTheme({
@@ -81,6 +90,7 @@ const theme = createMuiTheme({
 
 const Login = ({classes}) => {
 
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -89,16 +99,19 @@ const Login = ({classes}) => {
     const emailRef = useRef()
 
     const [passwordError, setPasswordError] = useState(false)
-    const passRef = useRef()
+    const passRef = useRef();
 
+    const setLogin = bool => dispatch(handleLogin(bool));
     const loggedIn = useSelector(state => state.loggedIn);
+
+    const [error, setError] = useState({msg:'', show:false});
 
     const login = () => {
         setLoading(true)
         if(email === ''){
             setEError(true)
             emailRef.current.focus()
-            emailRef.current.placeholder = 'Email Required';
+            emailRef.current.placeholder = 'Username Required';
             setLoading(false)
             return
         }
@@ -109,11 +122,25 @@ const Login = ({classes}) => {
             setLoading(false)
             return
         }
-    }
 
-    if(loggedIn){
-        return <Redirect to='/'/> 
-    }
+        authClient.signIn({ email, password }).then(async(res) => {           
+            if (res.status === 'SUCCESS') {
+                const successResult = await authClient.token.getWithoutPrompt({
+                    responseType: ['id_token', 'token'],
+                    sessionToken: res.sessionToken,
+                    redirectUri: 'http://localhost:3000',
+                });
+                const accessToken = successResult.tokens.accessToken.accessToken;
+                localStorage.setItem('token', accessToken);
+                setLogin(true);
+            }
+        }).catch(e => {
+            setLoading(false)
+            setError({msg: e.toString(), show:true})
+        })
+    };
+
+    if(loggedIn){ return <Redirect to='/'/> }
 
     return (
         <div className={classes.root}>
@@ -122,13 +149,14 @@ const Login = ({classes}) => {
                 <TextField 
                     className={classes.input} 
                     label="Email" 
+                    type='email'
                     style={{top:'30%'}}
-                    error={emailError} 
+                    error={emailError}
                     inputRef={emailRef}
                     onChange={(e) => {setEmail(e.target.value); setEError(false)}} 
                 />
                 <TextField 
-                    className={classes.input} 
+                    className={classes.input}
                     label="Password" 
                     style={{top:'50%'}} 
                     type="password"
@@ -139,6 +167,7 @@ const Login = ({classes}) => {
                 <Button className={classes.button} onClick={login}>Login</Button>
                 {loading && <MuiThemeProvider theme={theme}><LinearProgress className={classes.loader} color="secondary"/></MuiThemeProvider>}
             </Paper>
+            {error.show && <Alert className={classes.errorMsg} icon={alert.icon} severity='error'> {error.msg}</Alert>}
         </div>
     );
 };

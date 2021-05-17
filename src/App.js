@@ -26,6 +26,12 @@ function App() {
 
   const loggedIn = useSelector(state => state.loggedIn);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(token){
+      setLogin(true);
+    };
+  });
 
   useEffect(() => {
     if(loggedIn){
@@ -45,20 +51,17 @@ function App() {
         setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
       })
     }
-  // eslint-disable-next-line
-  },[]);
+  });
 
   useEffect(() => {
     if(loggedIn){
-      fetch(`https://geonet-volcano-images.s3-ap-southeast-2.amazonaws.com/volcano-eruption-alerts.json`, {
-        headers: { 'x-api-key': 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq' }
-      }).then(res => res.json())
-      .then(data => {
-        setVolcanicAlerts(data)
-      });
-    }  
-    // eslint-disable-next-line
-  },[])
+      fetch(`https://geonet-volcano-images.s3-ap-southeast-2.amazonaws.com/volcano-eruption-alerts.json`)
+        .then(res => res.json())
+        .then(data => {
+          setVolcanicAlerts(data)
+        });
+    }
+  })
 
   return (
     <Router>
