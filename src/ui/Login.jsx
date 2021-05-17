@@ -91,7 +91,7 @@ const theme = createMuiTheme({
 const Login = ({classes}) => {
 
     const dispatch = useDispatch();
-    const [email, setEmail] = useState('')
+    const [username, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -108,7 +108,7 @@ const Login = ({classes}) => {
 
     const login = () => {
         setLoading(true)
-        if(email === ''){
+        if(username === ''){
             setEError(true)
             emailRef.current.focus()
             emailRef.current.placeholder = 'Username Required';
@@ -123,7 +123,7 @@ const Login = ({classes}) => {
             return
         }
 
-        authClient.signIn({ email, password }).then(async(res) => {           
+        authClient.signInWithCredentials({username, password }).then(async(res) => {           
             if (res.status === 'SUCCESS') {
                 const successResult = await authClient.token.getWithoutPrompt({
                     responseType: ['id_token', 'token'],
