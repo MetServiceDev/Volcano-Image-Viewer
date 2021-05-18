@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import VolcanoCard from './VolcanoCard';
+import SatelliteCard from './SatelliteCard';
 
 const styles = {
     root: {
@@ -26,17 +27,18 @@ const VolcanoMatrix = ({classes, volcanoes}) => {
 
     return (
         <div className={classes.root} style={gridLayout}>
-                {volcanoes.map(volcano => {
-                    return(
-                        <Fragment key={volcano.code}>
-                            {volcano.location === 'Vanuatu' && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                            {volcano.location === 'NZ' && showNZ && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                            {volcano.location === 'Central NI' && showCNI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                            {volcano.location === 'WI' && showWI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                        </Fragment>
-                    ); 
-                })}
-            </div>
+            {volcanoes.map(volcano => {
+                return(
+                    <Fragment key={volcano.code}>
+                        {volcano.location === 'Vanuatu' && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === 'NZ' && showNZ && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === 'Central NI' && showCNI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === 'WI' && showWI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                    </Fragment>
+                );
+            })}
+            <SatelliteCard fontSize={fontSize}/>
+        </div>  
     );
 };
 

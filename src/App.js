@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts, handleLogin } from './redux/actions';
 import apiCall from './APICall';
 import Login from './ui/Login';
+import authClient from './Auth';
+import AshMapOverview from './ui/AshMap';
 
 function App() {
 
@@ -25,11 +27,21 @@ function App() {
   const setLogin = bool => dispatch(handleLogin(bool));
 
   const loggedIn = useSelector(state => state.loggedIn);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if(token){
-      setLogin(true);
+      authClient.token.getWithoutPrompt({
+          responseType: ['id_token', 'token'],
+          redirectUri: 'http://localhost:3000',
+      }).then((res) => {
+        const accessToken = res.tokens.accessToken.accessToken;
+        localStorage.setItem('token', accessToken);
+        setLogin(true);
+      }).catch(err => console.log(err));
+    }
+    else {
+      setLogin(false);
     };
   });
 
@@ -47,7 +59,7 @@ function App() {
 
   useEffect(() => {
     if(loggedIn){
-      apiCall('metadata').then(data => {
+      apiCall('metadata', 'GET', token).then(data => {
         setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
       })
     }
@@ -55,12 +67,8 @@ function App() {
 
   useEffect(() => {
     if(loggedIn){
-      fetch(`https://geonet-volcano-images.s3-ap-southeast-2.amazonaws.com/volcano-eruption-alerts.json`)
-        .then(res => res.json())
-        .then(data => {
-          setVolcanicAlerts(data)
-        });
-    }
+      apiCall('volcanic-alerts', 'GET', token).then(data => { setVolcanicAlerts(data.body); })
+    };
   })
 
   return (
@@ -78,6 +86,7 @@ function App() {
       </Route>
       <Route exact path='/login' component={Login}/>
       <Route exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={Volcanoes}/>)}/>
+      <Route exact path='/Vanuatu Ash Map' render={props => (<AshMapOverview {...props}/>)}/>
     </Router>
   );
 };

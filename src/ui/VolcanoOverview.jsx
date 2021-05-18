@@ -13,7 +13,6 @@ import VolcanicAlert from './VolcanicAlert';
 import AlertIcon from './AlertIcon';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
-import Slide from '@material-ui/core/Slide';
 
 const styles = {
     root: {
@@ -37,7 +36,7 @@ const styles = {
         display: 'grid',
         gridTemplateRows: '1fr 1fr 1fr',
         height: '100%',
-        float:'left'
+        float:'left',
     },
     sideItem:{
         padding:'20px',
@@ -113,6 +112,8 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                 return <img src={volcanoObject.location === 'Vanuatu' ? volcanoObject.drumLink : `${volcanoObject.drumLink}-drum.png`} alt={volcanoObject.name} width='100%'/>
             case 'RSAM':
                 return <img src={`${volcanoObject.drumLink}-combined.png`} alt={volcanoObject.name} width='100%'/>
+            default:
+                return
         }
     }
 

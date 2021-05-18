@@ -40,10 +40,11 @@ const LightningAlerts = ({classes}) => {
     const [loaded, setLoaded] = useState(false);
     const setLightningAlerts = data => dispatch(handleLightningAlerts(data));
     const currentAlerts = useSelector(state => state.lightningAlerts);
+    const token = localStorage.getItem('token');
 
     const fetchData = () => {
         setLoaded(false);
-        apiCall('lightning-data').then(data => {
+        apiCall('lightning-data', 'GET', token).then(data => {
             const res = JSON.parse(data.responseBody)
                 const { alertCheck, innerCheck, alertNames, innerNames, areas, twentyKStrikes, hundredKStrikes } = res;
                 if(alertCheck === 0 && innerCheck === 0){

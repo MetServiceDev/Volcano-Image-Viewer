@@ -1,12 +1,19 @@
 import { apiEndpoint } from './Endpoints';
 
-const apiKey = 'lKbptndQxl2AO4liuRVvi53IQZFLNMQI4tv3RrFq'
-const token = localStorage.getItem('token');
-
-const apiCall = async (route) => {
-    const call  = await fetch(`${apiEndpoint}/${route}`, { headers: { 'x-api-key': apiKey, 'Authorization': `Bearer ${token}` }});
-    const data = await call.json();
-    return data;
+const apiCall = async (route, method, token, body) => {
+    try{
+        const call  = await fetch(`${apiEndpoint}/${route}`, { 
+                method: method, 
+                body: method === 'GET' ? null : JSON.stringify(body), 
+                headers: { 'Authorization': token 
+            }});
+        const data = await call.json();
+        return data;
+    }catch(err){
+        console.log(err)
+        throw err;
+    }
+    
 };
 
 export default apiCall;

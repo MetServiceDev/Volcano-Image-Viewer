@@ -123,7 +123,7 @@ const Login = ({classes}) => {
             return
         }
 
-        authClient.signInWithCredentials({username, password }).then(async(res) => {           
+        authClient.signInWithCredentials({ username, password }).then(async(res) => {    
             if (res.status === 'SUCCESS') {
                 const successResult = await authClient.token.getWithoutPrompt({
                     responseType: ['id_token', 'token'],
@@ -131,6 +131,7 @@ const Login = ({classes}) => {
                     redirectUri: 'http://localhost:3000',
                 });
                 const accessToken = successResult.tokens.accessToken.accessToken;
+                authClient.tokenManager.setTokens(successResult)
                 localStorage.setItem('token', accessToken);
                 setLogin(true);
             }
