@@ -1,4 +1,5 @@
 import { OktaAuth } from '@okta/okta-auth-js';
+import { redirectUri } from './Endpoints';
 
 var authClient = new OktaAuth({
     url: 'https://dev-metraweather.oktapreview.com',
@@ -7,7 +8,7 @@ var authClient = new OktaAuth({
         autoRenew: true
     },
     clientId: '0oaz90a79pSqxbUL70h7',
-    redirectUri: 'http://localhost:3000',
+    redirectUri: redirectUri,
     issuer: 'https://dev-metraweather.oktapreview.com/oauth2/default' 
 });
 
