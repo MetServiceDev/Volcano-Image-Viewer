@@ -8,6 +8,7 @@ import SatelliteCard from './SatelliteCard';
 const styles = {
     root: {
         display: 'grid',
+        marginBottom: '20px'
     }
 };
 

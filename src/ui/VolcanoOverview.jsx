@@ -73,7 +73,8 @@ const styles = {
     },
     headerText: {
         display:'inline',
-        verticalAlign:'middle'
+        verticalAlign:'middle',
+        textAlign:'center'
     },
     relatedVolcanoes: {
         transition: '0.5s',

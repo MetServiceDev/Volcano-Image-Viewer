@@ -11,7 +11,7 @@ import { handleLogin } from '../redux/actions';
 import { Redirect } from 'react-router-dom';
 import authClient from '../Auth';
 import Alert from '@material-ui/lab/Alert';
-
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -171,6 +171,10 @@ const Login = ({classes}) => {
             {error.show && <Alert className={classes.errorMsg} icon={alert.icon} severity='error'> {error.msg}</Alert>}
         </div>
     );
+};
+
+Login.propTypes = {
+    classes:PropTypes.object
 };
 
 export default withStyles(styles)(Login);

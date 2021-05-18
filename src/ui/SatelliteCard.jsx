@@ -3,8 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ash from '../images/vanuatu_2000m_202105170200_Ash.png';
 import { Link } from 'react-router-dom';
-import dust from '../images/vanuatu_2000m_202105170200_Dust.png'
-import color from '../images/vanuatu_1000m_202105170450_True-Colour.png'
+import PropTypes from 'prop-types';
 
 const styles = {
     root: {
@@ -50,6 +49,11 @@ const SatelliteCard = ({classes, fontSize}) => {
             </div>
         </Link>
     );
+};
+
+SatelliteCard.propTypes = {
+    classes: PropTypes.object,
+    fontSize: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(SatelliteCard);
