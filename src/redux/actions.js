@@ -52,3 +52,8 @@ export const handleLogin = bool => ({
     type: 'SET_LOGIN',
     payload: bool
 })
+
+export const handleVolcanoData = array => ({
+    type: 'SET_VOLCANOES',
+    payload: array
+})

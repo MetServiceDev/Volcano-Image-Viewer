@@ -24,8 +24,7 @@ const styles = {
     menuIcon: {
         cursor: 'pointer',
         verticalAlign: 'middle',
-        fontSize: '28px',
-        paddingTop:'10px'
+        fontSize: '28px'
     },
     collapseIcon: {
         cursor: 'pointer',
@@ -33,7 +32,6 @@ const styles = {
         marginLeft: 'auto',
         marginRight: 'auto',
         fontSize: '28px',
-        paddingTop:'10px'
     }
 };
 

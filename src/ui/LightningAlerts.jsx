@@ -24,7 +24,8 @@ const styles = {
     },
     loader: {
         verticalAlign:'middle',
-        marginLeft:'10px'
+        marginLeft:'10px',
+        color: '#ffbb00'
     },
     text: {
         verticalAlign: 'middle',

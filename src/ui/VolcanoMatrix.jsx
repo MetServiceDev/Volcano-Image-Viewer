@@ -15,10 +15,7 @@ const styles = {
 const VolcanoMatrix = ({classes, volcanoes}) => {
 
     const gridDisplay = useSelector(state => state.gridDisplay);
-    const showNZ = useSelector(state => state.showNZ);
-    const showVA = useSelector(state => state.showVA);
-    const showCNI = useSelector(state => state.showCNI);
-    const showWI = useSelector(state => state.showWI);
+    const {showNZ, showVA, showCNI, showWI} = useSelector(state => state);
 
     const gridLayout = {
         gridTemplateColumns: `repeat(${gridDisplay}, 1fr)`,
@@ -39,7 +36,7 @@ const VolcanoMatrix = ({classes, volcanoes}) => {
                 );
             })}
             <SatelliteCard fontSize={fontSize}/>
-        </div>  
+        </div>
     );
 };
 

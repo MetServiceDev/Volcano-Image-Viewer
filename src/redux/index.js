@@ -5,17 +5,18 @@ import thunk from 'redux-thunk';
 const middleware = [thunk]
 
 const initialState = {
-  gridDisplay:4,
-  showNZ: true,
-  showVA: true,
-  showCNI: true,
-  showWI: true,
-  expandSidebar: true,
-  timestamps: [],
-  volcanicAlerts: [],
-  currentDisplay: 'VOLCANO_MATRIX',
-  lightningAlerts:{},
-  loggedIn: true,
+    volcanoes:[],
+    gridDisplay:4,
+    showNZ: true,
+    showVA: true,
+    showCNI: true,
+    showWI: true,
+    expandSidebar: true,
+    timestamps: [],
+    volcanicAlerts: [],
+    currentDisplay: 'VOLCANO_MATRIX',
+    lightningAlerts:{},
+    loggedIn: true,
 };
 
 export const store = createStore(
@@ -28,6 +29,11 @@ export const store = createStore(
 
 function reducer(state, action) {
   switch (action.type) {
+    case 'SET_VOLCANOES':
+        return {
+            ...state,
+            volcanoes:action.payload
+        }
     case 'SET_GRID_DISPLAY':
         return{
             ...state,

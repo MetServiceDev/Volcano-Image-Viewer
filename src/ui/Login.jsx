@@ -12,6 +12,7 @@ import { Redirect } from 'react-router-dom';
 import authClient from '../Auth';
 import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
+import { useOktaAuth } from '@okta/okta-react';
 
 const styles = {
     root: {
@@ -106,6 +107,8 @@ const Login = ({classes}) => {
 
     const [error, setError] = useState({msg:'', show:false});
 
+    const { oktaAuth } = useOktaAuth();
+
     const login = () => {
         setLoading(true)
         if(username === ''){
@@ -123,7 +126,7 @@ const Login = ({classes}) => {
             return
         }
 
-        authClient.signInWithCredentials({ username, password }).then(async(res) => {    
+        oktaAuth.signInWithCredentials({ username, password }).then(async(res) => {
             if (res.status === 'SUCCESS') {
                 const successResult = await authClient.token.getWithoutPrompt({
                     responseType: ['id_token', 'token'],

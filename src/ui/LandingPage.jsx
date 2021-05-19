@@ -5,6 +5,18 @@ import PropTypes from 'prop-types';
 import LightningAlerts from './LightningAlerts';
 import { useSelector } from 'react-redux';
 import VolcanoMap from './VolcanoMap';
+import LoaderUI from './LoadingUI';
+
+function WithLoading(Component) {
+    return function WihLoadingComponent({ isLoading, ...props }) {
+      if (isLoading) return (<Component {...props} />);
+      return (
+        <div style={{position: 'fixed', top:'20%', left:'40%'}}>
+            <LoaderUI/>
+        </div>
+      );
+    }
+};
 
 const styles = {
     root: {
@@ -15,7 +27,11 @@ const styles = {
     },
 };
 
-const LandingPage = ({classes, volcanoes, sulfurMaps}) => {
+const WithLoadingMatrix = withStyles(styles)(WithLoading(VolcanoMatrix))
+
+
+
+const LandingPage = ({classes, sulfurMaps, volcanoes}) => {
 
     const expand = useSelector(state => state.expandSidebar)
     const currentDisplay = useSelector(state => state.currentDisplay)
@@ -30,7 +46,7 @@ const LandingPage = ({classes, volcanoes, sulfurMaps}) => {
             {(() => {
                 switch(currentDisplay){
                     case 'VOLCANO_MATRIX':
-                        return <VolcanoMatrix volcanoes={volcanoes}/>
+                        return <WithLoadingMatrix volcanoes={volcanoes} isLoading={volcanoes.length > 0 ? true : false}/>
                     case 'SULFUR_MAPS':
                         return <SulfurMaps sulfurMaps={sulfurMaps}/>
                     case 'ALERT_MAP':
@@ -45,8 +61,8 @@ const LandingPage = ({classes, volcanoes, sulfurMaps}) => {
 
 LandingPage.propTypes = {
     classes: PropTypes.object.isRequired,
-    volcanoes: PropTypes.array.isRequired,
     sulfurMaps: PropTypes.array.isRequired,
+    volcanoes: PropTypes.array.isRequired,
 };
 
 export default withStyles(styles)(LandingPage)

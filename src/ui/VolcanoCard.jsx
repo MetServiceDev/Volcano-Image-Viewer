@@ -89,7 +89,7 @@ const VolcanoCard = ({classes, volcano, fontSize}) => {
     const renderVolcano = () => {
         const alert = volcanicAlerts.find(v => v.volcano === volcano.mountain);
         return (
-            <Link className={classes.link} to={`overview?volcano=${volcano.name}`} target='_blank' key={volcano.code} name='volcano-item'>
+            <Link className={classes.link} to={`overview?volcano=${volcano.name}`} key={volcano.code} name='volcano-item'>
                 <Paper className={classes.div} elevation={3}>
                     <div className={classes.header}>
                         <Typography variant='h4' className={classes.nameText} name='volcano-text' style={{fontSize:fontSize}}>{volcano.name}</Typography>
