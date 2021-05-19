@@ -24,7 +24,7 @@ const styles = {
         color: '#404040',
         transition:'0.25s',
         '&:hover':{
-            color: '#0e35c4'
+            color: '#ffbb00'
         },
     }
 }

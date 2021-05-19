@@ -5,15 +5,17 @@ import thunk from 'redux-thunk';
 const middleware = [thunk]
 
 const initialState = {
-  gridDisplay:4,
-  showNZ: true,
-  showVA: true,
-  showCNI: true,
-  showWI: true,
-  expandSidebar: true,
-  timestamps: [],
-  volcanicAlerts: [],
-  currentDisplay: 'VOLCANO_MATRIX'
+    gridDisplay:4,
+    showNZ: true,
+    showVA: true,
+    showCNI: true,
+    showWI: true,
+    expandSidebar: true,
+    timestamps: [],
+    volcanicAlerts: [],
+    currentDisplay: 'VOLCANO_MATRIX',
+    lightningAlerts:{},
+    loggedIn: true,
 };
 
 export const store = createStore(
@@ -70,6 +72,16 @@ function reducer(state, action) {
         return {
             ...state,
             currentDisplay: action.payload
+        }
+    case 'SET_LIGHTNING_DATA':
+        return {
+            ...state,
+            lightningAlerts: action.payload
+        }
+    case 'SET_LOGIN':
+        return {
+            ...state,
+            loggedIn: action.payload
         }
     default:
       return state;

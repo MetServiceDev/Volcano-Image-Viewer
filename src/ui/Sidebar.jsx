@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/styles';
-import { ExternalLinks } from '../ExternalLinks';
+import { ExternalLinks } from '../metadata/ExternalLinks';
 import SidebarItem from './SidebarItem';
 import PropTypes from 'prop-types';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -18,7 +18,6 @@ const styles = {
     content: {
         position: 'relative',
         top:'7%',
-        padding:'5px',
         height: '92vh',
         overflow: 'auto',
     },
@@ -26,8 +25,16 @@ const styles = {
         cursor: 'pointer',
         verticalAlign: 'middle',
         fontSize: '28px',
-        textAlign: 'center'
+        paddingTop:'2px'
     },
+    collapseIcon: {
+        cursor: 'pointer',
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        fontSize: '28px',
+        paddingTop:'2px'
+    }
 };
 
 const Sidebar = ({classes}) => {
@@ -46,7 +53,7 @@ const Sidebar = ({classes}) => {
     return (
         <div className={classes.root} style={style}>
             <div className={classes.content}>
-                {showMenu ? <MenuOpenIcon className={classes.menuIcon} onClick={setSidebar}/> : <MenuIcon className={classes.menuIcon} onClick={setSidebar}/>}
+                {showMenu ? <MenuOpenIcon className={classes.menuIcon} onClick={setSidebar}/> : <MenuIcon className={classes.collapseIcon} onClick={setSidebar}/>}
                 {showMenu && ExternalLinks.map((link, index) => {return <SidebarItem link={link} key={index}/>})}
             </div>
         </div>

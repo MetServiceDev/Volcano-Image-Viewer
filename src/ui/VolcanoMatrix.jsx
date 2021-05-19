@@ -3,20 +3,19 @@ import PropTypes from 'prop-types';
 import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import VolcanoCard from './VolcanoCard';
+import SatelliteCard from './SatelliteCard';
 
 const styles = {
     root: {
         display: 'grid',
+        marginBottom: '20px'
     }
 };
 
 const VolcanoMatrix = ({classes, volcanoes}) => {
 
     const gridDisplay = useSelector(state => state.gridDisplay);
-    const showNZ = useSelector(state => state.showNZ);
-    const showVA = useSelector(state => state.showVA);
-    const showCNI = useSelector(state => state.showCNI);
-    const showWI = useSelector(state => state.showWI);
+    const {showNZ, showVA, showCNI, showWI} = useSelector(state => state);
 
     const gridLayout = {
         gridTemplateColumns: `repeat(${gridDisplay}, 1fr)`,
@@ -26,17 +25,18 @@ const VolcanoMatrix = ({classes, volcanoes}) => {
 
     return (
         <div className={classes.root} style={gridLayout}>
-                {volcanoes.map(volcano => {
-                    return(
-                        <Fragment key={volcano.code}>
-                            {volcano.location === 'Vanuatu' && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                            {volcano.location === 'NZ' && showNZ && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                            {volcano.location === 'Central NI' && showCNI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                            {volcano.location === 'WI' && showWI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                        </Fragment>
-                    ); 
-                })}
-            </div>
+            {volcanoes.map(volcano => {
+                return(
+                    <Fragment key={volcano.code}>
+                        {volcano.location === 'Vanuatu' && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === 'NZ' && showNZ && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === 'Central NI' && showCNI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === 'WI' && showWI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                    </Fragment>
+                );
+            })}
+            <SatelliteCard fontSize={fontSize}/>
+        </div>
     );
 };
 

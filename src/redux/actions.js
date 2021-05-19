@@ -42,3 +42,13 @@ export const handleCurrentDisplay = string => ({
     type: 'SET_CURRENT_DISPLAY',
     payload: string
 })
+
+export const handleLightningAlerts = object => ({
+    type: 'SET_LIGHTNING_DATA',
+    payload:object
+})
+
+export const handleLogin = bool => ({
+    type: 'SET_LOGIN',
+    payload: bool
+})

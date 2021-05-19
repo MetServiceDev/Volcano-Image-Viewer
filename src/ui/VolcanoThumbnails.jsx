@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorMessage from './ErrorMessage';
-import { imageBucket } from '../Endpoints';
+import { imageBucket } from '../metadata/Endpoints';
 import { useSelector } from 'react-redux';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
 const styles = {
     root: {
@@ -37,13 +38,22 @@ const styles = {
     loader: {
         width: '100%',
         bottom:'0%',
-        position: 'absolute'
+        position: 'absolute',
+        backgroundColor:'rgba(255, 187, 0, 0.5)',
     },
     loadingDiv: {
         height:'24vh',
         textAlign:'center'
     },
 };
+
+const theme = createMuiTheme({
+    palette: {
+       secondary: {
+           main: '#ffbb00'
+       }
+    }
+});
 
 const VolcanoThumbnail = ({classes, volcano}) => {
     const timestamps = useSelector(state => state.timestamps);
@@ -63,7 +73,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     if(!isLoaded){
         return (
             <div className={classes.loadingDiv}>
-                <LinearProgress className={classes.loader}/>
+                <MuiThemeProvider theme={theme}><LinearProgress className={classes.loader} color='secondary'/></MuiThemeProvider>
             </div>
         );
     };
@@ -86,7 +96,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
 
     return(
         <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setThumbnail('12')}}>
-            {expand && <Typography className={classes.indexDisplay}>{timestamps[thumbnail === '' ? 0 : (thumbnail-1)]}</Typography>}
+            {expand && timestamps.length > 0 && <Typography className={classes.indexDisplay}>{timestamps[thumbnail === '' ? 0 : (thumbnail-1)]}</Typography>}
             {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={src} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
             <div className={classes.thumbnailGrid}>
                 {!isError.val && expand && returnThumnails()}
