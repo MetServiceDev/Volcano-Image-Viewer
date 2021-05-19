@@ -6,7 +6,7 @@ import MetaTags from 'react-meta-tags';
 import { Link } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import PropTypes from 'prop-types';
-import { imageBucket } from '../Endpoints';
+import { imageBucket } from '../metadata/Endpoints';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
 import VolcanicAlert from './VolcanicAlert';
@@ -70,15 +70,18 @@ const styles = {
         padding:'20px',
         backgroundColor:'white',
         borderBottom: '1px solid #404040',
+        textAlign:'center',
+        width:'100%',
+        overflow:'auto'
     },
     homeIcon: {
         borderRadius: '5px',
-        marginRight:'10px'
+        marginRight:'10px',
+        float:'left'
     },
     headerText: {
         display:'inline',
-        verticalAlign:'middle',
-        textAlign:'center'
+        float:'left'
     },
     relatedVolcanoes: {
         transition: '0.5s',
@@ -89,7 +92,7 @@ const styles = {
     alerIcon: {
         display:'inline-block',
         verticalAlign:'middle',
-        marginLeft:'20px',
+        float:'right',
         cursor: 'pointer'
     }
 };
@@ -132,7 +135,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                 <title>{name}</title>
             </MetaTags>
             <div className={classes.headerDiv}>
-                <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'36px'}}/></Button></Link>
+                <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'48px'}}/></Button></Link>
                 <Typography variant='h3' className={classes.headerText}>{name}</Typography>
                 {volcanoAlert && showAlert ? 
                     <VolcanicAlert data={volcanoAlert} toggle={()=>{toggleAlert(!showAlert)}}/> : volcanoAlert && 

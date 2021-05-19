@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorMessage from './ErrorMessage';
-import { imageBucket } from '../Endpoints';
+import { imageBucket } from '../metadata/Endpoints';
 import { useSelector } from 'react-redux';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 

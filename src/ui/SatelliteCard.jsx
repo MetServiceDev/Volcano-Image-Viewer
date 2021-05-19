@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import ash from '../images/vanuatu_2000m_202105170200_Ash.png';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 const styles = {
     root: {
@@ -15,7 +16,6 @@ const styles = {
     },
     img: {
         position: 'absolute',
-        width:'25%'
     },
     grid: {
         display: 'grid',
@@ -28,21 +28,23 @@ const styles = {
 
 const SatelliteCard = ({classes, fontSize}) => {
 
+    const gridDisplay = useSelector(state => state.gridDisplay);
+
     const ashImg = () => {
         return (
             <div>
-                <img src={'https://loopy-files.s3-ap-southeast-2.amazonaws.com/grid.png'} style={{zIndex:5}} alt='Satellite' width='100%' className={classes.img}/>
-                <img src={ash} alt='Satellite' width='100%' className={classes.img}/>
+                <img src={'https://loopy-files.s3-ap-southeast-2.amazonaws.com/grid.png'} style={{zIndex:5,width:`${100/gridDisplay}%`}} alt='Satellite' width='100%' className={classes.img}/>
+                <img src={ash} alt='Satellite' width='100%' className={classes.img} style={{width:`${100/gridDisplay}%`}}/>
             </div>
         );
     };
 
     return (
-        <Link className={classes.link} to='Vanuatu Ash Map' target='_blank'>
+        <Link className={classes.link} to='Vanuatu Satellite' target='_blank'>
             <div className={classes.root}>
                 <Paper elevation={3}>
                     <div className={classes.header}>
-                        <Typography variant='h4' className={classes.nameText} name='volcano-text' style={{fontSize:fontSize}}>Vanuatu Ash Map</Typography>
+                        <Typography variant='h4' className={classes.nameText} name='volcano-text' style={{fontSize:fontSize}}>Vanuatu Satellite</Typography>
                     </div>
                     {ashImg()}            
                 </Paper>

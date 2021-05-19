@@ -1,5 +1,5 @@
 import { OktaAuth } from '@okta/okta-auth-js';
-import { redirectUri } from './Endpoints';
+import { redirectUri } from '../metadata/Endpoints';
 
 var authClient = new OktaAuth({
     url: 'https://dev-metraweather.oktapreview.com',

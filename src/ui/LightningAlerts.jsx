@@ -71,7 +71,8 @@ const LightningAlerts = ({classes}) => {
         }else{
             setLoaded(true); 
             setAlerts(currentAlerts)
-        }  
+        }
+    // eslint-disable-next-line
     },[]);
 
     if(!loaded){

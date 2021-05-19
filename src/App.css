@@ -40,7 +40,7 @@ body {
   position: absolute;
   width: 96px;
   height: 96px;
-  border-radius: 50%;
+  border-radius: 0%;
   background: #ffbb00;
   animation: lds-grid 1.2s linear infinite;
 }

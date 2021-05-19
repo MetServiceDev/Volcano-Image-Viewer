@@ -117,7 +117,7 @@ export const AshMapOverview = ({classes}) => {
                 <title>Vanuatu Satellite</title>
             </MetaTags>
             <div className={classes.headerDiv}>
-                <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'36px'}}/></Button></Link>
+                <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'48px'}}/></Button></Link>
                 <Typography variant='h3' className={classes.headerText}>Vanuatu Satellite</Typography>
             </div>
             <div className={classes.sidebar}>

@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/styles';
-import { ExternalLinks } from '../ExternalLinks';
+import { ExternalLinks } from '../metadata/ExternalLinks';
 import SidebarItem from './SidebarItem';
 import PropTypes from 'prop-types';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -24,7 +24,8 @@ const styles = {
     menuIcon: {
         cursor: 'pointer',
         verticalAlign: 'middle',
-        fontSize: '28px'
+        fontSize: '28px',
+        paddingTop:'2px'
     },
     collapseIcon: {
         cursor: 'pointer',
@@ -32,6 +33,7 @@ const styles = {
         marginLeft: 'auto',
         marginRight: 'auto',
         fontSize: '28px',
+        paddingTop:'2px'
     }
 };
 

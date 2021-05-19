@@ -5,7 +5,6 @@ import thunk from 'redux-thunk';
 const middleware = [thunk]
 
 const initialState = {
-    volcanoes:[],
     gridDisplay:4,
     showNZ: true,
     showVA: true,
@@ -29,11 +28,6 @@ export const store = createStore(
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'SET_VOLCANOES':
-        return {
-            ...state,
-            volcanoes:action.payload
-        }
     case 'SET_GRID_DISPLAY':
         return{
             ...state,

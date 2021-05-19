@@ -2,7 +2,7 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { withStyles } from '@material-ui/styles';
-import { filter } from '../FilterSearch';
+import { filter } from '../modules/FilterSearch';
 import MapToggle from './MapToggle';
 import PropTypes from 'prop-types';
 import FilterListIcon from '@material-ui/icons/FilterList';

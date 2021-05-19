@@ -2,15 +2,13 @@ import Alert from '@material-ui/lab/Alert';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import MinimizeIcon from '@material-ui/icons/Minimize';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 
 const styles = {
     root: {
         width:'25%',
-        display:'inline-block',
-        verticalAlign:'middle',
-        marginLeft:'20px'
+        float:'right',
+        marginRight:'60px'
     },
     alert: {
         boxShadow: '1px 1px 2px #404040',
@@ -52,7 +50,7 @@ const VolcanicAlert = ({classes, data, toggle}) => {
     }
     return (
         <div className={classes.root}>
-            <Alert className={classes.alert} icon={alert.icon} severity={alert.severity} action={<MinimizeIcon onClick={toggle} className={classes.minimize}/>}>
+            <Alert className={classes.alert} icon={alert.icon} severity={alert.severity}>
                 Alert level {data.alertLevel} - {alert.msg}
             </Alert>       
         </div> 

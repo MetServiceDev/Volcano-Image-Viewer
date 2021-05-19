@@ -27,7 +27,7 @@ const styles = {
     },
 };
 
-const WithLoadingMatrix = withStyles(styles)(WithLoading(VolcanoMatrix))
+const WithLoadingMatrix = WithLoading(VolcanoMatrix);
 
 
 
