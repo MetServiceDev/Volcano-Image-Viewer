@@ -45,7 +45,7 @@ function App() {
         const accessToken = res.tokens.accessToken.accessToken;
         localStorage.setItem('token', accessToken);
         setLogin(true);
-      }).catch(() =>  { window.location.reload(); });
+      }).catch((err) =>  { console.log(`ERROR: ${err}`); setLogin(false); });
     }
     else {
       setLogin(false);
