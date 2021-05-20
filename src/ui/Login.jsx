@@ -6,13 +6,14 @@ import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import authClient from '../modules/Auth';
 import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import { useOktaAuth } from '@okta/okta-react';
 import { redirectUri } from '../metadata/Endpoints';
+import { handleLogin } from '../redux/actions';
 
 const styles = {
     root: {
@@ -91,6 +92,8 @@ const theme = createMuiTheme({
 
 const Login = ({classes}) => {
 
+    const dispatch = useDispatch();
+
     const [username, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -102,6 +105,7 @@ const Login = ({classes}) => {
     const passRef = useRef();
 
     const loggedIn = useSelector(state => state.loggedIn);
+    const setLogin = bool => dispatch(handleLogin(bool));
 
     const [error, setError] = useState({msg:'', show:false});
 
@@ -135,7 +139,8 @@ const Login = ({classes}) => {
                 });
                 const accessToken = successResult.tokens.accessToken.accessToken;
                 authClient.tokenManager.setTokens(successResult)
-                localStorage.setItem('token', accessToken);   
+                localStorage.setItem('token', accessToken);
+                setLogin(true)
             }
             window.location.reload();
         }).catch(e => {

@@ -41,35 +41,15 @@ function App() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    authClient.session.exists()
-    .then(async(session) => {
-      if (session) {
-        try{
-          const accessToken = await issueToken()
-          localStorage.setItem('token', accessToken);
-          setToken(accessToken);
-          setLogin(true);
-        } catch(err){
-          setLogin(false)
-        }
-      } else {
-        if(storedToken){
-          authClient.session.refresh()
-            .then(async() => {
-              try{
-                const accessToken = await issueToken()
-                localStorage.setItem('token', accessToken);
-                setToken(accessToken);
-                setLogin(true);
-              } catch(err){
-                setLogin(false)
-              }
-            })
-        } else{
-          setLogin(false);
-        }
-      }
-    });
+    if(storedToken){
+      issueToken().then(tkn => {
+        localStorage.setItem('token', tkn);
+        setToken(tkn);
+        setLogin(true);
+      })
+    } else {
+      setLogin(false);
+    }
   },[]);
 
   useEffect(() => {
@@ -83,7 +63,7 @@ function App() {
         window.location.reload();
       },60000*10);
     };
-  });
+  },[loggedIn]);
 
   useEffect(() => {
     if(loggedIn){
@@ -91,13 +71,13 @@ function App() {
         setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
       });
     };
-  },);
+  },[loggedIn]);
 
   useEffect(() => {
     if(loggedIn){
       apiCall('volcanic-alerts', 'GET', token).then(data => { setVolcanicAlerts(data.body); })
     };
-  });
+  },[loggedIn]);
 
   return (
     <Router>
