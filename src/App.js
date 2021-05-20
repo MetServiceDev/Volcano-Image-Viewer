@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts, handleLogin } from './redux/actions';
+import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts, handleLogin, handleToken } from './redux/actions';
 import apiCall from './APICall';
 import Login from './ui/Login';
 import authClient from './modules/Auth';
@@ -35,26 +35,31 @@ function App() {
 
   const loggedIn = useSelector(state => state.loggedIn);
   const setLogin = bool => dispatch(handleLogin(bool));
-  const token = localStorage.getItem('token');
+
+  const setToken = token => dispatch(handleToken(token));
+  const token = useSelector(state => state.accessToken)
 
   useEffect(() => {
+    const storedToken = localStorage.getItem('token');
     authClient.session.exists()
     .then(async(session) => {
       if (session) {
         try{
           const accessToken = await issueToken()
           localStorage.setItem('token', accessToken);
+          setToken(accessToken);
           setLogin(true);
         } catch(err){
           setLogin(false)
         }
       } else {
-        if(token){
+        if(storedToken){
           authClient.session.refresh()
             .then(async() => {
               try{
                 const accessToken = await issueToken()
                 localStorage.setItem('token', accessToken);
+                setToken(accessToken);
                 setLogin(true);
               } catch(err){
                 setLogin(false)
@@ -78,7 +83,7 @@ function App() {
         window.location.reload();
       },60000*10);
     };
-  },[]);
+  });
 
   useEffect(() => {
     if(loggedIn){
@@ -86,13 +91,13 @@ function App() {
         setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
       });
     };
-  },[]);
+  },);
 
   useEffect(() => {
     if(loggedIn){
       apiCall('volcanic-alerts', 'GET', token).then(data => { setVolcanicAlerts(data.body); })
     };
-  },[]);
+  });
 
   return (
     <Router>

@@ -15,7 +15,8 @@ const initialState = {
     volcanicAlerts: [],
     currentDisplay: 'VOLCANO_MATRIX',
     lightningAlerts:{},
-    loggedIn: true,
+    loggedIn: false,
+    accessToken: ''
 };
 
 export const store = createStore(
@@ -82,6 +83,11 @@ function reducer(state, action) {
         return {
             ...state,
             loggedIn: action.payload
+        }
+    case 'SET_TOKEN':
+        return {
+            ...state,
+            accessToken: action.payload
         }
     default:
       return state;

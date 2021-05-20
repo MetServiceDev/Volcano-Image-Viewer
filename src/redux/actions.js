@@ -52,3 +52,8 @@ export const handleLogin = bool => ({
     type: 'SET_LOGIN',
     payload: bool
 })
+
+export const handleToken = token => ({
+    type: 'SET_TOKEN',
+    payload: token
+})

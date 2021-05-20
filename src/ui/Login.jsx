@@ -144,7 +144,7 @@ const Login = ({classes}) => {
         })
     };
 
-    if(loggedIn || token){ return <Redirect to='/'/> }
+    if(loggedIn){ return <Redirect to='/'/> }
 
     return (
         <div className={classes.root}>
