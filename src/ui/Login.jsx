@@ -133,9 +133,9 @@ const Login = ({classes}) => {
                 });
                 const accessToken = successResult.tokens.accessToken.accessToken;
                 authClient.tokenManager.setTokens(successResult)
-                localStorage.setItem('token', accessToken);
-                window.location.reload();    
+                localStorage.setItem('token', accessToken);   
             }
+            window.location.reload();
         }).catch(e => {
             setLoading(false)
             setError({msg: e.toString(), show:true})
