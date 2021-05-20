@@ -45,8 +45,11 @@ function App() {
         const accessToken = res.tokens.accessToken.accessToken;
         localStorage.setItem('token', accessToken);
         setLogin(true);
-      }).catch((err) =>  { console.log(`ERROR: ${err}`); });
+      }).catch((err) =>  { setLogin(false); });
     }
+    else {
+      setLogin(false);
+    };
   },[]);
 
   useEffect(() => {
