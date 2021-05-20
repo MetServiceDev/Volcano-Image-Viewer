@@ -109,8 +109,6 @@ const Login = ({classes}) => {
 
     const [error, setError] = useState({msg:'', show:false});
 
-    const token = localStorage.getItem('token');
-
     const { oktaAuth } = useOktaAuth();
 
     const login = () => {
