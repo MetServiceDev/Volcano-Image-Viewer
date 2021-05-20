@@ -37,19 +37,35 @@ function App() {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    if(token){
-      authClient.token.getWithoutPrompt({
-        responseType: ['id_token', 'token'],
-        redirectUri: redirectUri,
-      }).then(res => {
-        const accessToken = res.tokens.accessToken.accessToken;
-        localStorage.setItem('token', accessToken);
-        setLogin(true);
-      }).catch(() =>  { setLogin(false); });
-    }
-    else {
-      setLogin(false);
-    };
+    authClient.session.exists()
+    .then(session => {
+      if (session) {
+        authClient.token.getWithoutPrompt({
+          responseType: ['id_token', 'token'],
+          redirectUri: redirectUri,
+        }).then(res => {
+          const accessToken = res.tokens.accessToken.accessToken;
+          localStorage.setItem('token', accessToken);
+          setLogin(true);
+        }).catch(() =>  { setLogin(false); });
+      } else {
+        if(token){
+          authClient.session.refresh()
+            .then(() => {
+              authClient.token.getWithoutPrompt({
+                responseType: ['id_token', 'token'],
+                redirectUri: redirectUri,
+              }).then(res => {
+                const accessToken = res.tokens.accessToken.accessToken;
+                localStorage.setItem('token', accessToken);
+                setLogin(true);
+              }).catch(() =>  { setLogin(false); });
+            })
+        } else{
+          setLogin(false);
+        }
+      }
+    });
   },[]);
 
   useEffect(() => {
