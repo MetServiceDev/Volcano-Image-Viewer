@@ -15,7 +15,7 @@ const initialState = {
     volcanicAlerts: [],
     currentDisplay: 'VOLCANO_MATRIX',
     lightningAlerts:{},
-    loggedIn: true,
+    loggedIn: false,
 };
 
 export const store = createStore(
