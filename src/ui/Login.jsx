@@ -4,7 +4,7 @@ import icon from '../images/volcano.png';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -133,9 +133,9 @@ const Login = ({classes}) => {
                 });
                 const accessToken = successResult.tokens.accessToken.accessToken;
                 authClient.tokenManager.setTokens(successResult)
-                localStorage.setItem('token', accessToken);
-                window.location.reload();
+                localStorage.setItem('token', accessToken);      
             }
+            window.location.reload();
         }).catch(e => {
             setLoading(false)
             setError({msg: e.toString(), show:true})
