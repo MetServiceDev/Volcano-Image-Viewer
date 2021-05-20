@@ -48,6 +48,7 @@ function App() {
       }).catch((err) =>  { console.log(`ERROR: ${err}`); setLogin(false); });
     }
     else {
+      console.log('ERROR: Logout bug is here')
       setLogin(false);
     };
   },[]);
