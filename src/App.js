@@ -45,12 +45,8 @@ function App() {
         const accessToken = res.tokens.accessToken.accessToken;
         localStorage.setItem('token', accessToken);
         setLogin(true);
-      }).catch((err) =>  { console.log(`ERROR: ${err}`); setLogin(false); });
+      }).catch((err) =>  { console.log(`ERROR: ${err}`); });
     }
-    else {
-      console.log('ERROR: Logout bug is here')
-      setLogin(false);
-    };
   },[]);
 
   useEffect(() => {
