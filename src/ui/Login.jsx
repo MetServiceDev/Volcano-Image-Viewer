@@ -105,6 +105,8 @@ const Login = ({classes}) => {
 
     const [error, setError] = useState({msg:'', show:false});
 
+    const token = localStorage.getItem('token');
+
     const { oktaAuth } = useOktaAuth();
 
     const login = () => {
@@ -142,7 +144,7 @@ const Login = ({classes}) => {
         })
     };
 
-    if(loggedIn){ return <Redirect to='/'/> }
+    if(loggedIn || token){ return <Redirect to='/'/> }
 
     return (
         <div className={classes.root}>

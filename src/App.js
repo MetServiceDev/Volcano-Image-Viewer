@@ -19,6 +19,7 @@ import { Security } from '@okta/okta-react';
 import AshMapOverview from './ui/AshMap';
 import { redirectUri } from './metadata/Endpoints';
 import ErrorPage from './ui/ErrorPage';
+import issueToken from './modules/IssueToken';
 
 function App() {
   
@@ -38,28 +39,26 @@ function App() {
 
   useEffect(() => {
     authClient.session.exists()
-    .then(session => {
+    .then(async(session) => {
       if (session) {
-        authClient.token.getWithoutPrompt({
-          responseType: ['id_token', 'token'],
-          redirectUri: redirectUri,
-        }).then(res => {
-          const accessToken = res.tokens.accessToken.accessToken;
+        try{
+          const accessToken = await issueToken()
           localStorage.setItem('token', accessToken);
           setLogin(true);
-        }).catch(() =>  { setLogin(false); });
+        } catch(err){
+          setLogin(false)
+        }
       } else {
         if(token){
           authClient.session.refresh()
-            .then(() => {
-              authClient.token.getWithoutPrompt({
-                responseType: ['id_token', 'token'],
-                redirectUri: redirectUri,
-              }).then(res => {
-                const accessToken = res.tokens.accessToken.accessToken;
+            .then(async() => {
+              try{
+                const accessToken = await issueToken()
                 localStorage.setItem('token', accessToken);
                 setLogin(true);
-              }).catch(() =>  { setLogin(false); });
+              } catch(err){
+                setLogin(false)
+              }
             })
         } else{
           setLogin(false);
