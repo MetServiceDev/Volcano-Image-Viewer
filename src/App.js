@@ -64,6 +64,7 @@ function App() {
                 setToken(accessToken);
                 localStorage.setItem('token', accessToken);
                 setLogin(true);
+                setLoaded(true)
               } catch(err){
                 setLogin(false)
                 setLoaded(true)

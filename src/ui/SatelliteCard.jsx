@@ -36,8 +36,6 @@ const addzero = (n) => {
 const SatelliteCard = ({classes, fontSize}) => {
 
     const [dateString, setDate] = useState('');
-    const [dateTime, setTime] = useState('');
-    const serverEndpoint = 'http://10.100.21.161:4500'
 
     useEffect(() => {
         var ms = 60000;
@@ -46,12 +44,8 @@ const SatelliteCard = ({classes, fontSize}) => {
         var M = addzero(today.getUTCMonth() + 1);
         var D = addzero(today.getUTCDate());
         var H = addzero(today.getUTCHours());
-        var n = today.getMinutes();
-        var quad = addzero((Math.floor(n/10))*10);
-        var datetime = Y+M+D+H+quad;
-        setTime(datetime);
-        setDate(`${Y}-${M}-${D}-${H}${M}`)
-    })
+        setDate(`${Y}-${M}-${D}-${H}${M}`);
+    });
 
     const gridDisplay = useSelector(state => state.gridDisplay);
     
@@ -60,7 +54,7 @@ const SatelliteCard = ({classes, fontSize}) => {
         return (
             <div>
                 <img src={'https://loopy-files.s3-ap-southeast-2.amazonaws.com/grid.png'} style={{zIndex:5,width:`${100/gridDisplay}%`}} alt='Satellite' width='100%' className={classes.img}/>
-                <img src={`${serverEndpoint}/Ash/2000m/10MIN/vanuatu_2000m_${dateTime}_Ash.png`} alt='Satellite' width='100%' className={classes.img} style={{width:`${100/gridDisplay}%`}}/>
+                <img src={`https://loopy-files.s3-ap-southeast-2.amazonaws.com/loopy-pix/Ash.png` } alt='Satellite' width='100%' className={classes.img} style={{width:`${100/gridDisplay}%`}}/>
             </div>
         );
     };
