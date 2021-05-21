@@ -41,40 +41,40 @@ function App() {
   const setToken = token => dispatch(handleToken(token));
   const token = useSelector(state => state.accessToken);
 
+  const setCreds = async() => {
+    const accessToken = await issueToken();
+    setToken(accessToken);
+    localStorage.setItem('token', accessToken);
+    setLogin(true);
+    setLoaded(true);
+  }
+
   useEffect(() => {
     authClient.session.exists()
     .then(async(session) => {
       if (session) {
         try{
-          const accessToken = await issueToken();
-          setToken(accessToken);
-          localStorage.setItem('token', accessToken);
-          setLogin(true);
-          setLoaded(true)
+          setCreds();
         } catch(err){
-          setLogin(false)
-          setLoaded(true)
-        }
+          setLogin(false);
+          setLoaded(true);
+        };
       } else {
         if(token){
           authClient.session.refresh()
             .then(async() => {
               try{
-                const accessToken = await issueToken();
-                setToken(accessToken);
-                localStorage.setItem('token', accessToken);
-                setLogin(true);
-                setLoaded(true)
+                setCreds();
               } catch(err){
-                setLogin(false)
-                setLoaded(true)
+                setLogin(false);
+                setLoaded(true);
               }
             })
         } else{
           setLogin(false);
-          setLoaded(true)
-        }
-      }
+          setLoaded(true);
+        };
+      };
     });
   },[]);
 
