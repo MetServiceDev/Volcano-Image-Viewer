@@ -20,10 +20,12 @@ import AshMapOverview from './ui/AshMap';
 import { redirectUri } from './metadata/Endpoints';
 import ErrorPage from './ui/ErrorPage';
 import issueToken from './modules/IssueToken';
+import SplashScreen from './ui/SplashScreen';
 
 function App() {
   
   const [volcanoes, fetchVolcanoes] = useState([]);
+  const [loaded, setLoaded] = useState(false)
 
   const dispatch = useDispatch();
 
@@ -37,7 +39,7 @@ function App() {
   const setLogin = bool => dispatch(handleLogin(bool));
 
   const setToken = token => dispatch(handleToken(token));
-  const token = useSelector(state => state.accessToken)
+  const token = useSelector(state => state.accessToken);
 
   useEffect(() => {
     authClient.session.exists()
@@ -48,8 +50,10 @@ function App() {
           setToken(accessToken);
           localStorage.setItem('token', accessToken);
           setLogin(true);
+          setLoaded(true)
         } catch(err){
           setLogin(false)
+          setLoaded(true)
         }
       } else {
         if(token){
@@ -62,10 +66,12 @@ function App() {
                 setLogin(true);
               } catch(err){
                 setLogin(false)
+                setLoaded(true)
               }
             })
         } else{
           setLogin(false);
+          setLoaded(true)
         }
       }
     });
@@ -103,14 +109,17 @@ function App() {
         <Switch>
           <Route exact path='/'>
             <MetaTags><title>Volcano Webcam Monitor</title></MetaTags>
-            {loggedIn ?
+            {loaded ? 
               <div>
-                <Navbar/>
-                <Sidebar/>
-                <LandingPage sulfurMaps={SulfurMaps} volcanoes={volcanoes}/>
-              </div> :
-              <Redirect to='/login' />
-            }
+                {loggedIn ?
+                  <div>
+                    <Navbar/>
+                    <Sidebar/>
+                    <LandingPage sulfurMaps={SulfurMaps} volcanoes={volcanoes}/>
+                  </div> :
+                  <Redirect to='/login' />}
+              </div> : <SplashScreen/>   
+          } 
           </Route>
           <Route exact path='/login' component={Login}/>
           <Route exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={volcanoes}/>)}/>

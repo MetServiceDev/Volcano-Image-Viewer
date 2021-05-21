@@ -5,7 +5,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
 import ash from '../images/vanuatu_2000m_202105170200_Ash.png';
 import dust from '../images/vanuatu_2000m_202105170200_Dust.png';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import color from '../images/vanuatu_1000m_202105170450_True-Colour.png';
 import PropTypes from 'prop-types';
 import MetaTags from 'react-meta-tags';
@@ -69,28 +69,52 @@ const styles = {
 
 const metadata = [
     {
-        img:ash,
         value: 'ASH',
         name:'Ash'
     },
     {
-        img: dust,
         value: 'DUST',
         name: 'Dust'
     },
     {
-        img: color,
         value: 'COLOR',
-        name:'True color'
+        name:'True-Colour'
     }
 ]
 
-export const AshMapOverview = ({classes}) => {
+const addzero = (n) => {
+	var string = n.toString();
+	if (n < 10) string = "0" + string;
+	return string;
+}
 
-    const [currentDisplay, setCurrentDisplay] = useState('ASH')
+const AshMapOverview = ({classes}) => {
+
+    const [currentDisplay, setCurrentDisplay] = useState(metadata[0]);
+    const [dateString, setDate] = useState('');
+    const [dateTime, setTime] = useState('');
+    const [distance, setDistance] = useState('')
+    const serverEndpoint = 'http://10.100.21.161:4500'
+
+    
+
+    useEffect(() => {
+        var ms = 60000;
+        var today = new Date(new Date()-30*ms);
+        var Y = today.getUTCFullYear().toString()
+        var M = addzero(today.getUTCMonth() + 1);
+        var D = addzero(today.getUTCDate());
+        var H = addzero(today.getUTCHours());
+        var n = today.getMinutes();
+        var quad = addzero((Math.floor(n/10))*10);
+        var datetime = Y+M+D+H+quad;
+        setTime(datetime);
+        setDate(`${Y}-${M}-${D}-${H}${M}`)
+        currentDisplay.name === 'True-Colour' ? setDistance('1000m') : setDistance('2000m')
+    })
 
     const setDisplay = (currentDisplay) => {
-        switch(currentDisplay){
+        switch(currentDisplay.value){
             case 'ASH':
                 return renderImg(ash)
             case 'DUST':
@@ -103,10 +127,11 @@ export const AshMapOverview = ({classes}) => {
     }
 
     const renderImg = (type) => {
+        const src = `${serverEndpoint}/${currentDisplay.name}/${distance}/10MIN/vanuatu_${distance}_${dateTime}_${currentDisplay.name}.png`
         return (
             <div>
                 <img src={'https://loopy-files.s3-ap-southeast-2.amazonaws.com/grid.png'} style={{zIndex:5}} alt='Satellite' width='100%' className={classes.img}/>
-                <img src={type} alt='Satellite' width='100%' className={classes.img}/>
+                <img src={src} alt='Satellite' width='100%' className={classes.img}/>
             </div>
         );
     };
@@ -118,15 +143,17 @@ export const AshMapOverview = ({classes}) => {
             </MetaTags>
             <div className={classes.headerDiv}>
                 <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'48px'}}/></Button></Link>
-                <Typography variant='h3' className={classes.headerText}>Vanuatu Satellite</Typography>
+                <Typography variant='h3' className={classes.headerText}>Vanuatu {dateString}-UTC</Typography>
             </div>
             <div className={classes.sidebar}>
                 <div className={classes.sidebarInner}>
                 {metadata.map((data, index) => {
+                    const dist = data.name === 'True-Colour' ? '1000m' : '2000m'
+                    const src = `${serverEndpoint}/${data.name}/${dist}/10MIN/vanuatu_${dist}_${dateTime}_${data.name}.png`                 
                     return (
-                        <div onClick={()=>{setCurrentDisplay(data.value)}} className={classes.sidebarItem} key={index}>
+                        <div onClick={()=>{setCurrentDisplay(data)}} className={classes.sidebarItem} key={index}>
                             <img src={'https://loopy-files.s3-ap-southeast-2.amazonaws.com/grid.png'} style={{zIndex:5}} alt='Satellite' width='100%' className={classes.img}/>
-                            <img src={data.img} alt='Satellite' width='100%' className={classes.img}/>
+                            <img src={src} alt='Satellite' width='100%' className={classes.img}/>
                             <Typography variant='body1' className={classes.text}>{data.name}</Typography>
                         </div>
                     );
