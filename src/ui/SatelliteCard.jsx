@@ -1,11 +1,11 @@
 import { withStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import ash from '../images/vanuatu_2000m_202105170200_Ash.png';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import apiCall from '../modules/APICall';
 
 const styles = {
     root: {
@@ -27,24 +27,15 @@ const styles = {
     },
 }
 
-const addzero = (n) => {
-	var string = n.toString();
-	if (n < 10) string = "0" + string;
-	return string;
-}
-
 const SatelliteCard = ({classes, fontSize}) => {
 
     const [dateString, setDate] = useState('');
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
-        var ms = 60000;
-        var today = new Date(new Date()-30*ms);
-        var Y = today.getUTCFullYear().toString()
-        var M = addzero(today.getUTCMonth() + 1);
-        var D = addzero(today.getUTCDate());
-        var H = addzero(today.getUTCHours());
-        setDate(`${Y}-${M}-${D}-${H}${M}`);
+        apiCall('get-utc-date', 'GET', token).then(date => {
+            setDate(date)
+        })
     });
 
     const gridDisplay = useSelector(state => state.gridDisplay);

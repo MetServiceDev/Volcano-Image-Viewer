@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
 import { useState, useEffect } from 'react';
-import color from '../images/vanuatu_1000m_202105170450_True-Colour.png';
+import apiCall from '../modules/APICall';
 import PropTypes from 'prop-types';
 import MetaTags from 'react-meta-tags';
 
@@ -67,25 +67,16 @@ const styles = {
 
 const metadata = [ 'Ash', 'Dust', 'True-Colour' ]
 
-const addzero = (n) => {
-	var string = n.toString();
-	if (n < 10) string = "0" + string;
-	return string;
-}
-
 const AshMapOverview = ({classes}) => {
 
     const [currentDisplay, setCurrentDisplay] = useState(metadata[0]);
     const [dateString, setDate] = useState('');
-  
+    const token = localStorage.getItem('token');
+
     useEffect(() => {
-        var ms = 60000;
-        var today = new Date(new Date()-30*ms);
-        var Y = today.getUTCFullYear().toString()
-        var M = addzero(today.getUTCMonth() + 1);
-        var D = addzero(today.getUTCDate());
-        var H = addzero(today.getUTCHours());
-        setDate(`${Y}-${M}-${D}-${H}${M}`)
+        apiCall('get-utc-date', 'GET', token).then(date => {
+            setDate(date)
+        })
     })
 
     const renderImg = () => {

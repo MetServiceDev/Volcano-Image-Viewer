@@ -12,7 +12,7 @@ import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts, handleLogin, handleToken } from './redux/actions';
-import apiCall from './APICall';
+import apiCall from './modules/APICall';
 import Login from './ui/Login';
 import authClient from './modules/Auth';
 import { Security } from '@okta/okta-react';

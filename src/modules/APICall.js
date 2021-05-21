@@ -1,4 +1,4 @@
-import { apiEndpoint } from './metadata/Endpoints';
+import { apiEndpoint } from '../metadata/Endpoints';
 
 const apiCall = async (route, method, token, body) => {
     try{
