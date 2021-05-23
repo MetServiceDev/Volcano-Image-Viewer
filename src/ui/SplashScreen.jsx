@@ -17,9 +17,10 @@ const styles = {
         borderRadius: '100%',
         width:'25%',
         height: '50vh',
-        position: 'fixed',
-        top: '15%',
-        left: '35%'
+        display: 'block',
+        marginLeft:'auto',
+        marginRight: 'auto',
+        marginTop:'100px'
     },
     icon: {
         paddingTop:'20px',

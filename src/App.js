@@ -43,7 +43,7 @@ function App() {
 
   const setCreds = async() => {
     const accessToken = await issueToken();
-    setToken(accessToken);
+    setToken(accessToken);    
     localStorage.setItem('token', accessToken);
     setLogin(true);
     setLoaded(true);
@@ -86,7 +86,12 @@ function App() {
       if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
       if(gridSize){ setGridDisplay(Number(gridSize)); };
       setInterval(() => {
-        window.location.reload();
+        fetchVolcanoes([])
+        Promise.all([apiCall('metadata', 'GET', token), apiCall('volcano-list', 'GET', token)])
+            .then(res => {
+              setTimestamps([].concat(res[0].body.reverse().map(stamp => { return stamp.slice(0,8); })));
+              fetchVolcanoes(res[1]);
+        })
       },60000*10);
     };
   },[loggedIn, token]);
@@ -105,6 +110,20 @@ function App() {
     };
   },[loggedIn, token]);
 
+  const logout = async () => {
+    await authClient.revokeAccessToken();
+    authClient.closeSession()
+      .then(() => {
+        setToken('');    
+        localStorage.removeItem('token');
+        setLogin(false);
+      }).catch(e => {
+        if (e.xhr && e.xhr.status === 429) {
+          throw e;
+        };
+      });  
+  }
+
   return (
     <Router>
         <Switch>
@@ -114,11 +133,10 @@ function App() {
               <div>
                 {loggedIn ?
                   <div>
-                    <Navbar/>
+                    <Navbar logout={logout}/>
                     <Sidebar/>
                     <LandingPage sulfurMaps={SulfurMaps} volcanoes={volcanoes}/>
-                  </div> :
-                  <Redirect to='/login' />}
+                  </div> : <Redirect to='/login'/>}
               </div> : <SplashScreen/>   
           } 
           </Route>

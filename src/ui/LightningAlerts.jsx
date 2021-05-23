@@ -13,7 +13,6 @@ const styles = {
     root: {
         width:'100%',
         marginLeft:'2px',
-        marginBottom: '10px'
     },
     alert: {
         boxShadow: '1px 1px 2px #404040',

@@ -64,7 +64,9 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     const [isLoaded, setLoading] = useState(false);
 
     const s3Tag = volcano.s3Link;
-    const src = `${imageBucket}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`
+    const [src, setSrc] = useState(`${imageBucket}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`);
+
+    const setImage = index => { setSrc(`${imageBucket}/${s3Tag}/${s3Tag}-${index}.jpg`) }
 
     useEffect(() => {
        fetch(src, { mode: 'no-cors' }).then(() => { setLoading(true); return; }).catch(e => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
@@ -82,20 +84,20 @@ const VolcanoThumbnail = ({classes, volcano}) => {
         return indexList.map((val, index) => (
             <Zoom in={expand} key={index}>
                 <div style={{backgroundColor:'white', width:'100%'}}>
-                <img          
-                    src={`${imageBucket}/${s3Tag}/${s3Tag}-${val}.jpg`} 
-                    alt={volcano.name} 
-                    width='100%'
-                    onMouseOver={()=>{setThumbnail(val)}}
-                    className={classes.thumbnailImg}
-                />
+                    <img          
+                        src={`${imageBucket}/${s3Tag}/${s3Tag}-${val}.jpg`} 
+                        alt={volcano.name} 
+                        width='100%'
+                        onMouseOver={()=>{setImage(val); setThumbnail(val)}}
+                        className={classes.thumbnailImg}
+                    />
                 </div>
             </Zoom>
-        ));
+        ));; 
     };
 
     return(
-        <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setThumbnail('12')}}>
+        <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setImage('12')}}>
             {expand && timestamps.length > 0 && <Typography className={classes.indexDisplay}>{timestamps[thumbnail === '' ? 0 : (thumbnail-1)]}</Typography>}
             {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={src} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
             <div className={classes.thumbnailGrid}>
