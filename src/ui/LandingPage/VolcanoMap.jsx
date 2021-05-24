@@ -59,7 +59,7 @@ const styles = {
 const VolcanoMap = ({classes, volcanoes}) => {
 
     const volcanoStrings = [].concat(volcanoes.map(v => { return v.mountain}));
-    var alertArray = [...new Set(volcanoStrings)].filter(x => { return x !== undefined});
+    const alertArray = [...new Set(volcanoStrings)].filter(x => { return x !== undefined});
 
     const alertTable = () => {
         return alertArray.map(volcano => {
