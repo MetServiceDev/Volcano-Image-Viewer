@@ -86,6 +86,7 @@ function App() {
         imagePoller(token).then(res => {
           setTimestamps([].concat(res[0].body.reverse().map(stamp => { return stamp.slice(0,8); })));
           fetchVolcanoes(res[1]);
+          authClient.session.refresh().then(() => { setCreds(); });
         });
       },60000*10);
     };
