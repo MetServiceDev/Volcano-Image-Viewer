@@ -12,7 +12,6 @@ const initialState = {
     showWI: true,
     expandSidebar: true,
     timestamps: [],
-    volcanicAlerts: [],
     currentDisplay: 'VOLCANO_MATRIX',
     lightningAlerts:{},
     loggedIn: false,
@@ -63,11 +62,6 @@ function reducer(state, action) {
         return {
             ...state,
             timestamps: action.payload
-        }
-    case 'SET_VOLCANIC_ALERTS':
-        return {
-            ...state,
-            volcanicAlerts: action.payload
         }
     case 'SET_CURRENT_DISPLAY':
         return {

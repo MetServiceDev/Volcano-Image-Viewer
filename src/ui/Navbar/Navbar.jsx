@@ -12,10 +12,8 @@ import { useState } from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector  } from 'react-redux';
 import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../../redux/actions';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Select from '@material-ui/core/Select';
-import { Link } from 'react-router-dom';
 import Filter from './Filter';
 
 const styles = {

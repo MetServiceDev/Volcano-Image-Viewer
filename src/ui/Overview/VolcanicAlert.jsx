@@ -22,22 +22,22 @@ const styles = {
 }
 
 const setAlertStatus = (data) => {
-    switch(data.alertLevel){
+    switch(data.level){
         case '0':
         case '1':
-            return {severity: 'success', msg: data.alertMsg, icon:<ReportProblemOutlinedIcon/> }
+            return {severity: 'success', msg: data.msg, icon:<ReportProblemOutlinedIcon/> }
         case '2':
         case '3':
-            return {severity: 'warning', msg: data.alertMsg}
+            return {severity: 'warning', msg: data.msg}
         case '4':
         case '5':
-            return {severity: 'error', msg: data.alertMsg}
+            return {severity: 'error', msg: data.msg}
         default:
             return
     };
 };
 
-const VolcanicAlert = ({classes, data, toggle}) => {
+const VolcanicAlert = ({classes, data}) => {
     const [alert, setAlert] = useState({severity:'success', msg: ''})
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const VolcanicAlert = ({classes, data, toggle}) => {
     return (
         <div className={classes.root}>
             <Alert className={classes.alert} icon={alert.icon} severity={alert.severity}>
-                Alert level {data.alertLevel} - {alert.msg}
+                Alert level {data.level} - {alert.msg}
             </Alert>       
         </div> 
     );
@@ -59,8 +59,7 @@ const VolcanicAlert = ({classes, data, toggle}) => {
 
 VolcanicAlert.propTypes = {
     classes: PropTypes.object,
-    data: PropTypes.object.isRequired,
-    toggle: PropTypes.func.isRequired
+    data: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(VolcanicAlert);

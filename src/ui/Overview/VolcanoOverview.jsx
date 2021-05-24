@@ -10,8 +10,6 @@ import { imageBucket } from '../../metadata/Endpoints';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
 import VolcanicAlert from './VolcanicAlert';
-import AlertIcon from '../ReusedComponents/AlertIcon';
-import { useSelector } from 'react-redux';
 import { useState } from 'react';
 
 const styles = {
@@ -105,21 +103,18 @@ const VolcanoOverview = ({classes, volcanoes}) => {
     let query = useQuery();
     const volcano = query.get('volcano')
     const volcanoObject = volcanoes.find(v => v.name === volcano) || {};
-    const name = volcanoObject.name;
-    const volcanicAlerts = useSelector(state => state.volcanicAlerts) || {};
-    const volcanoAlert = volcanicAlerts.find(v => v.volcano === volcanoObject.mountain);
-    const [showAlert, toggleAlert] = useState(true)
+    const { name, volcanicAlerts, s3Link } = volcanoObject;
     const [currentDisplay, setCurrentDisplay] = useState('THUMBNAIL')
-    const landingImg = `${imageBucket}/${volcanoObject.s3Link}/${volcanoObject.s3Link}-12.jpg`
+    const landingImg = `${imageBucket}/${s3Link}/${s3Link}-12.jpg`
 
     const setDisplay = (currentDisplay) => {
         switch(currentDisplay){
             case 'THUMBNAIL':
                 return <div><VolcanoThumbnails volcano={volcanoObject}/></div>;
             case 'DRUM_GRAPH':
-                return <img src={volcanoObject.location === 'Vanuatu' ? volcanoObject.drumLink : `${volcanoObject.drumLink}-drum.png`} alt={volcanoObject.name} width='100%'/>
+                return <img src={volcanoObject.location === 'Vanuatu' ? volcanoObject.drumLink : `${volcanoObject.drumLink}-drum.png`} alt={name} width='100%'/>
             case 'RSAM':
-                return <img src={`${volcanoObject.drumLink}-combined.png`} alt={volcanoObject.name} width='100%'/>
+                return <img src={`${volcanoObject.drumLink}-combined.png`} alt={name} width='100%'/>
             default:
                 return
         }
@@ -137,10 +132,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
             <div className={classes.headerDiv}>
                 <Link className={classes.link} to='/'><Button className={classes.homeIcon} aria-label="return home"><HomeIcon style={{fontSize:'48px'}}/></Button></Link>
                 <Typography variant='h3' className={classes.headerText}>{name}</Typography>
-                {volcanoAlert && showAlert ? 
-                    <VolcanicAlert data={volcanoAlert} toggle={()=>{toggleAlert(!showAlert)}}/> : volcanoAlert && 
-                    <span className={classes.alerIcon}><AlertIcon data={volcanoAlert} toggle={()=>{toggleAlert(!showAlert)}}/></span>
-                }
+                {volcanicAlerts && <VolcanicAlert data={volcanicAlerts}/>}
             </div>
             <div className={classes.mainPanel}>
                 <div className={classes.sidebar}>
@@ -155,7 +147,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                         <div className={classes.sideItem} >
                             <img 
                                 src={volcanoObject.location === 'Vanuatu' ? volcanoObject.drumLink : `${volcanoObject.drumLink}-drum.png`} 
-                                alt={volcanoObject.name} 
+                                alt={name} 
                                 width='100%' 
                                 onClick={() => {setCurrentDisplay('DRUM_GRAPH')}}
                             />
@@ -167,7 +159,7 @@ const VolcanoOverview = ({classes, volcanoes}) => {
                             <div className={classes.sideItem} >
                                 <img 
                                     src={`${volcanoObject.drumLink}-combined.png`} 
-                                    alt={volcanoObject.name} width='100%' 
+                                    alt={name} width='100%' 
                                     onClick={() => {setCurrentDisplay('RSAM')}}
                                 />
                                 <Typography>RASM & SSAM</Typography>

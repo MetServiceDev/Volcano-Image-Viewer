@@ -62,7 +62,7 @@ const LandingPage = ({classes, sulfurMaps, volcanoes}) => {
             <div className={classes.headerTags} style={{marginBottom:'10px',marginTop:marginTop}}>
                 {currentDisplay !== 'ALERT_MAP' && <div><LightningAlerts/></div>}
                 {currentDisplay !== 'ALERT_MAP' &&  showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
-                    action={<CloseIcon className={classes.minimize} onClick={()=>{toggleRefreshWarning(false)}}/>}>
+                    action={<CloseIcon className={classes.minimize} onClick={()=>{ return toggleRefreshWarning(false)}}/>}>
                     This page will poll for new images every 10 minutes
                 </Alert>}
             </div>
