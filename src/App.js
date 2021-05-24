@@ -81,14 +81,16 @@ function App() {
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
       if(gridSize){ setGridDisplay(Number(gridSize)); };
-      setInterval(() => {
+      var poller = setInterval(() => {
         fetchVolcanoes([])
         imagePoller(token).then(res => {
           setTimestamps([].concat(res[0].body.reverse().map(stamp => { return stamp.slice(0,8); })));
           fetchVolcanoes(res[1]);
           authClient.session.refresh().then(() => { setCreds(); });
         });
+        clearInterval(poller);
       },60000*10);
+
     };
   },[loggedIn, token]);
 
