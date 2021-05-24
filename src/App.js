@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts, handleLogin, handleToken } from './redux/actions';
+import { handleSidebar, handleGridDisplay, handleTimestamps, handleLogin, handleToken } from './redux/actions';
 import apiCall from './modules/APICall';
 import Login from './ui/LoginForm/Login';
 import authClient from './modules/Auth';
@@ -34,7 +34,6 @@ function App() {
   const setGridDisplay = size => dispatch(handleGridDisplay(size));
 
   const setTimestamps = array => dispatch(handleTimestamps(array));
-  const setVolcanicAlerts = array => dispatch(handleVolcanicAlerts(array));
 
   const loggedIn = useSelector(state => state.loggedIn);
   const setLogin = bool => dispatch(handleLogin(bool));
@@ -99,12 +98,6 @@ function App() {
       apiCall('metadata', 'GET', token).then(data => {
         setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
       });
-    };
-  },[loggedIn, token]);
-
-  useEffect(() => {
-    if(loggedIn){
-      apiCall('volcanic-alerts', 'GET', token).then(data => { setVolcanicAlerts(data.body); })
     };
   },[loggedIn, token]);
 

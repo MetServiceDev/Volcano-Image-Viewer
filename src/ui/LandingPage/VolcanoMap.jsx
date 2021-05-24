@@ -1,5 +1,4 @@
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
-import { useSelector } from 'react-redux';
 import * as L from 'leaflet';
 import { withStyles } from '@material-ui/styles';
 import Table from '@material-ui/core/Table';
@@ -59,19 +58,22 @@ const styles = {
 
 const VolcanoMap = ({classes, volcanoes}) => {
 
-    const volcanicAlerts = useSelector(state => state.volcanicAlerts);
+    const volcanoStrings = [].concat(volcanoes.map(v => { return v.mountain}));
+    const alertArray = [...new Set(volcanoStrings)].filter(x => { return x !== undefined});
 
     const alertTable = () => {
-        const array = volcanicAlerts.map(va => { return volcanoes.find(v => { return v.mountain === va.volcano }) }).filter(x => { return x !== undefined});
-        return array.map(volcano => {
-            const alert = volcanicAlerts.find(v => v.volcano === volcano.mountain);
-            return(
-                <TableRow className={classes.tableRow} key={volcano.code}>
-                    <TableCell align="left">{volcano.mountain}</TableCell>
-                    <TableCell align="left">{alert.alertLevel}</TableCell>
-                    <TableCell align="left">{alert.alertMsg}</TableCell>
-                </TableRow>
-            );
+        return alertArray.map(volcano => {
+            const { volcanicAlerts } = volcanoes.find(v => { return v.mountain === volcano});
+            if(volcanicAlerts){
+                return(
+                    <TableRow className={classes.tableRow} key={volcano.code}>
+                        <TableCell align="left">{volcano}</TableCell>
+                        <TableCell align="left">{volcanicAlerts.level}</TableCell>
+                        <TableCell align="left">{volcanicAlerts.msg}</TableCell>
+                    </TableRow>
+                );
+            }
+            
         });
     };
 
@@ -82,14 +84,14 @@ const VolcanoMap = ({classes, volcanoes}) => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
-                {volcanoes.map(volcano => {
-                    const {lat, long} = volcano.coordinates;
-                    const alerts = volcanicAlerts.find(v => v.volcano === volcano.mountain);
-                    const { alertLevel, alertMsg } = alerts || '';
-                    const icon = getIcon(alertLevel);
+                {alertArray.map(volcano => {
+                    const volcanoObject = volcanoes.find(v => { return v.mountain === volcano});
+                    const { level, msg } = volcanoObject.volcanicAlerts;
+                    const {lat, long} = volcanoObject.coordinates;
+                    const icon = getIcon(level);
                     return (
-                        <Marker position={[lat, long]} icon={icon} key={volcano.code}>
-                            <Popup>{volcano.mountain}: Alert level {alertLevel} - {alertMsg}</Popup>
+                        <Marker position={[lat, long]} icon={icon} key={volcanoObject.code}>
+                            <Popup>{volcanoObject.mountain}: Alert level {level} - {msg}</Popup>
                         </Marker>
                     );
                 })};

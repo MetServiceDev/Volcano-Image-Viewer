@@ -68,7 +68,6 @@ const setBG = (level) => {
 
 const VolcanoCard = ({classes, volcano, fontSize}) => {
 
-    const volcanicAlerts = useSelector(state => state.volcanicAlerts);
     const gridDisplay = useSelector(state => state.gridDisplay);
     const alertFontSize = gridDisplay === 6 ? '14px' : '16px';
     const bulletinWidth = gridDisplay === 6 ? '70%' : '50%';
@@ -78,16 +77,16 @@ const VolcanoCard = ({classes, volcano, fontSize}) => {
         return (
             <div>
                 {alert && showAlert &&
-                <Paper elevation={3} className={classes.alertBulletin} style={{border:`1px solid ${setBG(alert.alertLevel)}`,width:bulletinWidth}}>
-                    <Typography>Alert level {alert.alertLevel}</Typography>
-                    <Typography style={{fontWeight:'bold',fontSize:alertFontSize}}>{alert.alertMsg}</Typography>
+                <Paper elevation={3} className={classes.alertBulletin} style={{border:`1px solid ${setBG(alert.level)}`,width:bulletinWidth}}>
+                    <Typography>Alert level {alert.level}</Typography>
+                    <Typography style={{fontWeight:'bold',fontSize:alertFontSize}}>{alert.msg}</Typography>
                 </Paper>}
             </div>
         );
     };
 
     const renderVolcano = () => {
-        const alert = volcanicAlerts.find(v => v.volcano === volcano.mountain);
+        const alert = volcano.volcanicAlerts
         return (
             <Link className={classes.link} to={`overview?volcano=${volcano.name}`} target='_blank' key={volcano.code} name='volcano-item'>
                 <Paper className={classes.div} elevation={3}>

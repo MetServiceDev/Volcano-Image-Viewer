@@ -18,7 +18,7 @@ const styles = {
 const AlertIcon = ({classes, data, showAlert, hideAlert, fontSize, toggle}) => {
     
     const getIcon = () => {
-        switch(data.alertLevel){
+        switch(data.level){
             case '0':
             case '1':
                 return <ReportProblemOutlinedIcon className={classes.noWarning} style={{fontSize}}/>;
