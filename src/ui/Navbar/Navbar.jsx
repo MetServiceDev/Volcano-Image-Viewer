@@ -2,7 +2,7 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { withStyles } from '@material-ui/styles';
-import { filter } from '../modules/FilterSearch';
+import { filter } from '../../modules/FilterSearch';
 import MapToggle from './MapToggle';
 import PropTypes from 'prop-types';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -11,7 +11,7 @@ import MenuList from '@material-ui/core/MenuList';
 import { useState } from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector  } from 'react-redux';
-import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../redux/actions';
+import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../../redux/actions';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Select from '@material-ui/core/Select';
@@ -80,7 +80,7 @@ const styles = {
         },
     },
     rightIcons: {
-        left:'90%',
+        left:'95%',
         top:'25%',
         position:'absolute',
         display: 'inline-block',
@@ -147,8 +147,7 @@ const Navbar = ({classes, logout}) => {
                 }}
             />
             <div className={classes.rightIcons}>
-                <Link to='/dashboard' className={classes.link}><AccountCircleIcon className={classes.userIcon}/></Link>
-                <ExitToAppIcon className={classes.userIcon} onClick={logout}/>
+                <ButtonBase><ExitToAppIcon className={classes.userIcon} onClick={logout}/></ButtonBase>
             </div>
         </div>
     );

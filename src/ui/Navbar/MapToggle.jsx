@@ -6,7 +6,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch  } from 'react-redux';
-import { handleCurrentDisplay } from '../redux/actions';
+import { handleCurrentDisplay } from '../../redux/actions';
 
 const styles = {
     root: {

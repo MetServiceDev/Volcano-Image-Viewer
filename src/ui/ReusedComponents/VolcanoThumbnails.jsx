@@ -4,8 +4,8 @@ import Zoom from '@material-ui/core/Zoom';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import ErrorMessage from './ErrorMessage';
-import { imageBucket } from '../metadata/Endpoints';
+import ErrorMessage from '../ErrorComponents/ErrorMessage';
+import { imageBucket } from '../../metadata/Endpoints';
 import { useSelector } from 'react-redux';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
@@ -97,7 +97,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     };
 
     return(
-        <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setImage('12')}}>
+        <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setImage('12'); setThumbnail('12')}}>
             {expand && timestamps.length > 0 && <Typography className={classes.indexDisplay}>{timestamps[thumbnail === '' ? 0 : (thumbnail-1)]}</Typography>}
             {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={src} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
             <div className={classes.thumbnailGrid}>

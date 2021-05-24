@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/styles';
-import icon from '../images/volcano.png';
+import icon from '../../images/volcano.png';
 import Fade from '@material-ui/core/Fade';
 
 const styles = {

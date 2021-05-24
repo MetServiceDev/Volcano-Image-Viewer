@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import LightningAlerts from './LightningAlerts';
 import { useSelector } from 'react-redux';
 import VolcanoMap from './VolcanoMap';
-import LoaderUI from './LoadingUI';
+import LoaderUI from '../ReusedComponents/LoadingUI';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import { useState } from 'react';
 
 function WithLoading(Component) {
-    return function WihLoadingComponent({ isLoading, ...props }) {
-      if (isLoading) return (<Component {...props} />);
+    return function WihLoadingComponent({ hasLoaded, ...props }) {
+      if (hasLoaded) return (<Component {...props} />);
       return (
         <div style={{position: 'fixed', top:'20%', left:'40%'}}>
             <LoaderUI/>
@@ -53,25 +53,23 @@ const LandingPage = ({classes, sulfurMaps, volcanoes}) => {
     const currentDisplay = useSelector(state => state.currentDisplay);
     const [showRefreshWarning, toggleRefreshWarning] = useState(true);
 
-    const style = {
-        width: `${!expand ? '98':'85'}%`
-    };
+    const style = { width: `${!expand ? '98':'85'}%` };
 
-    const marginTop = currentDisplay !== 'ALERT_MAP' ? '70px' : '0px'
+    const marginTop = currentDisplay !== 'ALERT_MAP' ? '70px' : '0px';
 
     return (
         <div className={classes.root} style={style}>
             <div className={classes.headerTags} style={{marginBottom:'10px',marginTop:marginTop}}>
-                {currentDisplay !== 'ALERT_MAP' && <div ><LightningAlerts/></div>}
+                {currentDisplay !== 'ALERT_MAP' && <div><LightningAlerts/></div>}
                 {currentDisplay !== 'ALERT_MAP' &&  showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
                     action={<CloseIcon className={classes.minimize} onClick={()=>{toggleRefreshWarning(false)}}/>}>
-                    This page refreshes every 10 minutes
+                    This page will poll for new images every 10 minutes
                 </Alert>}
             </div>
             {(() => {
                 switch(currentDisplay){
                     case 'VOLCANO_MATRIX':
-                        return <WithLoadingMatrix volcanoes={volcanoes} isLoading={volcanoes.length > 0 ? true : false}/>
+                        return <WithLoadingMatrix volcanoes={volcanoes} hasLoaded={volcanoes.length > 0 ? true : false}/>
                     case 'SULFUR_MAPS':
                         return <SulfurMaps sulfurMaps={sulfurMaps}/>
                     case 'ALERT_MAP':

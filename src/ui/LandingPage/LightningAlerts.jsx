@@ -5,9 +5,9 @@ import { useState, useEffect } from 'react';
 import ReplayIcon from '@material-ui/icons/Replay';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import apiCall from '../modules/APICall';
+import apiCall from '../../modules/APICall';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleLightningAlerts } from '../redux/actions';
+import { handleLightningAlerts } from '../../redux/actions';
 
 const styles = {
     root: {
@@ -63,6 +63,12 @@ const LightningAlerts = ({classes}) => {
                 setLoaded(true);
         }).catch(() => { setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'}); setLoaded(true); })  
     };
+
+    useEffect(()=> { 
+        setInterval(()=>{
+            fetchData()
+        }, 60000*10) 
+    },[]);
 
     useEffect(() => {
         if(!currentAlerts.severity){

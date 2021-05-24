@@ -1,5 +1,5 @@
 import { withStyles } from "@material-ui/styles";
-import icon from '../images/volcano.png';
+import icon from '../../images/volcano.png';
 import MetaTags from 'react-meta-tags';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
