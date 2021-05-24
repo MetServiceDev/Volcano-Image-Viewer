@@ -2,7 +2,7 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { withStyles } from '@material-ui/styles';
-import { filter } from '../modules/FilterSearch';
+import { filter } from '../../modules/FilterSearch';
 import MapToggle from './MapToggle';
 import PropTypes from 'prop-types';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -11,10 +11,11 @@ import MenuList from '@material-ui/core/MenuList';
 import { useState } from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector  } from 'react-redux';
-import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../redux/actions';
+import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../../redux/actions';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Select from '@material-ui/core/Select';
-import Alert from '@material-ui/lab/Alert';
-import CloseIcon from '@material-ui/icons/Close';
+import { Link } from 'react-router-dom';
 import Filter from './Filter';
 
 const styles = {
@@ -28,9 +29,10 @@ const styles = {
     },
     searchField: {
         width:'40%',
+        position:'relative',
         backgroundColor: 'white',
         left:'20%',
-        position: 'relative',
+        verticalAlign:'middle',
         '& label.Mui-focused': {
             color: '#121212',
           },
@@ -77,20 +79,27 @@ const styles = {
             background: 'none',
         },
     },
-    refreshWarning: {
-        width: '20%',
-        float:'right',
-        marginRight:'40px',
-        padding:'0px 10px 0px 5px',
-        fontSize:'12px'
+    rightIcons: {
+        left:'95%',
+        top:'25%',
+        position:'absolute',
+        display: 'inline-block',
+        marginRight:"20px",
+        verticalAlign:'middle',
     },
-    minimize: {
-        position: 'relative',
+    userIcon: {
+        verticalAlign:'middle',
+        fontSize:'28px',
+        color:'#404040',
+        marginRight:'20px',
         cursor: 'pointer'
-    }
+    },
+    link: {
+        textDecoration:'none'
+    },
 };
 
-const Navbar = ({classes}) => {
+const Navbar = ({classes, logout}) => {
     const dispatch = useDispatch();
 
     const [showFilter, toggleFilter] = useState(false);
@@ -101,7 +110,6 @@ const Navbar = ({classes}) => {
     const toggleWI = val => dispatch(handleWIFilter(val));
     const gridDisplay = useSelector(state => state.gridDisplay);
     const { showNZ, showVA, showCNI, showWI } = useSelector(state => state);
-    const [showRefreshWarning, toggleRefreshWarning] = useState(true)
 
     const setGrid = (e) => {
         const size = Number(e.target.value);
@@ -138,16 +146,16 @@ const Navbar = ({classes}) => {
                     ),
                 }}
             />
-            {showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
-                action={<CloseIcon className={classes.minimize} onClick={()=>{toggleRefreshWarning(false)}}/>}>
-                This page refreshes every 10 minutes
-            </Alert>}
+            <div className={classes.rightIcons}>
+                <ButtonBase><ExitToAppIcon className={classes.userIcon} onClick={logout}/></ButtonBase>
+            </div>
         </div>
     );
 };
 
 Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
+    logout: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Navbar);

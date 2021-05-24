@@ -1,6 +1,6 @@
 import { withStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
-import icon from '../images/volcano.png';
+import icon from '../../images/volcano.png';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -8,12 +8,12 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import authClient from '../modules/Auth';
+import authClient from '../../modules/Auth';
 import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import { useOktaAuth } from '@okta/okta-react';
-import { redirectUri } from '../metadata/Endpoints';
-import { handleLogin } from '../redux/actions';
+import { redirectUri } from '../../metadata/Endpoints';
+import { handleLogin, handleToken } from '../../redux/actions';
 
 const styles = {
     root: {
@@ -107,6 +107,8 @@ const Login = ({classes}) => {
     const loggedIn = useSelector(state => state.loggedIn);
     const setLogin = bool => dispatch(handleLogin(bool));
 
+    const setToken = token => dispatch(handleToken(token));
+
     const [error, setError] = useState({msg:'', show:false});
 
     const { oktaAuth } = useOktaAuth();
@@ -138,9 +140,9 @@ const Login = ({classes}) => {
                 const accessToken = successResult.tokens.accessToken.accessToken;
                 authClient.tokenManager.setTokens(successResult)
                 localStorage.setItem('token', accessToken);
+                setToken(accessToken)
                 setLogin(true)
             }
-            window.location.reload();
         }).catch(e => {
             setLoading(false)
             setError({msg: e.toString(), show:true})

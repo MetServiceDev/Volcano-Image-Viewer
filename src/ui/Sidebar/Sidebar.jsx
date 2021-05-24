@@ -1,11 +1,11 @@
 import { withStyles } from '@material-ui/styles';
-import { ExternalLinks } from '../metadata/ExternalLinks';
+import { ExternalLinks } from '../../metadata/ExternalLinks';
 import SidebarItem from './SidebarItem';
 import PropTypes from 'prop-types';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleSidebar } from '../redux/actions';
+import { handleSidebar } from '../../redux/actions';
 
 const styles = {
     root: {

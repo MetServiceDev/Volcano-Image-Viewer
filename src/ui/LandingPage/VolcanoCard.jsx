@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import VolcanoThumbnails from './VolcanoThumbnails';
+import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 import { withStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import AlertIcon from './AlertIcon';
+import AlertIcon from '../ReusedComponents/AlertIcon';
 import { useState } from 'react';
 
 const styles = {

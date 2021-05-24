@@ -1,16 +1,16 @@
 import { useLocation } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-import VolcanoThumbnails from './VolcanoThumbnails';
+import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 import { withStyles } from '@material-ui/styles';
 import MetaTags from 'react-meta-tags';
 import { Link } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import PropTypes from 'prop-types';
-import { imageBucket } from '../metadata/Endpoints';
+import { imageBucket } from '../../metadata/Endpoints';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
 import VolcanicAlert from './VolcanicAlert';
-import AlertIcon from './AlertIcon';
+import AlertIcon from '../ReusedComponents/AlertIcon';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 

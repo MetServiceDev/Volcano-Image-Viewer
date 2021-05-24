@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/styles';
-import icon from '../images/volcano.png';
+import icon from '../../images/volcano.png';
 import Fade from '@material-ui/core/Fade';
 
 const styles = {
@@ -17,9 +17,10 @@ const styles = {
         borderRadius: '100%',
         width:'25%',
         height: '50vh',
-        position: 'fixed',
-        top: '15%',
-        left: '35%'
+        display: 'block',
+        marginLeft:'auto',
+        marginRight: 'auto',
+        marginTop:'100px'
     },
     icon: {
         paddingTop:'20px',

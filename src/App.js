@@ -1,10 +1,10 @@
 import './App.css';
 import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import VolcanoOverview from './ui/VolcanoOverview';
-import Navbar from './ui//Navbar';
-import Sidebar from './ui/Sidebar';
-import LandingPage from './ui/LandingPage';
+import VolcanoOverview from './ui/Overview/VolcanoOverview';
+import Navbar from './ui/Navbar/Navbar';
+import Sidebar from './ui/Sidebar/Sidebar';
+import LandingPage from './ui/LandingPage/LandingPage.jsx';
 import { useEffect } from 'react';
 import { SulfurMaps } from './metadata/SulfurMaps';
 import { Provider } from 'react-redux';
@@ -13,14 +13,15 @@ import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleSidebar, handleGridDisplay, handleTimestamps, handleVolcanicAlerts, handleLogin, handleToken } from './redux/actions';
 import apiCall from './modules/APICall';
-import Login from './ui/Login';
+import Login from './ui/LoginForm/Login';
 import authClient from './modules/Auth';
 import { Security } from '@okta/okta-react';
-import AshMapOverview from './ui/AshMap';
+import AshMapOverview from './ui/Overview/AshMap';
 import { redirectUri } from './metadata/Endpoints';
-import ErrorPage from './ui/ErrorPage';
+import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import issueToken from './modules/IssueToken';
-import SplashScreen from './ui/SplashScreen';
+import SplashScreen from './ui/ReusedComponents/SplashScreen';
+import imagePoller from './modules/ImagePoller';
 
 function App() {
   
@@ -42,33 +43,28 @@ function App() {
   const token = useSelector(state => state.accessToken);
 
   const setCreds = async() => {
-    const accessToken = await issueToken();
-    setToken(accessToken);
-    localStorage.setItem('token', accessToken);
-    setLogin(true);
-    setLoaded(true);
+    try{
+      const accessToken = await issueToken();
+      setToken(accessToken);    
+      localStorage.setItem('token', accessToken);
+      setLogin(true);
+      setLoaded(true);
+    } catch(err){
+      setLogin(false);
+      setLoaded(true);
+    };
   }
 
   useEffect(() => {
     authClient.session.exists()
-    .then(async(session) => {
+    .then((session) => {
       if (session) {
-        try{
-          setCreds();
-        } catch(err){
-          setLogin(false);
-          setLoaded(true);
-        };
+        setCreds();
       } else {
         if(token){
           authClient.session.refresh()
-            .then(async() => {
-              try{
-                setCreds();
-              } catch(err){
-                setLogin(false);
-                setLoaded(true);
-              }
+            .then(() => {
+              setCreds();
             })
         } else{
           setLogin(false);
@@ -86,7 +82,11 @@ function App() {
       if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
       if(gridSize){ setGridDisplay(Number(gridSize)); };
       setInterval(() => {
-        window.location.reload();
+        fetchVolcanoes([])
+        imagePoller(token).then(res => {
+          setTimestamps([].concat(res[0].body.reverse().map(stamp => { return stamp.slice(0,8); })));
+          fetchVolcanoes(res[1]);
+        });
       },60000*10);
     };
   },[loggedIn, token]);
@@ -105,6 +105,20 @@ function App() {
     };
   },[loggedIn, token]);
 
+  const logout = async () => {
+    await authClient.revokeAccessToken();
+    authClient.closeSession()
+      .then(() => {
+        setToken('');    
+        localStorage.removeItem('token');
+        setLogin(false);
+      }).catch(e => {
+        if (e.xhr && e.xhr.status === 429) {
+          throw e;
+        };
+      });  
+  }
+
   return (
     <Router>
         <Switch>
@@ -114,13 +128,11 @@ function App() {
               <div>
                 {loggedIn ?
                   <div>
-                    <Navbar/>
+                    <Navbar logout={logout}/>
                     <Sidebar/>
                     <LandingPage sulfurMaps={SulfurMaps} volcanoes={volcanoes}/>
-                  </div> :
-                  <Redirect to='/login' />}
-              </div> : <SplashScreen/>   
-          } 
+                  </div> : <Redirect to='/login'/>}
+              </div> : <SplashScreen/>} 
           </Route>
           <Route exact path='/login' component={Login}/>
           <Route exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={volcanoes}/>)}/>
