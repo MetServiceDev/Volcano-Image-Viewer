@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
 import { imageBucket } from '../../metadata/Endpoints';
-import { useSelector } from 'react-redux';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
 const styles = {
@@ -56,21 +55,35 @@ const theme = createMuiTheme({
 });
 
 const VolcanoThumbnail = ({classes, volcano}) => {
-    const timestamps = useSelector(state => state.timestamps);
     const [thumbnail, setThumbnail] = useState('12');
     const indexList = [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
     const [expand, toggleExpand] = useState(false);
     const [isError, setError] = useState({val: false, msg: ''});
     const [isLoaded, setLoading] = useState(false);
 
+    const [timestamps, setTimestamps] = useState([]);
+
     const s3Tag = volcano.s3Link;
     const [src, setSrc] = useState(`${imageBucket}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`);
 
-    const setImage = index => { setSrc(`${imageBucket}/${s3Tag}/${s3Tag}-${index}.jpg`) }
+    const setImage = index => { setSrc(`${imageBucket}/${s3Tag}/${s3Tag}-${index}.jpg`); };
 
     useEffect(() => {
-       fetch(src, { mode: 'no-cors' }).then(() => { setLoading(true); return; }).catch(e => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
-    },[thumbnail, volcano.code, volcano.name, src]);
+        const origin = `${imageBucket}/${s3Tag}/${s3Tag}`;
+        Promise.all(indexList.map(item => {
+            const url = `${origin}-${item}.jpg`;
+            return new Promise((res, rej) => {
+                return fetch(url).then(response => {
+                    const timestamp = response.headers.get('x-amz-meta-timestamp').slice(0,8);
+                    res(timestamp);
+                }).catch(() => { setLoading(true); });
+            });
+        })).then(timestamps => {
+            setTimestamps(timestamps);
+            setLoading(true); 
+            return;
+        }).catch(e => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
+    },[s3Tag, volcano.code, volcano.name, src]);
 
     if(!isLoaded){
         return (

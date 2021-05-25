@@ -28,11 +28,6 @@ export const handleSidebar = bool => ({
     payload: bool
 })
 
-export const handleTimestamps = array => ({
-    type: 'SET_TIMESTAMPS',
-    payload: array
-})
-
 export const handleCurrentDisplay = string => ({
     type: 'SET_CURRENT_DISPLAY',
     payload: string
