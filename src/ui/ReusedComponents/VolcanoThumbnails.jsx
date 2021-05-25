@@ -7,6 +7,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
 import { imageBucket } from '../../metadata/Endpoints';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import apiCall from '../../modules/APICall';
+import { useSelector } from 'react-redux';
 
 const styles = {
     root: {
@@ -60,6 +62,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     const [expand, toggleExpand] = useState(false);
     const [isError, setError] = useState({val: false, msg: ''});
     const [isLoaded, setLoading] = useState(false);
+    const token = useSelector(state => state.accessToken);
 
     const [timestamps, setTimestamps] = useState([]);
 
@@ -76,7 +79,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
                 return fetch(url).then(response => {
                     const timestamp = response.headers.get('x-amz-meta-timestamp').slice(0,8);
                     res(timestamp);
-                }).catch(() => { setLoading(true); });
+                }).catch(() => { apiCall('metadata', 'GET', token).then(data => { res(data) }); });
             });
         })).then(timestamps => {
             setTimestamps(timestamps);
