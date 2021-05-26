@@ -29,7 +29,8 @@ const styles = {
         position:'absolute',
         top:'5%',
         left: '5%',
-        width:'50%'
+        width:'50%',
+        opacity: 0.7
     },
     thumbnailGrid: {
         display:'grid',
@@ -85,21 +86,20 @@ const VolcanoThumbnail = ({classes, volcano}) => {
 
     useEffect(() => {
         const origin = `${imageBucket}/${s3Tag}/${s3Tag}`;
-        Promise.all(indexList.map((item) => {
+        Promise.all(indexList.map((item, index) => {
             const url = `${origin}-${item}.jpg`;
             return new Promise(async(res, rej) => {
                 try{
-                    const call = await fetch(url)
+                    const call = await fetch(url);
                     const blob = await call.blob();
                     const timestamp = call.headers.get('x-amz-meta-timestamp').slice(0,8);
                     res({ timestamp: timestamp, size: blob.size });
-                }catch(err) { 
+                }catch(err) {
                     setLoading(true); 
                     apiCall('metadata', 'GET', token).then(timestamps => {
-                        console.log(timestamps)
-                        res([].concat(timestamps.body.map(stamp => { return { timestamp:stamp,updated:true } })));
-                    });  
-                 }
+                        res({ timestamp:timestamps.body[index].slice(0,8),updated:true });
+                    });
+                };
             });
         })).then(metadata => {
             const data = metadata.reverse();
@@ -117,17 +117,17 @@ const VolcanoThumbnail = ({classes, volcano}) => {
                             updated:true
                         });
                     };
-                }catch(err){
+                } catch(err){
                     array.push({
                         timestamp:meta.timestamp,
                         updated:true
                     });
                 };          
-            })
+            });
             setMetadata(array.reverse());
             setLoading(true); 
             return;
-        }).catch(() => { setRefresh(true) })
+        }).catch(() => { setRefresh(true); })
     },[s3Tag, volcano.code, volcano.name]);
 
     if(!isLoaded){
@@ -156,10 +156,10 @@ const VolcanoThumbnail = ({classes, volcano}) => {
 
     return(
         <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setImage('12'); setThumbnail('12')}}>
-            {expand && metadata.length > 0 && <Typography className={classes.indexDisplay}>{metadata[thumbnail === '' ? 0 : (thumbnail-1)].timestamp}</Typography>}
-            {expand && metadata.length > 0 && metadata[thumbnail === '' ? 0 : (thumbnail-1)].updated === false  &&
+            {expand && volcano.location !== 'Vanuatu' && metadata.length > 0 && <Typography className={classes.indexDisplay}>{metadata[thumbnail === '' ? 0 : (thumbnail-1)].timestamp}</Typography>}
+            {metadata.length > 0 && metadata[thumbnail === '' ? 0 : (thumbnail-1)].updated === false  &&
                 <Alert severity={'error'} className={classes.updatedDisplay}>
-                    Warning, Image did not update!
+                    Warning, image did not update!
                 </Alert>}
             {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={src} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
             <div className={classes.thumbnailGrid}>
