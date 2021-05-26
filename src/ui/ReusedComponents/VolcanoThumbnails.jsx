@@ -108,7 +108,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
                 try{
                     if(meta.size && meta.size === data[index+1].size){
                         array.push({
-                            timestamp:data[index+1].timestamp,
+                            timestamp:meta.timestamp,
                             updated:false,
                         });
                     } else {
