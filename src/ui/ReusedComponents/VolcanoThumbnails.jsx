@@ -9,6 +9,7 @@ import { imageBucket } from '../../metadata/Endpoints';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import apiCall from '../../modules/APICall';
 import { useSelector } from 'react-redux';
+import Alert from '@material-ui/lab/Alert';
 
 const styles = {
     root: {
@@ -22,6 +23,11 @@ const styles = {
         borderRadius: '5px',
         padding: '10px',
         fontSize: '22px'
+    },
+    updatedDisplay:{
+        position:'absolute',
+        top:'5%',
+        left: '5%',
     },
     thumbnailGrid: {
         display:'grid',
@@ -64,7 +70,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     const [isLoaded, setLoading] = useState(false);
     const token = useSelector(state => state.accessToken);
 
-    const [timestamps, setTimestamps] = useState([]);
+    const [metadata, setMetadata] = useState([])
 
     const s3Tag = volcano.s3Link;
     const [src, setSrc] = useState(`${imageBucket}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`);
@@ -73,20 +79,49 @@ const VolcanoThumbnail = ({classes, volcano}) => {
 
     useEffect(() => {
         const origin = `${imageBucket}/${s3Tag}/${s3Tag}`;
-        Promise.all(indexList.map(item => {
+        Promise.all(indexList.map((item) => {
             const url = `${origin}-${item}.jpg`;
-            return new Promise((res, rej) => {
-                return fetch(url).then(response => {
-                    const timestamp = response.headers.get('x-amz-meta-timestamp').slice(0,8);
-                    res(timestamp);
-                }).catch(() => { apiCall('metadata', 'GET', token).then(data => { res(data) }); });
+            return new Promise(async(res, rej) => {
+                try{
+                    const call = await fetch(url)
+                    const blob = await call.blob();
+                    const timestamp = call.headers.get('x-amz-meta-timestamp').slice(0,8);
+                    res({ timestamp: timestamp, size: blob.size });
+                }catch(err) { 
+                    setLoading(true); 
+                    apiCall('metadata', 'GET', token).then(timestamps => {
+                        res(timestamps.body);
+                    });  
+                 }
             });
-        })).then(timestamps => {
-            setTimestamps(timestamps);
+        })).then(metadata => {
+            const data = metadata.reverse();
+            var array = [];
+            data.map((meta, index) => {
+                try{
+                    if(meta.size === data[index+1].size){
+                        array.push({
+                            timestamp:meta.timestamp,
+                            updated:false,
+                        });
+                    } else {
+                        array.push({
+                            timestamp:meta.timestamp,
+                            updated:true
+                        });
+                    };
+                }catch(err){
+                    array.push({
+                        timestamp:meta.timestamp,
+                        updated:true
+                    });
+                };          
+            })
+            setMetadata(array.reverse());
             setLoading(true); 
             return;
         }).catch(e => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
-    },[s3Tag, volcano.code, volcano.name, src]);
+    },[s3Tag, volcano.code, volcano.name]);
 
     if(!isLoaded){
         return (
@@ -114,7 +149,11 @@ const VolcanoThumbnail = ({classes, volcano}) => {
 
     return(
         <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setImage('12'); setThumbnail('12')}}>
-            {expand && timestamps.length > 0 && <Typography className={classes.indexDisplay}>{timestamps[thumbnail === '' ? 0 : (thumbnail-1)]}</Typography>}
+            {expand && metadata.length > 0 && <Typography className={classes.indexDisplay}>{metadata[thumbnail === '' ? 0 : (thumbnail-1)].timestamp}</Typography>}
+            {expand && metadata.length > 0 && metadata[thumbnail === '' ? 0 : (thumbnail-1)].updated === false  &&
+                <Alert severity={'error'} className={classes.updatedDisplay}>
+                    Warning, Image did not update!
+                </Alert>}
             {isError.val ? <ErrorMessage msg={isError.msg}/> : <img width='100%' src={src} alt={volcano.name} onMouseOver={()=>{toggleExpand(true)}}/>}
             <div className={classes.thumbnailGrid}>
                 {!isError.val && expand && returnThumnails()}
