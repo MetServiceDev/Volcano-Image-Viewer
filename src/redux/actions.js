@@ -47,3 +47,8 @@ export const handleToken = token => ({
     type: 'SET_TOKEN',
     payload: token
 })
+
+export const handleRefresh = bool => ({
+    type: 'REQUIRE_REFRESH',
+    payload: bool
+})

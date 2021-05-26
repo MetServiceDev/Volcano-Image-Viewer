@@ -14,7 +14,8 @@ const initialState = {
     currentDisplay: 'VOLCANO_MATRIX',
     lightningAlerts:{},
     loggedIn: false,
-    accessToken: ''
+    accessToken: '',
+    requireRefresh:false
 };
 
 export const store = createStore(
@@ -76,6 +77,11 @@ function reducer(state, action) {
         return {
             ...state,
             accessToken: action.payload
+        }
+    case 'REQUIRE_REFRESH':
+        return {
+            ...state,
+            requireRefresh:action.payload
         }
     default:
       return state;

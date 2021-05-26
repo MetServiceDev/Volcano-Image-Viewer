@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleSidebar, handleGridDisplay, handleLogin, handleToken } from './redux/actions';
+import { handleSidebar, handleGridDisplay, handleLogin, handleToken, handleRefresh } from './redux/actions';
 import apiCall from './modules/APICall';
 import Login from './ui/LoginForm/Login';
 import authClient from './modules/Auth';
@@ -37,6 +37,9 @@ function App() {
 
   const setToken = token => dispatch(handleToken(token));
   const token = useSelector(state => state.accessToken);
+
+  const requireRefresh = useSelector(state => state.requireRefresh);
+  const setRefresh = bool => dispatch(handleRefresh(bool));
 
   const setCreds = async() => {
     try{
@@ -69,6 +72,19 @@ function App() {
       };
     });
   },[]);
+
+  useEffect(() => {
+    if(requireRefresh){
+      fetchVolcanoes([])
+        apiCall('volcano-list', 'GET', token).then(res => {
+          fetchVolcanoes(res);
+          setTimeout(() => {
+            setRefresh(false)
+          },100)
+          
+        });
+    }
+  },[requireRefresh])
 
   useEffect(() => {
     if(loggedIn){

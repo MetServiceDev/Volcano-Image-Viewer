@@ -8,7 +8,8 @@ import ErrorMessage from '../ErrorComponents/ErrorMessage';
 import { imageBucket } from '../../metadata/Endpoints';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import apiCall from '../../modules/APICall';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { handleRefresh } from '../../redux/actions';
 import Alert from '@material-ui/lab/Alert';
 
 const styles = {
@@ -28,6 +29,7 @@ const styles = {
         position:'absolute',
         top:'5%',
         left: '5%',
+        width:'50%'
     },
     thumbnailGrid: {
         display:'grid',
@@ -63,6 +65,8 @@ const theme = createMuiTheme({
 });
 
 const VolcanoThumbnail = ({classes, volcano}) => {
+    const dispatch = useDispatch();
+
     const [thumbnail, setThumbnail] = useState('12');
     const indexList = [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
     const [expand, toggleExpand] = useState(false);
@@ -71,6 +75,8 @@ const VolcanoThumbnail = ({classes, volcano}) => {
     const token = useSelector(state => state.accessToken);
 
     const [metadata, setMetadata] = useState([])
+
+    const setRefresh = bool => dispatch(handleRefresh(bool));
 
     const s3Tag = volcano.s3Link;
     const [src, setSrc] = useState(`${imageBucket}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`);
@@ -90,7 +96,8 @@ const VolcanoThumbnail = ({classes, volcano}) => {
                 }catch(err) { 
                     setLoading(true); 
                     apiCall('metadata', 'GET', token).then(timestamps => {
-                        res(timestamps.body);
+                        console.log(timestamps)
+                        res([].concat(timestamps.body.map(stamp => { return { timestamp:stamp,updated:true } })));
                     });  
                  }
             });
@@ -99,7 +106,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
             var array = [];
             data.map((meta, index) => {
                 try{
-                    if(meta.size === data[index+1].size){
+                    if(meta.size && meta.size === data[index+1].size){
                         array.push({
                             timestamp:meta.timestamp,
                             updated:false,
@@ -120,7 +127,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
             setMetadata(array.reverse());
             setLoading(true); 
             return;
-        }).catch(e => { setError({val: true, msg:e.toString()}); setLoading(true); return; })
+        }).catch(() => { setRefresh(true) })
     },[s3Tag, volcano.code, volcano.name]);
 
     if(!isLoaded){
