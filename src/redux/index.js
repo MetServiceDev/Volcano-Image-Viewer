@@ -11,11 +11,11 @@ const initialState = {
     showCNI: true,
     showWI: true,
     expandSidebar: true,
-    timestamps: [],
     currentDisplay: 'VOLCANO_MATRIX',
     lightningAlerts:{},
     loggedIn: false,
-    accessToken: ''
+    accessToken: '',
+    requireRefresh:false
 };
 
 export const store = createStore(
@@ -58,11 +58,6 @@ function reducer(state, action) {
             ...state,
             expandSidebar: action.payload
         }
-    case 'SET_TIMESTAMPS':
-        return {
-            ...state,
-            timestamps: action.payload
-        }
     case 'SET_CURRENT_DISPLAY':
         return {
             ...state,
@@ -82,6 +77,11 @@ function reducer(state, action) {
         return {
             ...state,
             accessToken: action.payload
+        }
+    case 'REQUIRE_REFRESH':
+        return {
+            ...state,
+            requireRefresh:action.payload
         }
     default:
       return state;

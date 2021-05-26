@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleSidebar, handleGridDisplay, handleTimestamps, handleLogin, handleToken } from './redux/actions';
+import { handleSidebar, handleGridDisplay, handleLogin, handleToken, handleRefresh } from './redux/actions';
 import apiCall from './modules/APICall';
 import Login from './ui/LoginForm/Login';
 import authClient from './modules/Auth';
@@ -21,7 +21,6 @@ import { redirectUri } from './metadata/Endpoints';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import issueToken from './modules/IssueToken';
 import SplashScreen from './ui/ReusedComponents/SplashScreen';
-import imagePoller from './modules/ImagePoller';
 
 function App() {
   
@@ -31,15 +30,16 @@ function App() {
   const dispatch = useDispatch();
 
   const setSidebar = val => dispatch(handleSidebar(val));
-  const setGridDisplay = size => dispatch(handleGridDisplay(size));
-
-  const setTimestamps = array => dispatch(handleTimestamps(array));
+  const setGridDisplay = size => dispatch(handleGridDisplay(size))
 
   const loggedIn = useSelector(state => state.loggedIn);
   const setLogin = bool => dispatch(handleLogin(bool));
 
   const setToken = token => dispatch(handleToken(token));
   const token = useSelector(state => state.accessToken);
+
+  const requireRefresh = useSelector(state => state.requireRefresh);
+  const setRefresh = bool => dispatch(handleRefresh(bool));
 
   const setCreds = async() => {
     try{
@@ -74,30 +74,34 @@ function App() {
   },[]);
 
   useEffect(() => {
+    if(requireRefresh){
+      fetchVolcanoes([])
+        apiCall('volcano-list', 'GET', token).then(res => {
+          fetchVolcanoes(res);
+          setTimeout(() => {
+            setRefresh(false)
+          },100)
+          
+        });
+    }
+  },[requireRefresh])
+
+  useEffect(() => {
     if(loggedIn){
-      apiCall('volcano-list', 'GET', token).then(data => { fetchVolcanoes(data) });
+      apiCall('volcano-list', 'GET', token).then(data => { fetchVolcanoes(data); });
       const expandSidebar = localStorage.getItem('expandSidebar');
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
       if(gridSize){ setGridDisplay(Number(gridSize)); };
       var poller = setInterval(() => {
         fetchVolcanoes([])
-        imagePoller(token).then(res => {
-          setTimestamps([].concat(res[0].body.reverse().map(stamp => { return stamp.slice(0,8); })));
-          fetchVolcanoes(res[1]);
+        apiCall('volcano-list', 'GET', token).then(res => {
+          fetchVolcanoes(res);
           authClient.session.refresh().then(() => { setCreds(); });
         });
         clearInterval(poller);
       },60000*10);
 
-    };
-  },[loggedIn, token]);
-
-  useEffect(() => {
-    if(loggedIn){
-      apiCall('metadata', 'GET', token).then(data => {
-        setTimestamps([].concat(data.body.reverse().map(stamp => { return stamp.slice(0,8); })));
-      });
     };
   },[loggedIn, token]);
 

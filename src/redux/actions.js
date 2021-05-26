@@ -28,11 +28,6 @@ export const handleSidebar = bool => ({
     payload: bool
 })
 
-export const handleTimestamps = array => ({
-    type: 'SET_TIMESTAMPS',
-    payload: array
-})
-
 export const handleCurrentDisplay = string => ({
     type: 'SET_CURRENT_DISPLAY',
     payload: string
@@ -51,4 +46,9 @@ export const handleLogin = bool => ({
 export const handleToken = token => ({
     type: 'SET_TOKEN',
     payload: token
+})
+
+export const handleRefresh = bool => ({
+    type: 'REQUIRE_REFRESH',
+    payload: bool
 })

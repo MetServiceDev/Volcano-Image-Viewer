@@ -13,13 +13,14 @@ const styles = {
         position: 'fixed',
         height:'100vh',
         boxShadow: '-2px -2px 8px #404040',
-        transition: '0.5s'
+        transition: '0.5s',
     },
     content: {
         position: 'relative',
         top:'7%',
         height: '92vh',
         overflow: 'auto',
+        overflowX:'hidden'
     },
     menuIcon: {
         cursor: 'pointer',
