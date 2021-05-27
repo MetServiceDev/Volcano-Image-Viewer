@@ -17,11 +17,11 @@ interface Volcano {
 		msg: string;
 	};
 	relatedVolanoes?: string[];
-}
+};
 
 const poll = async ( token: string ): Promise<Volcano[]> => {
-    const fetch = await apiCall('volcano-list', 'GET', token)
+    const fetch = await apiCall('volcano-list', 'GET', token);
     return fetch as Volcano[];
-}
+};
 
 export { poll };

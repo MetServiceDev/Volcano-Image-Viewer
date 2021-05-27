@@ -1,6 +1,11 @@
 import { apiEndpoint } from '../metadata/Endpoints';
 
-const apiCall = async (route: string, method: string, token: string, body?: object) => {
+interface Response {
+    code: number
+    body: any
+};
+
+const apiCall = async (route: string, method: string, token: string, body?: object): Promise<any> => {
     try{
         const call = await fetch(`${apiEndpoint}/${route}`, { 
                 method: method, 
