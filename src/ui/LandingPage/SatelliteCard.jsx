@@ -34,7 +34,7 @@ const SatelliteCard = ({classes, fontSize}) => {
 
     useEffect(() => {
         apiCall('get-utc-date', 'GET', token).then(date => {
-            setDate(date)
+            setDate(date.body)
         })
     });
 

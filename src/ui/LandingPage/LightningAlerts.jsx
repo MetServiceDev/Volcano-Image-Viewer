@@ -45,7 +45,7 @@ const LightningAlerts = ({classes}) => {
     const fetchData = () => {
         setLoaded(false);
         apiCall('lightning-data', 'GET', token).then(data => {
-            const res = JSON.parse(data.responseBody)
+            const res = JSON.parse(data.body)
                 const { alertCheck, innerCheck, alertNames, innerNames, areas, twentyKStrikes, hundredKStrikes } = res;
                 if(alertCheck === 0 && innerCheck === 0){
                     setAlerts({severity: 'success', msg: 'No current lightning alerts for possible eruptions'});

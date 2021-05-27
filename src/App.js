@@ -77,8 +77,8 @@ function App() {
   useEffect(() => {
     if(requireRefresh){
       fetchVolcanoes([])
-      poll(token).then(res => {
-        fetchVolcanoes(res);
+      poll(token, res => { 
+        fetchVolcanoes(res.body);
         setTimeout(() => {
           setRefresh(false)
         },100)
@@ -88,15 +88,15 @@ function App() {
 
   useEffect(() => {
     if(loggedIn){
-      poll(token).then(res => { fetchVolcanoes(res); })
+      poll(token, res => { fetchVolcanoes(res.body); });
       const expandSidebar = localStorage.getItem('expandSidebar');
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
       if(gridSize){ setGridDisplay(Number(gridSize)); };
       var poller = setInterval(() => {
         fetchVolcanoes([])
-        poll(token).then(res => {
-          fetchVolcanoes(res);
+        poll(token, res => { 
+          fetchVolcanoes(res.body);
           authClient.session.refresh().then(() => { setCreds(); });
         });
         clearInterval(poller);

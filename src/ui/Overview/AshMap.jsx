@@ -75,7 +75,7 @@ const AshMapOverview = ({classes}) => {
 
     useEffect(() => {
         apiCall('get-utc-date', 'GET', token).then(date => {
-            setDate(date)
+            setDate(date.body)
         })
     })
 

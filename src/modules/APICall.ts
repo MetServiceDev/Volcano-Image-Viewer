@@ -13,7 +13,7 @@ const apiCall = async (route: string, method: string, token: string, body?: obje
                 headers: { 'Authorization': token }
             });
         const data = await call.json();
-        return data;
+        return data as Response;
     }catch(err){
         throw err;
     }
