@@ -81,7 +81,6 @@ const VolcanoThumbnail = ({classes, volcano}) => {
 
     const s3Tag = volcano.s3Link;
     const [src, setSrc] = useState(`${imageBucket}/${s3Tag}/${s3Tag}-${thumbnail}.jpg`);
-
     const setImage = index => { setSrc(`${imageBucket}/${s3Tag}/${s3Tag}-${index}.jpg`); };
 
     useEffect(() => {
@@ -143,7 +142,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
             <Zoom in={expand} key={index}>
                 <div style={{backgroundColor:'white', width:'100%'}}>
                     <img          
-                        src={`${imageBucket}/${s3Tag}/${s3Tag}-${val}.jpg`} 
+                        src={`${imageBucket}/${s3Tag}/${s3Tag}-${val}.jpg`}
                         alt={volcano.name} 
                         width='100%'
                         onMouseOver={()=>{setImage(val); setThumbnail(val); }}
