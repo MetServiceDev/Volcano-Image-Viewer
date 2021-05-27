@@ -1,14 +1,19 @@
 import { apiEndpoint } from '../metadata/Endpoints';
 
-const apiCall = async (route, method, token, body) => {
+interface Response {
+    code: number
+    body: any
+};
+
+const apiCall = async (route: string, method: string, token: string, body?: object): Promise<any> => {
     try{
         const call = await fetch(`${apiEndpoint}/${route}`, { 
                 method: method, 
-                body: method === 'POST' ? JSON.stringify(body) : null, 
+                body: JSON.stringify(body),
                 headers: { 'Authorization': token }
             });
         const data = await call.json();
-        return data;
+        return data as Response;
     }catch(err){
         throw err;
     }

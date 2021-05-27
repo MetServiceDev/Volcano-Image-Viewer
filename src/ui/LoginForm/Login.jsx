@@ -90,18 +90,18 @@ const theme = createMuiTheme({
     }
 });
 
-const Login = ({classes}) => {
+const Login = ({ classes }) => {
 
     const dispatch = useDispatch();
 
-    const [username, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [username, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const [emailError, setEError] = useState(false)
-    const emailRef = useRef()
+    const [emailError, setEError] = useState(false);
+    const emailRef = useRef();
 
-    const [passwordError, setPasswordError] = useState(false)
+    const [passwordError, setPasswordError] = useState(false);
     const passRef = useRef();
 
     const loggedIn = useSelector(state => state.loggedIn);
@@ -114,20 +114,20 @@ const Login = ({classes}) => {
     const { oktaAuth } = useOktaAuth();
 
     const login = () => {
-        setLoading(true)
+        setLoading(true);
         if(username === ''){
-            setEError(true)
-            emailRef.current.focus()
+            setEError(true);
+            emailRef.current.focus();
             emailRef.current.placeholder = 'Username Required';
-            setLoading(false)
-            return
+            setLoading(false);
+            return;
         }
         if(password === ''){
-            setPasswordError(true)
-            passRef.current.focus()
+            setPasswordError(true);
+            passRef.current.focus();
             passRef.current.placeholder = 'Invalid Password';
-            setLoading(false)
-            return
+            setLoading(false);
+            return;
         }
 
         oktaAuth.signInWithCredentials({ username, password }).then(async(res) => {
@@ -138,15 +138,15 @@ const Login = ({classes}) => {
                     redirectUri: redirectUri,
                 });
                 const accessToken = successResult.tokens.accessToken.accessToken;
-                authClient.tokenManager.setTokens(successResult)
+                authClient.tokenManager.setTokens(successResult);
                 localStorage.setItem('token', accessToken);
-                setToken(accessToken)
-                setLogin(true)
+                setToken(accessToken);
+                setLogin(true);
             }
         }).catch(e => {
-            setLoading(false)
-            setError({msg: e.toString(), show:true})
-        })
+            setLoading(false);
+            setError({msg: e.toString(), show:true});
+        });
     };
 
     if(loggedIn){ return <Redirect to='/'/> }
