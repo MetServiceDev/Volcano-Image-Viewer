@@ -11,7 +11,7 @@ import MenuList from '@material-ui/core/MenuList';
 import { useState } from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useDispatch, useSelector  } from 'react-redux';
-import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter } from '../../redux/actions';
+import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, handleWIFilter, handleSATFilter } from '../../redux/actions';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Select from '@material-ui/core/Select';
 import Filter from './Filter';
@@ -106,8 +106,9 @@ const Navbar = ({classes, logout}) => {
     const toggleVA = val => dispatch(handleVAFilter(val));
     const toggleCNI = val => dispatch(handleCNIFilter(val));
     const toggleWI = val => dispatch(handleWIFilter(val));
+    const toggleSAT = val => dispatch(handleSATFilter(val));
     const gridDisplay = useSelector(state => state.gridDisplay);
-    const { showNZ, showVA, showCNI, showWI } = useSelector(state => state);
+    const { showNZ, showVA, showCNI, showWI, showSAT } = useSelector(state => state);
 
     const setGrid = (e) => {
         const size = Number(e.target.value);
@@ -125,6 +126,7 @@ const Navbar = ({classes, logout}) => {
                     <Filter check={showNZ} toggle={()=>{toggleNZ(!showNZ)}} text='New Zealand'/>
                     <Filter check={showCNI} toggle={()=>{toggleCNI(!showCNI)}} text='Central NI'/>
                     <Filter check={showWI} toggle={()=>{toggleWI(!showWI)}} text='White Island'/>
+                    <Filter check={showSAT} toggle={()=>{toggleSAT(!showSAT)}} text='Satellite'/>
                 </MenuList>
             </Paper>}
             <Select variant="outlined" value={gridDisplay} onChange={(e)=>{setGrid(e)}} className={classes.selectRows}>

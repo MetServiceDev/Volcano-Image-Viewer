@@ -146,7 +146,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
                         src={`${imageBucket}/${s3Tag}/${s3Tag}-${val}.jpg`} 
                         alt={volcano.name} 
                         width='100%'
-                        onMouseOver={()=>{setImage(val); setThumbnail(val)}}
+                        onMouseOver={()=>{setImage(val); setThumbnail(val); }}
                         className={classes.thumbnailImg}
                     />
                 </div>

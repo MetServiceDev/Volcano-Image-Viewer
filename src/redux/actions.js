@@ -23,6 +23,11 @@ export const handleWIFilter = bool => ({
     payload: bool
 });
 
+export const handleSATFilter = bool => ({
+    type: 'SET_SAT_FILTER',
+    payload: bool
+})
+
 export const handleSidebar = bool => ({
     type: 'EXPAND_SIDEBAR',
     payload: bool

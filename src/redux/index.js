@@ -10,6 +10,7 @@ const initialState = {
     showVA: true,
     showCNI: true,
     showWI: true,
+    showSAT: true,
     expandSidebar: true,
     currentDisplay: 'VOLCANO_MATRIX',
     lightningAlerts:{},
@@ -52,7 +53,12 @@ function reducer(state, action) {
         return {
             ...state,
             showWI: action.payload
-        } 
+        }
+    case 'SET_SAT_FILTER':
+        return {
+            ...state,
+            showSAT: action.payload
+        }
     case 'EXPAND_SIDEBAR':
         return {
             ...state,
