@@ -21,6 +21,7 @@ import { redirectUri } from './metadata/Endpoints';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import issueToken from './modules/IssueToken';
 import SplashScreen from './ui/ReusedComponents/SplashScreen';
+import { poll } from './modules/Poller';
 
 function App() {
   
@@ -76,26 +77,25 @@ function App() {
   useEffect(() => {
     if(requireRefresh){
       fetchVolcanoes([])
-        apiCall('volcano-list', 'GET', token).then(res => {
-          fetchVolcanoes(res);
-          setTimeout(() => {
-            setRefresh(false)
-          },100)
-          
-        });
+      poll(token).then(res => {
+        fetchVolcanoes(res);
+        setTimeout(() => {
+          setRefresh(false)
+        },100)
+      });
     }
   },[requireRefresh])
 
   useEffect(() => {
     if(loggedIn){
-      apiCall('volcano-list', 'GET', token).then(data => { fetchVolcanoes(data); });
+      poll(token).then(res => { fetchVolcanoes(res); })
       const expandSidebar = localStorage.getItem('expandSidebar');
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
       if(gridSize){ setGridDisplay(Number(gridSize)); };
       var poller = setInterval(() => {
         fetchVolcanoes([])
-        apiCall('volcano-list', 'GET', token).then(res => {
+        poll(token).then(res => {
           fetchVolcanoes(res);
           authClient.session.refresh().then(() => { setCreds(); });
         });

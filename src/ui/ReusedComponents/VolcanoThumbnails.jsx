@@ -96,6 +96,7 @@ const VolcanoThumbnail = ({classes, volcano}) => {
                 }catch(err) {
                     setLoading(true); 
                     apiCall('metadata', 'GET', token).then(timestamps => {
+                        timestamps.body.reverse()
                         res({ timestamp:timestamps.body[index].slice(0,8),updated:true });
                     });
                 };
