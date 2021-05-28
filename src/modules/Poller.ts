@@ -20,8 +20,8 @@ interface Volcano {
 };
 
 const poll = async ( token: string, cb: (res: Volcano[]) => {} ) => {
-    const fetch = await apiCall('volcano-list', 'GET', token);
-    cb(fetch as Volcano[]);
+    const response = await apiCall('volcano-list', 'GET', token);
+    cb(response.body as Volcano[]);
 };
 
 export { poll };
