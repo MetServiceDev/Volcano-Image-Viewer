@@ -9,8 +9,8 @@ enum Method {
 
 interface Config {
     method: string;
-    body?:any,
-    headers:any
+    body?:any;
+    headers:any;
 };
 
 interface Response {
@@ -37,7 +37,7 @@ const setConfig = (method: string, token: string, body?: object) => {
     }
 }
 
-const apiCall = async (route: string, method: string, token: string, body?: object): Promise<any> => {
+const apiCall = async (route: string, method: string, token: string, body?: object): Promise<Response> => {
     try{
         const call = await fetch(`${apiEndpoint}/${route}`, setConfig(method, token, body));
         const data = await call.json();

@@ -5,9 +5,9 @@ import { useState, useEffect } from 'react';
 import ReplayIcon from '@material-ui/icons/Replay';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import apiCall from '../../modules/APICall';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleLightningAlerts } from '../../redux/actions';
+import { fetchLightning } from '../../modules/FetchLightning';
 
 const styles = {
     root: {
@@ -35,39 +35,29 @@ const styles = {
 
 const LightningAlerts = ({classes}) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [alerts, setAlerts] = useState({severity:'success', msg: ''});
     const [loaded, setLoaded] = useState(false);
     const setLightningAlerts = data => dispatch(handleLightningAlerts(data));
     const currentAlerts = useSelector(state => state.lightningAlerts);
-    const token = localStorage.getItem('token');
+    const token = useSelector(state => state.accessToken);
 
-    const fetchData = () => {
+    const fetchData = async() => {
         setLoaded(false);
-        apiCall('lightning-data', 'GET', token).then(data => {
-            const res = JSON.parse(data.body)
-                const { alertCheck, innerCheck, alertNames, innerNames, areas, twentyKStrikes, hundredKStrikes } = res;
-                if(alertCheck === 0 && innerCheck === 0){
-                    setAlerts({severity: 'success', msg: 'No current lightning alerts for possible eruptions'});
-                    setLightningAlerts({severity: 'success', msg: 'No current lightning alerts for possible eruptions'})
-                } else if(alertCheck > 0 && innerCheck > 0){
-                    setAlerts({severity: 'error', msg: `${areas}: Possible eruption at ${alertNames.map(name => {return `${name}`})} --- ${twentyKStrikes} lightning strikes also reported within 20km of ${innerNames.map(name => {return `${name}`})}`});
-                    setLightningAlerts({severity: 'error', msg: `${areas}: Possible eruption at ${alertNames.map(name => {return `${name}`})} --- ${twentyKStrikes} lightning strikes also reported within 20km of ${innerNames.map(name => {return `${name}`})}`});
-                } else if(alertCheck > 0 && innerCheck === 0){
-                    setAlerts({severity: 'warning', msg: `${areas}: Lightning data indicates possible eruption happening at ${alertNames.map(name => {return `${name}`})}  --- Please check latest imagery!`});
-                    setLightningAlerts({severity: 'warning', msg: `${areas}: Lightning data indicates possible eruption happening at ${alertNames.map(name => {return `${name}`})}  --- Please check latest imagery!`});
-                } else if(alertCheck === 0 && innerCheck > 0){
-                    setAlerts({severity: 'warning', msg: `${areas}: Lightning data shows ${twentyKStrikes} strikes within 20km and ${hundredKStrikes} strikes within 100km of ${innerNames.map(name => {return `${name}`})}  Please check latest imagery.`});
-                    setLightningAlerts({severity: 'warning', msg: `${areas}: Lightning data shows ${twentyKStrikes} strikes within 20km and ${hundredKStrikes} strikes within 100km of ${innerNames.map(name => {return `${name}`})}  Please check latest imagery.`});
-                };
-                setLoaded(true);
-        }).catch(() => { setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'}); setLoaded(true); })  
+        try{
+            const data = await fetchLightning(token);
+            setAlerts(data);
+            setLightningAlerts(data);
+            setLoaded(true);
+        } catch (err){
+            console.log(err);
+            setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'});
+            setLoaded(true);
+        };
     };
 
     useEffect(()=> { 
-        setInterval(()=>{
-            fetchData()
-        }, 60000*10) 
+        setInterval(()=>{ fetchData() }, 60000*10);
     },[]);
 
     useEffect(() => {

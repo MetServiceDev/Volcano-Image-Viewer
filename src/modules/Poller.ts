@@ -19,9 +19,9 @@ interface Volcano {
 	relatedVolanoes?: string[];
 };
 
-const poll = async ( token: string, cb: (res: Volcano[]) => {} ) => {
+const poll = async ( token: string, cb: (res: Volcano[]) => {} ): Promise<Volcano[]> => {
     const response = await apiCall('volcano-list', 'GET', token);
-    cb(response.body as Volcano[]);
+    return response.body as Volcano[];
 };
 
 export { poll };

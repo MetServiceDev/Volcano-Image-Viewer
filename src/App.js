@@ -12,7 +12,6 @@ import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleSidebar, handleGridDisplay, handleLogin, handleToken, handleRefresh } from './redux/actions';
-import apiCall from './modules/APICall';
 import Login from './ui/LoginForm/Login';
 import authClient from './modules/Auth';
 import { Security } from '@okta/okta-react';
@@ -77,7 +76,7 @@ function App() {
   useEffect(() => {
     if(requireRefresh){
       fetchVolcanoes([])
-      poll(token, res => { 
+      poll(token).then(res => {
         fetchVolcanoes(res);
         setTimeout(() => {
           setRefresh(false)
@@ -88,14 +87,14 @@ function App() {
 
   useEffect(() => {
     if(loggedIn){
-      poll(token, res => { fetchVolcanoes(res); });
+      poll(token).then(res => { fetchVolcanoes(res); });
       const expandSidebar = localStorage.getItem('expandSidebar');
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar){ setSidebar(JSON.parse(expandSidebar.toLowerCase())); };
       if(gridSize){ setGridDisplay(Number(gridSize)); };
       var poller = setInterval(() => {
         fetchVolcanoes([])
-        poll(token, res => { 
+        poll(token).then(res => {
           fetchVolcanoes(res);
           authClient.session.refresh().then(() => { setCreds(); });
         });
