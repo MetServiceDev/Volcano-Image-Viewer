@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 const middleware = [thunk]
 
 const initialState = {
+    user:{},
     gridDisplay:4,
     showNZ: true,
     showVA: true,
@@ -88,6 +89,11 @@ function reducer(state, action) {
         return {
             ...state,
             requireRefresh:action.payload
+        }
+    case 'SET_USER':
+        return {
+            ...state,
+            user: action.payload
         }
     default:
       return state;

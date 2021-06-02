@@ -13,7 +13,7 @@ import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import { useOktaAuth } from '@okta/okta-react';
 import { redirectUri } from '../../metadata/Endpoints';
-import { handleLogin, handleToken } from '../../redux/actions';
+import { handleLogin, handleToken, handleUser } from '../../redux/actions';
 
 const styles = {
     root: {
@@ -111,6 +111,8 @@ const Login = ({ classes }) => {
 
     const [error, setError] = useState({msg:'', show:false});
 
+    const setUser = user => dispatch(handleUser(user));
+
     const { oktaAuth } = useOktaAuth();
 
     const login = () => {
@@ -142,6 +144,7 @@ const Login = ({ classes }) => {
                 localStorage.setItem('token', accessToken);
                 setToken(accessToken);
                 setLogin(true);
+                setUser({...res.user.profile, id:res.user.id});
             }
         }).catch(e => {
             setLoading(false);

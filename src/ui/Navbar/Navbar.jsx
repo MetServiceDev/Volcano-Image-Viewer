@@ -15,6 +15,8 @@ import { handleGridDisplay, handleNZFilter, handleVAFilter, handleCNIFilter, han
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Select from '@material-ui/core/Select';
 import Filter from './Filter';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { Link } from 'react-router-dom';
 
 const styles = {
     root: {
@@ -78,7 +80,7 @@ const styles = {
         },
     },
     rightIcons: {
-        left:'95%',
+        left:'90%',
         top:'25%',
         position:'absolute',
         display: 'inline-block',
@@ -147,6 +149,7 @@ const Navbar = ({classes, logout}) => {
                 }}
             />
             <div className={classes.rightIcons}>
+                <Link to='/dashboard'><ButtonBase><AccountCircleIcon className={classes.userIcon}/></ButtonBase></Link>
                 <ButtonBase><ExitToAppIcon className={classes.userIcon} onClick={logout}/></ButtonBase>
             </div>
         </div>

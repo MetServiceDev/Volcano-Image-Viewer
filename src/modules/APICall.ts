@@ -43,6 +43,7 @@ const apiCall = async (route: string, method: string, token: string, body?: obje
         const response = await call.json();
         return response as Response;
     }catch(err){
+        console.log(err);
         throw err;
     }
     

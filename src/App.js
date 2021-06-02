@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleSidebar, handleGridDisplay, handleLogin, handleToken, handleRefresh } from './redux/actions';
+import { handleSidebar, handleGridDisplay, handleLogin, handleToken, handleRefresh, handleUser } from './redux/actions';
 import Login from './ui/LoginForm/Login';
 import authClient from './modules/Auth';
 import { Security } from '@okta/okta-react';
@@ -21,8 +21,11 @@ import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import issueToken from './modules/IssueToken';
 import SplashScreen from './ui/ReusedComponents/SplashScreen';
 import { poll } from './modules/Poller';
+import Dashboard from './ui/Dashboard/Dashboard';
+import DashNav from './ui/Dashboard/DashNav';
 
 function App() {
+  const setUser = user => dispatch(handleUser(user));
   
   const [volcanoes, fetchVolcanoes] = useState([]);
   const [loaded, setLoaded] = useState(false)
@@ -55,9 +58,13 @@ function App() {
   }
 
   useEffect(() => {
-    authClient.session.exists()
-    .then((session) => {
+    authClient.session.get()
+    .then(async(session) => {   
       if (session) {
+        try{
+          const user = await session.user();
+          setUser({...user.profile, id:user.id});
+        }catch(err){};
         setCreds();
       } else {
         if(token){
@@ -136,6 +143,10 @@ function App() {
           <Route exact path='/login' component={Login}/>
           <Route exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={volcanoes}/>)}/>
           <Route exact path='/Vanuatu Satellite' render={props => (<AshMapOverview {...props}/>)}/>
+          <Route exact path='/dashboard'>
+              <DashNav/>
+              <Dashboard/>
+          </Route>
           <Route component={ErrorPage}/>
         </Switch>
     </Router>

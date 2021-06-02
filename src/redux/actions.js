@@ -57,3 +57,8 @@ export const handleRefresh = bool => ({
     type: 'REQUIRE_REFRESH',
     payload: bool
 })
+
+export const handleUser = user => ({
+    type: 'SET_USER',
+    payload: user
+})
