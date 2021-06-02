@@ -9,8 +9,8 @@ enum Method {
 
 interface Config {
     method: string;
-    body?:any,
-    headers:any
+    body?:any;
+    headers:any;
 };
 
 interface Response {
@@ -24,7 +24,7 @@ const setConfig = (method: string, token: string, body?: object) => {
             method: Method['GET'],
             headers: { 'Authorization' : token }
         };
-        return config
+        return config;
     }
 
     else if(method === 'POST'){
@@ -33,15 +33,15 @@ const setConfig = (method: string, token: string, body?: object) => {
             body: JSON.stringify(body),
             headers: { 'Authorization' : token }
         };
-        return config
-    }
-}
+        return config;
+    };
+};
 
-const apiCall = async (route: string, method: string, token: string, body?: object): Promise<any> => {
+const apiCall = async (route: string, method: string, token: string, body?: object): Promise<Response> => {
     try{
         const call = await fetch(`${apiEndpoint}/${route}`, setConfig(method, token, body));
-        const data = await call.json();
-        return data as Response;
+        const response = await call.json();
+        return response as Response;
     }catch(err){
         throw err;
     }
