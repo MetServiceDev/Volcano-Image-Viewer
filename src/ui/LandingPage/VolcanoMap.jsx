@@ -94,7 +94,7 @@ const VolcanoMap = ({classes, volcanoes}) => {
                     const {lat, long} = volcanoObject.coordinates;
                     const icon = getIcon(level);
                     return (
-                        <Marker position={[lat, long]} icon={icon} key={volcanoObject.code} id='marker'>
+                        <Marker position={[lat, long]} icon={icon} key={volcanoObject.code}>
                             <Popup>{volcanoObject.mountain}: Alert level {level} - {msg}</Popup>
                         </Marker>
                     );
