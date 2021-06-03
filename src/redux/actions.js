@@ -62,3 +62,8 @@ export const handleUser = user => ({
     type: 'SET_USER',
     payload: user
 })
+
+export const handleUserDashboards = array => ({
+    type: 'SET_USER_DASHBOARDS',
+    payload: array
+})

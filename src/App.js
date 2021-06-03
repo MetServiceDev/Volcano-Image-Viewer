@@ -23,9 +23,9 @@ import SplashScreen from './ui/ReusedComponents/SplashScreen';
 import { poll } from './modules/Poller';
 import Dashboard from './ui/Dashboard/Dashboard';
 import DashNav from './ui/Dashboard/DashNav';
+import DashSidebar from './ui/Dashboard/DashSidebar';
 
 function App() {
-  const setUser = user => dispatch(handleUser(user));
   
   const [volcanoes, fetchVolcanoes] = useState([]);
   const [loaded, setLoaded] = useState(false)
@@ -34,6 +34,8 @@ function App() {
 
   const setSidebar = val => dispatch(handleSidebar(val));
   const setGridDisplay = size => dispatch(handleGridDisplay(size))
+
+  const setUser = user => dispatch(handleUser(user));
 
   const loggedIn = useSelector(state => state.loggedIn);
   const setLogin = bool => dispatch(handleLogin(bool));
@@ -102,6 +104,7 @@ function App() {
       var poller = setInterval(() => {
         fetchVolcanoes([])
         poll(token).then(res => {
+          console.log('repolled');
           fetchVolcanoes(res);
           authClient.session.refresh().then(() => { setCreds(); });
         });
@@ -146,6 +149,7 @@ function App() {
           <Route exact path='/dashboard'>
               <DashNav/>
               <Dashboard/>
+              <DashSidebar/>
           </Route>
           <Route component={ErrorPage}/>
         </Switch>

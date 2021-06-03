@@ -6,6 +6,7 @@ const middleware = [thunk]
 
 const initialState = {
     user:{},
+    userDashboards:[],
     gridDisplay:4,
     showNZ: true,
     showVA: true,
@@ -94,6 +95,11 @@ function reducer(state, action) {
         return {
             ...state,
             user: action.payload
+        }
+    case 'SET_USER_DASHBOARDS':
+        return {
+            ...state,
+            userDashboards:action.payload
         }
     default:
       return state;

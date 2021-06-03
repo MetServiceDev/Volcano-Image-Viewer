@@ -26,7 +26,7 @@ const styles = {
         cursor: 'pointer',
         position:'absolute',
         right: '0%',
-        transition: '0.5s'
+        transition: '0.5s',
     },
     refreshWarning: {
         marginLeft:'10px',
