@@ -103,6 +103,12 @@ export const ExternalLinks = [
                     name: 'Ash 4 Panel',
                     link: 'https://volcano.ssec.wisc.edu/imagery/view/#sector:Mt_Erebus_500_m::instr:all::sat:all::image_type:RGB1112or13um_3911um_11um_Ash_Retv::endtime:latest::daterange:1440'
                 }
+            ],
+            [
+                {
+                    name: 'Vanuatu Metars & Tafs',
+                    link: 'https://www.aviationweather.gov/metar/data?ids=NVVW%2C+NVVV%2C+NVVA%2C+NVSS%2C+NVSL%2C+NVSG%2C+NVSC&format=raw&date=0&hours=3&taf=on'
+                }
             ]
         ]
     },
