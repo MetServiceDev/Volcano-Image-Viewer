@@ -1,0 +1,97 @@
+body {
+  overflow-x: hidden
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bfbfbf; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf; 
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+}
+
+.lds-grid {
+  display: inline-block;
+  position: relative;
+  width: 320px;
+  height: 320px;
+}
+.lds-grid div {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  border-radius: 0%;
+  background: #ffbb00;
+  animation: lds-grid 1.2s linear infinite;
+}
+.lds-grid div:nth-child(1) {
+  top: 0px;
+  left: 0px;
+  animation-delay: 0s;
+}
+.lds-grid div:nth-child(2) {
+  top: 0px;
+  left: 128px;
+  animation-delay: -0.4s;
+}
+.lds-grid div:nth-child(3) {
+  top: 0px;
+  left: 256px;
+  animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(4) {
+  top: 128px;
+  left: 0px;
+  animation-delay: -0.4s;
+}
+.lds-grid div:nth-child(5) {
+  top: 128px;
+  left: 128px;
+  animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(6) {
+  top: 128px;
+  left: 256px;
+  animation-delay: -1.2s;
+}
+.lds-grid div:nth-child(7) {
+  top: 256px;
+  left: 0px;
+  animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(8) {
+  top: 256px;
+  left: 128px;
+  animation-delay: -1.2s;
+}
+.lds-grid div:nth-child(9) {
+  top: 256px;
+  left: 256px;
+  animation-delay: -1.6s;
+}
+@keyframes lds-grid {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

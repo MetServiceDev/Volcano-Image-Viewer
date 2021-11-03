@@ -26,6 +26,7 @@ import { poll } from './api/poller';
 import { User } from './api/User/headers';
 import { toggleSidebar } from './redux/effects/sidebarEffect';
 import { setGrid } from './redux/effects/gridEffect';
+import './ui/App.css';
 
 const App: React.FC = () => {
   const history = useHistory();
