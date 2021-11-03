@@ -8,7 +8,7 @@ import { toRelativeUrl } from '@okta/okta-auth-js';
 
 import authClient from './api/auth/Auth';
 import appTheme from './AppTheme';
-import store from './redux/store/index';
+import store, { AppState } from './redux/store/index';
 
 import Dashboard from './ui/Dashboard';
 import VolcanoOverview from './ui/Overview/VolcanoOverview';
@@ -22,6 +22,10 @@ import Login from './ui/LoginForm/Login';
 import AshMapOverview from './ui/Overview/AshMap';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import { Volcano } from './api/volcano/headers';
+import { poll } from './api/poller';
+import { User } from './api/User/headers';
+import { toggleSidebar } from './redux/effects/sidebarEffect';
+import { setGrid } from './redux/effects/gridEffect';
 
 const App: React.FC = () => {
   const history = useHistory();
@@ -29,7 +33,21 @@ const App: React.FC = () => {
     history.replace(toRelativeUrl(originalUri || '/', window.location.origin));
   };
 
+  const dispatch = useDispatch();
+
+  const user = useSelector((state:AppState) => state.login) as User;
+
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+
+  React.useEffect(() => {
+    if (user) {
+      const expandSidebar = localStorage.getItem('expandSidebar');
+      const gridSize = localStorage.getItem('gridSize');
+      if(expandSidebar) { dispatch(toggleSidebar(JSON.parse(expandSidebar.toLowerCase()))); };
+      if(gridSize) { dispatch(setGrid(Number(gridSize))); };
+      poll(user).then(res => setVolcanoes(res))
+    }
+  },[user])
 
   const muiTheme = appTheme(false)
 
@@ -42,9 +60,9 @@ const App: React.FC = () => {
               <Dashboard volcanoes={volcanoes}/>
             </Route>
             <Route exact path='/login' component={Login}/>
-            {/* <Route exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={volcanoes}/>)}/>
-            <Route exact path='/Vanuatu Satellite' render={props => (<AshMapOverview {...props}/>)}/>
-            <Route component={ErrorPage}/> */}
+            <Route exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={volcanoes}/>)}/>
+            {/* <Route exact path='/Vanuatu Satellite' render={props => (<AshMapOverview {...props}/>)}/> */}
+            <Route component={ErrorPage}/>
             <Route exact path='/login/callback' component={LoginCallback} />
           </Switch>
         </Security>

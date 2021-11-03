@@ -40,12 +40,12 @@ const LightningAlerts: React.FC = () => {
     const [alerts, setAlerts] = React.useState({severity:'success', msg: ''});
     const [loaded, setLoaded] = React.useState(false);
     const currentAlerts = useSelector((state: AppState) => state.lightningAlerts);
-    const login = useSelector((state: AppState) => state.login) as User;
+    const user = useSelector((state: AppState) => state.login) as User;
 
     const fetchData = async() => {
         setLoaded(false);
-        try{
-            const data = await fetchLightning(login.token);
+        try {
+            const data = await fetchLightning(user);
             setAlerts(data);
             dispatch(setLightningAlerts(data))
             setLoaded(true);
@@ -62,14 +62,14 @@ const LightningAlerts: React.FC = () => {
     },[]);
 
     React.useEffect(() => {
-        if(!currentAlerts.severity){
+        if(!currentAlerts.severity && user){
             fetchData();
         }else{
             setLoaded(true); 
             setAlerts(currentAlerts)
         }
     // eslint-disable-next-line
-    },[]);
+    },[user]);
 
     if(!loaded){
         return (

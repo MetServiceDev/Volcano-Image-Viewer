@@ -28,7 +28,6 @@ const Dashboard: React.FC<Props> = ({ volcanoes }) => {
             const token = authState?.accessToken?.accessToken || '';
             dispatch(setLogin({ email, aud, name, token } as User));
         };
-        console.log(authState)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[authState]);
 

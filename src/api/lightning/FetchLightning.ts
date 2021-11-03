@@ -1,9 +1,10 @@
 import apiCall from '../APICall';
+import { User } from '../User/headers';
 import { APIResponse, LightningData } from './headers';
 
-const fetchLightning = async(token: string): Promise<LightningData> => {
+const fetchLightning = async(user: User): Promise<LightningData> => {
     try{
-        const data = await apiCall('lightning-data', 'GET', token);
+        const data = await apiCall('lightning-data', 'GET', user);
         const response: APIResponse = JSON.parse(data.body);
         const { alertCheck, innerCheck, alertNames, innerNames, areas, twentyKStrikes, hundredKStrikes } = response;
         let lightningData: LightningData = {

@@ -26,7 +26,7 @@ export const filterReducer = (
         case SET_VA_FILTER:
             return {
                 ...state,
-                showNZ: action.payload
+                showVA: action.payload
             }
         case SET_CNI_FILTER:
             return {

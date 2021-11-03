@@ -3,8 +3,11 @@ import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 import { Typography, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
+import { useSelector } from 'react-redux';
 
 import apiCall from '../../api/APICall';
+import { AppState } from '../../redux/store';
+import { User } from '../../api/User/headers';
 
 const styles = () => createStyles({
     root:{},
@@ -68,13 +71,13 @@ const metadata = [ 'Ash', 'Dust', 'True-Colour' ];
 interface Props extends WithStyles<typeof styles> {}
 
 const AshMapOverview: React.FC<Props> = ({ classes }) => {
+    const user = useSelector((state: AppState) => state.login) as User;
 
     const [currentDisplay, setCurrentDisplay] = React.useState(metadata[0]);
     const [dateString, setDate] = React.useState('');
-    const token = localStorage.getItem('token') as string;
 
     React.useEffect(() => {
-        apiCall('get-utc-date', 'GET', token).then(date => {
+        apiCall('get-utc-date', 'GET', user).then(date => {
             setDate(date.body)
         })
     })

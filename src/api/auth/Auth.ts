@@ -2,7 +2,7 @@ import { OktaAuth, OktaAuthOptions } from '@okta/okta-auth-js';
 
 const config: OktaAuthOptions = {
     clientId: '0oaz90a79pSqxbUL70h7',
-    redirectUri: window.location.origin,
+    redirectUri: `${window.location.origin}/login/callback`,
     issuer: 'https://dev-metraweather.oktapreview.com/oauth2/default',
 };
 
