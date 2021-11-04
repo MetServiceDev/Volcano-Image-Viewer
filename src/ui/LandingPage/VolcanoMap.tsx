@@ -47,7 +47,7 @@ const styles = () => createStyles({
         width:'70%',
         position:'absolute',
         right:'0%',
-        zIndex: -2,   
+        zIndex: 4,   
     },
     alertTable: {
         width:'30%',
@@ -55,7 +55,7 @@ const styles = () => createStyles({
         left:'0%' ,
         height: '100vh',
         backgroundColor: 'white',
-        zIndex: -2
+        zIndex: 4
     },
     tableRow: {
         '&:nth-of-type(odd)': {

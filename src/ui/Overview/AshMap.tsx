@@ -77,10 +77,11 @@ const AshMapOverview: React.FC<Props> = ({ classes }) => {
     const [dateString, setDate] = React.useState('');
 
     React.useEffect(() => {
-        apiCall('get-utc-date', 'GET', user).then(date => {
-            setDate(date.body)
-        })
-    })
+        if (user) {
+            apiCall('get-utc-date', 'GET', user).then(date => setDate(date.body));
+        }
+        
+    },[user])
 
     const renderImg = () => {
         const src = `https://loopy-files.s3-ap-southeast-2.amazonaws.com/loopy-pix/${currentDisplay}.png` 

@@ -101,7 +101,7 @@ const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
                             {volcano.name}
                         </Typography>
                         <span className={classes.alerIcon}>{alert && 
-                            <AlertIcon data={alert} showAlert={() => {setAlertVisibility(true)}} hideAlert={() => {setAlertVisibility(false)}} fontSize={fontSize}/>}
+                            <AlertIcon data={alert} fontSize={fontSize}/>}
                         </span>
                         {renderAlertBulletin(alert)}
                         <OpenInNewIcon className={classes.icon} style={{fontSize:fontSize}}/>

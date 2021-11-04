@@ -29,6 +29,7 @@ import { setGrid } from './redux/effects/gridEffect';
 import './ui/App.css';
 
 const App: React.FC = () => {
+  const muiTheme = appTheme(false);
   const history = useHistory();
   const restoreOriginalUri = async (_oktaAuth:any, originalUri:string) => {
     history.replace(toRelativeUrl(originalUri || '/', window.location.origin));
@@ -42,15 +43,18 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     if (user) {
+      poll(user).then(res => setVolcanoes(res));
       const expandSidebar = localStorage.getItem('expandSidebar');
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar) { dispatch(toggleSidebar(JSON.parse(expandSidebar.toLowerCase()))); };
       if(gridSize) { dispatch(setGrid(Number(gridSize))); };
-      poll(user).then(res => setVolcanoes(res))
+      var poller = setInterval(() => {
+        setVolcanoes([])
+        poll(user).then(res => setVolcanoes(res));
+        clearInterval(poller);
+      },60000*10);
     }
   },[user])
-
-  const muiTheme = appTheme(false)
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -61,9 +65,11 @@ const App: React.FC = () => {
               <Dashboard volcanoes={volcanoes}/>
             </Route>
             <Route exact path='/login' component={Login}/>
-            <Route exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={volcanoes}/>)}/>
-            {/* <Route exact path='/Vanuatu Satellite' render={props => (<AshMapOverview {...props}/>)}/> */}
-            <Route component={ErrorPage}/>
+            <SecureRoute exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={volcanoes}/>)}/>
+            <SecureRoute exact path='/Vanuatu Satellite'>
+              <AshMapOverview />
+            </SecureRoute>
+            {/* <Route component={ErrorPage}/> */}
             <Route exact path='/login/callback' component={LoginCallback} />
           </Switch>
         </Security>
