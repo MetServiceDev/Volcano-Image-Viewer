@@ -57,7 +57,11 @@ const LightningAlerts: React.FC = () => {
     };
 
     React.useEffect(()=> { 
-        setInterval(()=>{ fetchData() }, 60000*10);
+        setInterval(() => {
+            if (user) {
+                fetchData();
+            }
+        }, 60000*10);
     // eslint-disable-next-line
     },[]);
 

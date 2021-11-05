@@ -39,8 +39,14 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+interface SulfurMap {
+    link: string,
+    name: string,
+    img: string
+}
+
 interface Props {
-    sulfurMaps: any
+    sulfurMaps: SulfurMap[]
 }
 
 const SulfurMaps: React.FC<Props> = ({ sulfurMaps }) => {

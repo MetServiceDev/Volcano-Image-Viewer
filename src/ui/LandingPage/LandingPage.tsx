@@ -16,12 +16,18 @@ import { Volcano } from '../../api/volcano/headers';
 interface WithLoadingProps {
     hasLoaded: boolean;
 }
+
+const loadingComponent = (
+    <div style={{position: 'fixed', top:'20%', left:'40%'}}>
+        <LoaderUI/>
+    </div>
+)
   
 const withLoading = <P extends object>(Component: React.ComponentType<P>) =>
     class WithLoading extends React.Component<P & WithLoadingProps> {
       render() {
         const { hasLoaded, ...props } = this.props;
-        return hasLoaded ? <Component {...props as P} /> : <LoaderUI/>;
+        return hasLoaded ? <Component {...props as P} /> : loadingComponent;
       }
 };
 

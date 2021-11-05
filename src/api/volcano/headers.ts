@@ -16,3 +16,16 @@ export interface Volcano {
 	};
 	relatedVolcanoes?: string[];
 };
+
+export enum VolcanoLocation {
+	VANUATU = 'Vanuatu',
+	NZ = 'NZ',
+	CENTRAL_NI = 'Central NI',
+	WI = 'WI',
+};
+
+export enum OverviewDisplay {
+	THUMBNAIL = 'THUMBNAIL',
+	DRUM_GRAPH = 'DRUM_GRAPH',
+	RSAM = 'RSAM'
+};

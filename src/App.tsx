@@ -58,14 +58,14 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={muiTheme}>
-      <Paper style={{ height: '100vh'}}>
+      <Paper style={{ height: '100%'}}>
         <Security oktaAuth={authClient} restoreOriginalUri={restoreOriginalUri}>
           <Switch>
             <Route exact path='/'>
               <Dashboard volcanoes={volcanoes}/>
             </Route>
             <Route exact path='/login' component={Login}/>
-            <SecureRoute exact path='/overview' render={props => (<VolcanoOverview {...props} volcanoes={volcanoes}/>)}/>
+            <SecureRoute exact path='/overview' component={VolcanoOverview}/>
             <SecureRoute exact path='/Vanuatu Satellite'>
               <AshMapOverview />
             </SecureRoute>

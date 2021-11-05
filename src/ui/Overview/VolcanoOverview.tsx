@@ -4,11 +4,21 @@ import { Grow, Typography, Button } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
+import { useOktaAuth } from '@okta/okta-react';
+import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+
+import { setLogin } from '../../redux/effects/loginEffect';
+import { User } from '../../api/User/headers';
+import { AppState } from '../../redux/store/index';
+import { poll } from '../../api/poller';
 
 import { imageBucket } from '../../metadata/Endpoints';
 import VolcanicAlert from './VolcanicAlert';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
-import { Volcano } from '../../api/volcano/headers';
+
+import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
+import formatTimeStamp from '../../api/volcano/formatTimeStamp';
 
 const styles = () => createStyles({
     root: {
@@ -98,33 +108,66 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-interface Props extends WithStyles<typeof styles> {
-    volcanoes: Volcano[]
-}
+interface Props extends WithStyles<typeof styles> {}
 
-const VolcanoOverview: React.FC<Props> = ({ classes, volcanoes }) => {
+const VolcanoOverview: React.FC<Props> = ({ classes }) => {
+    const { authState } = useOktaAuth();
+    const user = useSelector((state:AppState) => state.login) as User;
+    const dispatch = useDispatch();
+
+    const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+
+    React.useEffect(() => {
+        if(authState && authState.isAuthenticated){ 
+            const { email, aud, name } = authState?.idToken?.claims as any;
+            const token = authState?.accessToken?.accessToken || '';
+            dispatch(setLogin({ email, aud, name, token } as User));
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[authState]);
+
+    React.useEffect(() => {
+        if (user) {
+            poll(user).then(res => {console.log(res); setVolcanoes(res)});
+        }
+    }, [user])
+    
+
+
     let query = useQuery();
     const volcano = query.get('volcano')
     const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
     const { name, volcanicAlerts, s3Link } = volcanoObject;
-    const [currentDisplay, setCurrentDisplay] = React.useState('THUMBNAIL')
+    const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL)
     const landingImg = `${imageBucket}/${s3Link}/${s3Link}-12.jpg`
 
-    const setDisplay = (currentDisplay: string) => {
+    const setDisplay = (currentDisplay: OverviewDisplay) => {
         switch(currentDisplay){
-            case 'THUMBNAIL':
-                return <div><VolcanoThumbnails volcano={volcanoObject}/></div>;
-            case 'DRUM_GRAPH':
+            case OverviewDisplay.THUMBNAIL:
+                return <VolcanoThumbnails volcano={volcanoObject}/>
+            case OverviewDisplay.DRUM_GRAPH:
                 return <img src={volcanoObject.location === 'Vanuatu' ? volcanoObject.drumLink : `${volcanoObject.drumLink}-drum.png`} alt={name} width='100%'/>
-            case 'RSAM':
+            case OverviewDisplay.RSAM:
                 return <img src={`${volcanoObject.drumLink}-combined.png`} alt={name} width='100%'/>
-            default:
-                return
         }
     }
 
     if(!volcanoObject.name){
         return null
+    }
+
+    const fetchSrc = (code: string) => {
+        const volcano = volcanoes.find(v => v.code === code) as Volcano;
+        if (volcano.location === VolcanoLocation.VANUATU) {
+            const s3Tag = volcano.s3Link || ''
+            const src = `${imageBucket}/${s3Tag}/${s3Tag}-12.jpg`
+            return src;
+        } else {
+            const date = moment().utc();
+            date.subtract('minutes', 10).format('H:mm');
+            const { src } = formatTimeStamp(code, date);
+            return src;
+        }
     }
 
     return(
@@ -138,18 +181,18 @@ const VolcanoOverview: React.FC<Props> = ({ classes, volcanoes }) => {
                 <div className={classes.sidebar}>
                     <Grow in={true} {...(true ? { timeout: 1000*(1) } : {})}>
                         <div className={classes.sideItem}>
-                            <img src={landingImg} alt={volcano as string} width='100%' onClick={() => {setCurrentDisplay('THUMBNAIL')}}/>
+                            <img src={landingImg} alt={volcano as string} width='100%' onClick={() => setCurrentDisplay(OverviewDisplay.THUMBNAIL)}/>
                             <Typography>Live Images</Typography>
                         </div>
                     </Grow>
                     {volcanoObject.drumLink &&
                         <Grow in={true} {...(true ? { timeout: 1000*(2) } : {})}>
                         <div className={classes.sideItem} >
-                            <img 
+                            <img
                                 src={volcanoObject.location === 'Vanuatu' ? volcanoObject.drumLink : `${volcanoObject.drumLink}-drum.png`} 
                                 alt={name} 
                                 width='100%' 
-                                onClick={() => {setCurrentDisplay('DRUM_GRAPH')}}
+                                onClick={() => setCurrentDisplay(OverviewDisplay.DRUM_GRAPH)}
                             />
                             <Typography>Drum Plot</Typography>
                         </div>
@@ -160,7 +203,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes, volcanoes }) => {
                                 <img 
                                     src={`${volcanoObject.drumLink}-combined.png`} 
                                     alt={name} width='100%' 
-                                    onClick={() => {setCurrentDisplay('RSAM')}}
+                                    onClick={() => setCurrentDisplay(OverviewDisplay.RSAM)}
                                 />
                                 <Typography>RASM & SSAM</Typography>
                             </div>
@@ -171,15 +214,14 @@ const VolcanoOverview: React.FC<Props> = ({ classes, volcanoes }) => {
                 </div>
                 {volcanoObject.relatedVolcanoes && (
                     <div className={classes.bottomSec}>
-                    {volcanoObject.relatedVolcanoes.map((vol, index) => {
-                        const volcano = volcanoes.find(v => v.code === vol) as Volcano;
-                        const s3Tag = volcano.s3Link || ''
-                        const src = `${imageBucket}/${s3Tag}/${s3Tag}-12.jpg`
+                    {volcanoObject.relatedVolcanoes.map((code, index) => {
+                        const imgSrc = fetchSrc(code);
+                        const volcano = volcanoes.find(v => v.code === code) as Volcano;
                         return (
-                            <Link className={classes.link} to={`overview?volcano=${volcano.name}`} target='_blank' key={volcano.code}>
+                            <Link className={classes.link} to={`overview?volcano=${volcano.name}`} key={volcano.code} target='_blank'>
                                 <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
                                     <div className={classes.sideItem}>
-                                        <img src={src} alt={volcano.name} width='100%'/>
+                                        <img src={imgSrc} alt={volcano.name} width='100%'/>
                                         <Typography>{volcano.name}</Typography>
                                     </div>
                                 </Grow>

@@ -29,24 +29,22 @@ const MapToggle = () => {
         setAlignment(newAlignment);
     };
 
-    const toggleButton = (display: CurrentDisplay, icon: JSX.Element | string) => {
-       return (
+    const toggleButton = (display: CurrentDisplay, icon: JSX.Element | string, value: string) => (
         <ToggleButton
             onClick={()=>{setCurrentDisplay(display)}}
-            value="left"
+            value={value}
             aria-label="left aligned"
             className={classes.button}
         >
             {icon}
         </ToggleButton>
-       ) 
-    }
+    )
 
     return (
         <ToggleButtonGroup className={classes.root} value={alignment} exclusive onChange={handleAlignment}>
-            {toggleButton(CurrentDisplay.VOLCANO_MATRIX, <DashboardIcon/>)}
-            {toggleButton(CurrentDisplay.SULFUR_MAPS, 'So2')}
-            {toggleButton(CurrentDisplay.ALERT_MAP, <MapIcon/>)}
+            {toggleButton(CurrentDisplay.VOLCANO_MATRIX, <DashboardIcon/>, 'left')}
+            {toggleButton(CurrentDisplay.SULFUR_MAPS, 'So2', 'center')}
+            {toggleButton(CurrentDisplay.ALERT_MAP, <MapIcon/>, 'right')}
         </ToggleButtonGroup>
     );
 };
