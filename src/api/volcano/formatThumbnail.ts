@@ -1,7 +1,7 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { gnsEndpont } from '../../metadata/Endpoints';
 
-const formatTimeStamp = (code:string, currentTime: any) => {   
+const formatThumbnail = (code:string, currentTime: Moment) => {   
     const year = moment().format('YYYY'); 
     const dayOfYear = currentTime.dayOfYear();
     const startMinute = currentTime.format('mm').split('')[0];
@@ -12,4 +12,4 @@ const formatTimeStamp = (code:string, currentTime: any) => {
     return { src, timestamp };
 };
 
-export default formatTimeStamp;
+export default formatThumbnail;

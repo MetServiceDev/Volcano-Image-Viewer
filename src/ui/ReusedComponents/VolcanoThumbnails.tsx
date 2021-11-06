@@ -9,7 +9,7 @@ import ErrorMessage from '../ErrorComponents/ErrorMessage';
 import { imageBucket } from '../../metadata/Endpoints';
 import { setRefresh } from '../../redux/effects/refreshEffect';
 import { Volcano, VolcanoLocation } from '../../api/volcano/headers';
-import formatTimeStamp from '../../api/volcano/formatTimeStamp';
+import formatThumbnail from '../../api/volcano/formatThumbnail';
 
 
 const styles = () => createStyles({
@@ -88,7 +88,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
             const times = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10];
             const images = times.map(time => {
                 const indexedTime = date.subtract('minutes', time);
-                return formatTimeStamp(volcano.code, indexedTime)
+                return formatThumbnail(volcano.code, indexedTime)
             }).reverse();
             setThumbnails(images);
         } else {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Grow, Typography, Button } from '@material-ui/core';
+import { Grow, Typography, Button, CircularProgress  } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
@@ -18,7 +18,7 @@ import VolcanicAlert from './VolcanicAlert';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 
 import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
-import formatTimeStamp from '../../api/volcano/formatTimeStamp';
+import formatTimeStamp from '../../api/volcano/formatThumbnail';
 
 const styles = () => createStyles({
     root: {
@@ -101,6 +101,11 @@ const styles = () => createStyles({
         verticalAlign:'middle',
         float:'right',
         cursor: 'pointer'
+    },
+    loader: {
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%'
     }
 });
 
@@ -115,6 +120,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const user = useSelector((state:AppState) => state.login) as User;
     const dispatch = useDispatch();
 
+    const [hasLoaded, setLoaded] = React.useState<boolean>(false);
     const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
 
     React.useEffect(() => {
@@ -128,11 +134,12 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
 
     React.useEffect(() => {
         if (user) {
-            poll(user).then(res => {console.log(res); setVolcanoes(res)});
+            poll(user).then(res => {
+                setVolcanoes(res);
+                setLoaded(true)
+            });
         }
     }, [user])
-    
-
 
     let query = useQuery();
     const volcano = query.get('volcano')
@@ -169,6 +176,15 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
             return src;
         }
     }
+
+    const loadingUI = (
+        <div className={classes.loader}>
+            <CircularProgress
+                color='primary'
+                size={256}
+           />
+        </div>      
+    )
 
     return(
         <div className={classes.root}>
@@ -210,7 +226,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                         </Grow>}
                 </div>
                 <div className={classes.imgContainer}>
-                    {setDisplay(currentDisplay)}
+                    {hasLoaded ? setDisplay(currentDisplay) : loadingUI}
                 </div>
                 {volcanoObject.relatedVolcanoes && (
                     <div className={classes.bottomSec}>

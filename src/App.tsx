@@ -12,12 +12,7 @@ import store, { AppState } from './redux/store/index';
 
 import Dashboard from './ui/Dashboard';
 import VolcanoOverview from './ui/Overview/VolcanoOverview';
-import Navbar from './ui/Navbar/Navbar';
-import Sidebar from './ui/Sidebar/Sidebar';
-import LandingPage from './ui/LandingPage/LandingPage.jsx';
-// import { SulfurMaps } from './metadata/SulfurMaps';
 import { useDispatch, useSelector } from 'react-redux';
-// import { handleSidebar, handleGridDisplay, handleLogin, handleToken, handleRefresh } from './redux/actions';
 import Login from './ui/LoginForm/Login';
 import AshMapOverview from './ui/Overview/AshMap';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
@@ -26,6 +21,8 @@ import { poll } from './api/poller';
 import { User } from './api/User/headers';
 import { toggleSidebar } from './redux/effects/sidebarEffect';
 import { setGrid } from './redux/effects/gridEffect';
+import issueToken from './api/auth/issueToken';
+import { setLogin } from './redux/effects/loginEffect';
 import './ui/App.css';
 
 const App: React.FC = () => {
@@ -40,17 +37,32 @@ const App: React.FC = () => {
   const user = useSelector((state:AppState) => state.login) as User;
 
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+  const [hasLoaded, setLoaded] = React.useState<boolean>(false);
+
+  const refreshSession = async (volcanoes: Volcano[]) => {
+    setVolcanoes(volcanoes);
+    await authClient.session.refresh();
+    const accessToken = await issueToken();
+    user['token'] = accessToken
+    dispatch(setLogin({...user} as User));
+  };
 
   React.useEffect(() => {
     if (user) {
-      poll(user).then(res => setVolcanoes(res));
+      poll(user).then(async(res) => {
+        setVolcanoes(res);
+        setLoaded(true);
+      });
       const expandSidebar = localStorage.getItem('expandSidebar');
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar) { dispatch(toggleSidebar(JSON.parse(expandSidebar.toLowerCase()))); };
       if(gridSize) { dispatch(setGrid(Number(gridSize))); };
       var poller = setInterval(() => {
-        setVolcanoes([])
-        poll(user).then(res => setVolcanoes(res));
+        setLoaded(false)
+        poll(user).then(async(res) => {
+          setLoaded(true);
+          await refreshSession(res);
+        });
         clearInterval(poller);
       },60000*10);
     }
@@ -58,11 +70,14 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={muiTheme}>
-      <Paper style={{ height: '100%'}}>
+      <Paper style={{ height: '100%'}} elevation={0}>
         <Security oktaAuth={authClient} restoreOriginalUri={restoreOriginalUri}>
           <Switch>
             <Route exact path='/'>
-              <Dashboard volcanoes={volcanoes}/>
+              <Dashboard
+                volcanoes={volcanoes}
+                hasLoaded={hasLoaded}
+              />
             </Route>
             <Route exact path='/login' component={Login}/>
             <SecureRoute exact path='/overview' component={VolcanoOverview}/>
@@ -71,6 +86,7 @@ const App: React.FC = () => {
             </SecureRoute>
             {/* <Route component={ErrorPage}/> */}
             <Route exact path='/login/callback' component={LoginCallback} />
+            <Route component={ErrorPage}/>
           </Switch>
         </Security>
       </Paper>

@@ -13,10 +13,11 @@ import LandingPage from '../LandingPage/LandingPage';
 import { Volcano } from '../../api/volcano/headers';
 
 interface Props {
-    volcanoes: Volcano[]
+    volcanoes: Volcano[],
+    hasLoaded: boolean,
 }
 
-const Dashboard: React.FC<Props> = ({ volcanoes }) => {
+const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded }) => {
     const { oktaAuth , authState } = useOktaAuth();
     const dispatch = useDispatch();
 
@@ -41,11 +42,15 @@ const Dashboard: React.FC<Props> = ({ volcanoes }) => {
     };
 
     return(
-        <div>
+        <>
             <Navbar logout={logout}/>
             <Sidebar/>
-            <LandingPage sulfurMaps={SulfurMaps} volcanoes={volcanoes}/>
-        </div>
+            <LandingPage
+                sulfurMaps={SulfurMaps}
+                volcanoes={volcanoes}
+                hasLoaded={hasLoaded}
+            />
+        </>
     )
 };
 

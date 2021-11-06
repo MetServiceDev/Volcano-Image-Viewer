@@ -57,10 +57,11 @@ const WithLoadingMatrix = withLoading(VolcanoMatrix);
 
 interface Props {
     sulfurMaps: any,
-    volcanoes: Volcano[]
+    volcanoes: Volcano[],
+    hasLoaded: boolean
 }
 
-const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes }) => {
+const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes, hasLoaded }) => {
     const classes = useStyles();
     const expand = useSelector((state: AppState) => state.expandSidebar);
     const currentDisplay = useSelector((state: AppState) => state.currentDisplay);
@@ -82,7 +83,7 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes }) => {
             {(() => {
                 switch(currentDisplay){
                     case CurrentDisplay.VOLCANO_MATRIX:
-                        return <WithLoadingMatrix volcanoes={volcanoes} hasLoaded={volcanoes.length > 0 ? true : false}/>
+                        return <WithLoadingMatrix volcanoes={volcanoes} hasLoaded={hasLoaded}/>
                     case CurrentDisplay.SULFUR_MAPS:
                         return <SulfurMaps sulfurMaps={sulfurMaps}/>
                     case CurrentDisplay.ALERT_MAP:
