@@ -1,51 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
-import { Paper, Typography } from '@material-ui/core';
+import { Paper, Typography, Theme } from '@material-ui/core';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 import AlertIcon from '../ReusedComponents/AlertIcon';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 import { Volcano } from '../../api/volcano/headers';
 
-const styles = () => createStyles({
+const styles = (theme: Theme) => createStyles({
     div: {
-        margin:'2px',
+        margin:theme.spacing(1),
         position:'relative',
         '&:hover': {
             boxShadow:'4px 4px 8px #404040'
         },
+        backgroundColor: theme.palette.background.default
     },
     link: {
         textDecoration:'none'
     },
     header: {
         borderBottom: '1px solid #404040',
-        color:'#404040',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     nameText: {
-        display:'inline',
-        verticalAlign: 'middle',
-        padding:'10px',
+        padding: theme.spacing(0.5),
         
     },
     icon: {
-        color:'#404040',
-        position:'absolute',
-        right:'1%',
-        top:'1%'
+        marginRight: theme.spacing(1), 
+        marginLeft: theme.spacing(1),
     },
-    alerIcon: {
-        position:'absolute',
-        right:'8%',
-        top:'1%'
-    },
-    alertBulletin: {
-        position:'absolute',
-        height:'5vh',
-        zIndex: 5,
-        right:'-10%',
-        padding:'10px',
+    icons: {
+        marginRight: theme.spacing(1),
     }
 });
 
@@ -63,10 +53,10 @@ const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
                     <Typography variant='h4' className={classes.nameText} style={{ fontSize }}>
                         {volcano.name}
                     </Typography>
-                    <span className={classes.alerIcon}>{alert && 
+                    <span className={classes.icons}>{alert && 
                         <AlertIcon data={alert} fontSize={fontSize}/>}
+                        <OpenInNewIcon className={classes.icon} style={{ fontSize }}/>
                     </span>
-                    <OpenInNewIcon className={classes.icon} style={{ fontSize }}/>
                 </div>
                 <VolcanoThumbnails volcano={volcano}/>
             </Paper>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Theme } from '@material-ui/core';
+import { Typography, Theme, Collapse } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         fontWeight: 'bold'
     },
     link: {
-        color: '#404040',
+        color: theme.palette.text.secondary,
         transition:'0.25s',
         '&:hover':{
             color: theme.palette.primary.main

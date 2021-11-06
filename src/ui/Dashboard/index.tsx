@@ -11,17 +11,20 @@ import Navbar from '../Navbar/Navbar';
 import Sidebar from '../Sidebar/Sidebar';
 import LandingPage from '../LandingPage/LandingPage';
 import { Volcano } from '../../api/volcano/headers';
+import { redirectUri } from '../../metadata/Endpoints';
 
 interface Props {
     volcanoes: Volcano[],
     hasLoaded: boolean,
+    theme: boolean,
+    toggleTheme: () => void
 }
 
-const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded }) => {
+const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme }) => {
     const { oktaAuth , authState } = useOktaAuth();
     const dispatch = useDispatch();
 
-    const logout = async (): Promise<void> => await oktaAuth.signOut({postLogoutRedirectUri: window.location.origin });
+    const logout = async (): Promise<void> => await oktaAuth.signOut({postLogoutRedirectUri: redirectUri });
 
     React.useEffect(() => {
         if(authState && authState.isAuthenticated){ 
@@ -43,7 +46,11 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded }) => {
 
     return(
         <>
-            <Navbar logout={logout}/>
+            <Navbar
+                logout={logout}
+                theme={theme}
+                toggleTheme={toggleTheme}
+            />
             <Sidebar/>
             <LandingPage
                 sulfurMaps={SulfurMaps}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
-import { Typography, LinearProgress, Zoom } from '@material-ui/core';
+import { Typography, LinearProgress, Zoom, Theme } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
@@ -12,7 +12,7 @@ import { Volcano, VolcanoLocation } from '../../api/volcano/headers';
 import formatThumbnail from '../../api/volcano/formatThumbnail';
 
 
-const styles = () => createStyles({
+const styles = (theme: Theme) => createStyles({
     root: {
         position:'relative',
     },
@@ -23,7 +23,8 @@ const styles = () => createStyles({
         backgroundColor: 'rgba(219, 219, 219, 0.5)',
         borderRadius: '5px',
         padding: '10px',
-        fontSize: '22px'
+        fontSize: '22px',
+        color: '#202020'
     },
     updatedDisplay:{
         position:'absolute',
@@ -55,6 +56,10 @@ const styles = () => createStyles({
         height:'24vh',
         textAlign:'center'
     },
+    thumbnailWrapper: {
+        backgroundColor: theme.palette.background.default,
+        width:'100%'
+    }
 });
 
 // const theme = createMuiTheme({
@@ -153,7 +158,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
     const returnThumnails = () => {
         return allThumbnails.map((val, index) => (
             <Zoom in={expand} key={index}>
-                <div style={{backgroundColor:'white', width:'100%'}}>
+                <div className={classes.thumbnailWrapper}>
                     <img          
                         src={val.src}
                         alt={volcano.name} 

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     root: {
         width:'100%',
         height:'100%',
-        backgroundColor:'white',
+        backgroundColor:theme.palette.background.default,
         position:'fixed',
         top:'0%',
         left:'0%'
@@ -35,18 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     input: {
         width: '90%',
         position:'absolute',
-        left:'5%',
-        '& label.Mui-focused': {
-            color: '#404040',
-          },
-          '& .MuiInput-underline:after': {
-            borderBottomColor: theme.palette.primary.main,
-          },
-          '& .MuiOutlinedInput-root': {
-            '&.Mui-focused fieldset': {
-              borderColor: theme.palette.primary.main,
-            },
-        }   
+        left:'5%'
     },
     button: {
         width: '90%',

@@ -1,19 +1,18 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import { Theme, Paper, Typography } from '@material-ui/core';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr',
-        cursor: 'pointer'
+        cursor: 'pointer',
     },
     header: {
         borderBottom: '1px solid #404040',
-        color:'#404040'
+        padding: theme.spacing(0.5)
     },
     nameText: {
         display:'inline',
@@ -26,12 +25,12 @@ const useStyles = makeStyles(() => ({
         '&:hover':{
             boxShadow:'4px 4px 8px #404040'
         },
+        backgroundColor: theme.palette.background.default,
     },
     link: {
         textDecoration:'none'
     },
     icon: {
-        color:'#404040',
         fontSize:'28px',
         position:'absolute',
         right:'1%',

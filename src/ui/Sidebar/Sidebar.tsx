@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
+import { Theme } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,13 +9,13 @@ import SidebarItem from './SidebarItem';
 import { toggleSidebar } from '../../redux/effects/sidebarEffect';
 import { AppState } from '../../redux/store';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        backgroundColor: 'white',
+        backgroundColor: theme.palette.background.default,
         position: 'fixed',
         height:'100vh',
         boxShadow: '-2px -2px 8px #404040',
-        transition: '0.5s',
+        transition: '0.25s',
     },
     content: {
         position: 'relative',
@@ -56,8 +57,11 @@ const Sidebar: React.FC = () => {
     return (
         <div className={classes.root} style={style}>
             <div className={classes.content}>
-                {showMenu ? <MenuOpenIcon className={classes.menuIcon} onClick={setSidebar}/> : <MenuIcon className={classes.collapseIcon} onClick={setSidebar}/>}
-                {showMenu && ExternalLinks.map((link, index) => {return <SidebarItem link={link} key={index}/>})}
+                {showMenu ?
+                    <MenuOpenIcon className={classes.menuIcon} onClick={setSidebar}/>: 
+                    <MenuIcon className={classes.collapseIcon} onClick={setSidebar}/>
+                }
+                {showMenu && ExternalLinks.map((link, index) => <SidebarItem link={link} key={index}/> )}
             </div>
         </div>
     );

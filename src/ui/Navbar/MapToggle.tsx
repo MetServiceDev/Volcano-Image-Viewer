@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import MapIcon from '@material-ui/icons/Map';
+import { Theme } from '@material-ui/core';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 
@@ -9,9 +10,9 @@ import { useDispatch  } from 'react-redux';
 import { setDisplay } from '../../redux/effects/displayEffect';
 import { CurrentDisplay } from '../../api/display/headers';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: theme.palette.background.paper,
         verticalAlign: 'middle',
     },
     button:{

@@ -24,12 +24,14 @@ import { setGrid } from './redux/effects/gridEffect';
 import issueToken from './api/auth/issueToken';
 import { setLogin } from './redux/effects/loginEffect';
 import './ui/App.css';
+import { redirectUri } from './metadata/Endpoints';
 
 const App: React.FC = () => {
-  const muiTheme = appTheme(false);
+  const [styleTheme, toggleTheme] = React.useState<boolean>(false);
+  const muiTheme = appTheme(styleTheme);
   const history = useHistory();
   const restoreOriginalUri = async (_oktaAuth:any, originalUri:string) => {
-    history.replace(toRelativeUrl(originalUri || '/', window.location.origin));
+    history.replace(toRelativeUrl(originalUri || '/', redirectUri));
   };
 
   const dispatch = useDispatch();
@@ -70,13 +72,15 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={muiTheme}>
-      <Paper style={{ height: '100%'}} elevation={0}>
+      <Paper style={{ height: '250vh' }} elevation={0}>
         <Security oktaAuth={authClient} restoreOriginalUri={restoreOriginalUri}>
           <Switch>
             <Route exact path='/'>
               <Dashboard
                 volcanoes={volcanoes}
                 hasLoaded={hasLoaded}
+                theme={styleTheme}
+                toggleTheme={() => toggleTheme(!styleTheme)}
               />
             </Route>
             <Route exact path='/login' component={Login}/>

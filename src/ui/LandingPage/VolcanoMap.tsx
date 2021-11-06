@@ -2,7 +2,7 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import * as L from 'leaflet';
 import { withStyles } from '@material-ui/styles';
-import { createStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, WithStyles } from '@material-ui/core';
+import { createStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, WithStyles, Theme } from '@material-ui/core';
 import { Volcano } from '../../api/volcano/headers';
 
 const greenIcon = new L.Icon({
@@ -39,7 +39,7 @@ const getIcon = (alertLevel: string) => {
     };
 };
 
-const styles = () => createStyles({
+const styles = (theme: Theme) => createStyles({
     root: {
         marginTop:'60px'
     },
@@ -54,12 +54,12 @@ const styles = () => createStyles({
         position:'absolute',
         left:'0%' ,
         height: '100vh',
-        backgroundColor: 'white',
+        backgroundColor: theme.palette.background.paper,
         zIndex: 4
     },
     tableRow: {
         '&:nth-of-type(odd)': {
-          backgroundColor: '#f0f0f0',
+          backgroundColor: theme.palette.background.default,
         }
     },
 });

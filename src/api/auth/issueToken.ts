@@ -1,10 +1,11 @@
 import authClient from './Auth';
+import { redirectUri } from '../../metadata/Endpoints';
 
 const issueToken = async (): Promise<string> => {
     try {
         const auth = await authClient.token.getWithoutPrompt({
             responseType: ['id_token', 'token'],
-            redirectUri: `${window.location.origin}/login/callback`,
+            redirectUri: `${redirectUri}/login/callback`,
           })
         const accessToken = auth?.tokens?.accessToken?.accessToken;
         return accessToken as string;

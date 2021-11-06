@@ -1,7 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, ThemeProvider } from '@material-ui/styles';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
+import { Theme } from '@material-ui/core';
 
 import VolcanoMatrix from './VolcanoMatrix';
 import SulfurMaps from './SulfurMaps';
@@ -31,7 +32,7 @@ const withLoading = <P extends object>(Component: React.ComponentType<P>) =>
       }
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         cursor: 'pointer',
         position:'absolute',
@@ -49,7 +50,8 @@ const useStyles = makeStyles(() => ({
     },
     headerTags: {
         display:'grid',
-        gridTemplateColumns: '0.75fr 0.25fr'
+        gridTemplateColumns: '0.75fr 0.25fr',
+        margin: theme.spacing(0.5)
     }
 }));
 
@@ -69,14 +71,14 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes, hasLoaded }) => {
 
     const style = { width: `${!expand ? '98':'85'}%` };
 
-    const marginTop = currentDisplay !== 'ALERT_MAP' ? '70px' : '0px';
+    const marginTop = currentDisplay !== CurrentDisplay.ALERT_MAP ? '70px' : '0px';
 
     return (
         <div className={classes.root} style={style}>
-            <div className={classes.headerTags} style={{marginBottom:'10px',marginTop:marginTop}}>
-                {currentDisplay !== 'ALERT_MAP' && <div><LightningAlerts/></div>}
-                {currentDisplay !== 'ALERT_MAP' &&  showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
-                    action={<CloseIcon className={classes.minimize} onClick={()=>{ return toggleRefreshWarning(false)}}/>}>
+            <div className={classes.headerTags} style={{ marginTop }}>
+                {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts/>}
+                {currentDisplay !== CurrentDisplay.ALERT_MAP &&  showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
+                    action={<CloseIcon className={classes.minimize} onClick={() => toggleRefreshWarning(false)} />}>
                     This page will poll for new images every 10 minutes
                 </Alert>}
             </div>

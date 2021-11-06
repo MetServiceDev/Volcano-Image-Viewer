@@ -10,7 +10,6 @@ import { Volcano } from '../../api/volcano/headers';
 const useStyles = makeStyles(() => ({
     root: {
         display: 'grid',
-        marginBottom: '20px'
     }
 }));
 
