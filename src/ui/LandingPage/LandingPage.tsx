@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, ThemeProvider } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import { Theme } from '@material-ui/core';
@@ -37,7 +37,8 @@ const useStyles = makeStyles((theme: Theme) => ({
         cursor: 'pointer',
         position:'absolute',
         right: '0%',
-        transition: '0.5s'
+        transition: '0.5s',
+        marginTop: theme.spacing(1)
     },
     refreshWarning: {
         marginLeft:'10px',

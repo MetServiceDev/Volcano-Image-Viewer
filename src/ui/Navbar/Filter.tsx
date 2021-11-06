@@ -6,12 +6,11 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(() => ({
     menuItem: {
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%'
     },
     switch: {
-        position:'absolute',
-        left:'70%'
     },
 }));
 

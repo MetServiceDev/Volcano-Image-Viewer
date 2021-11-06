@@ -1,17 +1,18 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
-import { InputAdornment, Paper, Switch, MenuList, Select, IconButton, Tooltip, Menu, MenuItem } from '@material-ui/core';
+import { InputAdornment, Switch, Select, IconButton, Tooltip, MenuItem } from '@material-ui/core';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
+// import { Autocomplete } from '@material-ui/lab';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useDispatch, useSelector  } from 'react-redux';
+
 import { filter } from '../../api/filterSearch';
 import MapToggle from './MapToggle';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { useState } from 'react';
-import { useDispatch, useSelector  } from 'react-redux';
 import { setGrid } from '../../redux/effects/gridEffect';
 import { setNZFilter, setVAFilter, setCNIFilter, setWIFilter, setSATFilter } from '../../redux/effects/filterEffects';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Filter from './Filter';
+import FilterMenu from './FilterMenu';
 import { AppState } from '../../redux/store';
 
 const styles = (theme: Theme) => createStyles({
@@ -20,7 +21,7 @@ const styles = (theme: Theme) => createStyles({
         width:'100%',
         position:'fixed',
         padding:'10px',
-        borderBottom: '1px solid #404040',
+        borderBottom: `1px solid ${theme.palette.primary.dark}`,
         zIndex: 5,
         display: 'flex',
         justifyContent: 'space-between'
@@ -47,16 +48,16 @@ const styles = (theme: Theme) => createStyles({
     },
     selectRows: {
         zIndex: 5,
-        // height: '4vh',
-        // padding:'0px',
-        // position:'absolute',
-        // left:'15%',
-        // fontSize: '16px',
-        // outline: 'white',
-        // backgroundColor: theme.palette.background.default,
-        // "& .MuiSelect-select": {
-        //     background: 'none',
-        // },
+        height: '4vh',
+        padding:'0px',
+        position:'absolute',
+        left:'15%',
+        fontSize: '16px',
+        outline: 'white',
+        backgroundColor: theme.palette.background.default,
+        "& .MuiSelect-select": {
+            background: 'none',
+        },
     },
     rightIcons: {
         // left:'90%',
@@ -81,7 +82,7 @@ interface Props extends WithStyles {
 
 const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme }) => {
     const dispatch = useDispatch();
-    const [showFilter, toggleFilter] = useState(false);
+    const [showFilter, toggleFilter] = React.useState<boolean>(false);
     const setGridDisplay = (size:number) => dispatch(setGrid(size));
 
     const toggleNZ = (val:boolean) => dispatch(setNZFilter(val));
@@ -100,23 +101,30 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme }) => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
-      };
+    };
+
+    const handleClose = () => setAnchorEl(null);
 
     return (
         <div className={classes.root}>
             <span className={classes.toggleButton}><MapToggle/></span>
-            <Menu open={open} anchorEl={anchorEl} onChange={(e) => saveGridSettings(e)} className={classes.selectRows}>
-                {[2, 4, 6].map(n => <MenuItem
-                                        key={n} 
-                                        value={n} 
-                                        style={{cursor:'pointer'}}
-                                    >
-                                        {`View ${n} per row`}
-                                    </MenuItem> )}
-            </Menu>
+            <Select
+                value={gridDisplay}
+                onChange={(e) => saveGridSettings(e)}
+                className={classes.selectRows}
+                variant='outlined'
+            >
+                {[2, 4, 6].map(n =>
+                    <MenuItem
+                        key={n} 
+                        value={n} 
+                        style={{cursor:'pointer'}}
+                    >
+                        {`View ${n} per row`}
+                    </MenuItem>)}
+            </Select>
             <div className={classes.searchFilter}>
                 <TextField
                     label="Search"
@@ -132,18 +140,39 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme }) => {
                         ),
                     }}
                 />
-                <IconButton className={classes.filterButton}>
-                    <FilterListIcon onClick={() => toggleFilter(!showFilter)}/>
-                </IconButton>
-                {showFilter && <Paper className={classes.filterMenu}>
-                    <MenuList>
-                        <Filter check={showVA} toggle={() => toggleVA(!showVA)} text='Vanuatu' />
-                        <Filter check={showNZ} toggle={() => toggleNZ(!showNZ)} text='New Zealand' />
-                        <Filter check={showCNI} toggle={() => toggleCNI(!showCNI)} text='Central NI' />
-                        <Filter check={showWI} toggle={() => toggleWI(!showWI)} text='White Island' />
-                        <Filter check={showSAT} toggle={() => toggleSAT(!showSAT)} text='Satellite' />
-                    </MenuList>
-                </Paper>}
+                <Tooltip title='filters' arrow>
+                    <IconButton
+                        className={classes.filterButton}
+                        onClick={handleClick}
+                    >
+                        <FilterListIcon/>
+                    </IconButton>
+                </Tooltip>
+                <FilterMenu
+                    anchorEl={anchorEl}
+                    open={open}
+                    handleClose={handleClose}
+                    showVA={showVA}
+                    showNZ={showNZ}
+                    showCNI={showCNI}
+                    showWI={showWI}
+                    showSAT={showSAT}
+                    toggleVA={() => toggleVA(!showVA)}
+                    toggleNZ={() => toggleNZ(!showNZ)}
+                    toggleWI={() => toggleWI(!showWI)}
+                    toggleCNI={() => toggleCNI(!showCNI)}
+                    toggleSAT={() => toggleSAT(!showSAT)}
+                />
+                
+                {/* // <Paper className={classes.filterMenu}>
+                //     <MenuList>
+                //         <Filter check={showVA} toggle={() => toggleVA(!showVA)} text='Vanuatu' />
+                //         <Filter check={showNZ} toggle={() => toggleNZ(!showNZ)} text='New Zealand' />
+                //         <Filter check={showCNI} toggle={() => toggleCNI(!showCNI)} text='Central NI' />
+                //         <Filter check={showWI} toggle={() => toggleWI(!showWI)} text='White Island' />
+                //         <Filter check={showSAT} toggle={() => toggleSAT(!showSAT)} text='Satellite' />
+                //     </MenuList>
+                // </Paper> */}
             </div>
             <div className={classes.rightIcons}>
                 <Tooltip title={`${!theme ? 'Dark' : 'Light'} theme`} arrow>
@@ -153,12 +182,14 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme }) => {
                         color="primary"
                     />
                 </Tooltip>
-                <IconButton>
-                    <ExitToAppIcon 
-                        className={classes.userIcon}
-                        onClick={logout}
-                    />
-                </IconButton>
+                <Tooltip title='logout' arrow>
+                    <IconButton>
+                        <ExitToAppIcon 
+                            className={classes.userIcon}
+                            onClick={logout}
+                        />
+                    </IconButton>
+                </Tooltip>
             </div>
         </div>
     );

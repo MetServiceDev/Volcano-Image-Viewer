@@ -27,7 +27,8 @@ import './ui/App.css';
 import { redirectUri } from './metadata/Endpoints';
 
 const App: React.FC = () => {
-  const [styleTheme, toggleTheme] = React.useState<boolean>(false);
+  const theme = localStorage.getItem('ui-theme');
+  const [styleTheme, toggleTheme] = React.useState<boolean>(Boolean(theme));
   const muiTheme = appTheme(styleTheme);
   const history = useHistory();
   const restoreOriginalUri = async (_oktaAuth:any, originalUri:string) => {
@@ -68,7 +69,12 @@ const App: React.FC = () => {
         clearInterval(poller);
       },60000*10);
     }
-  },[user])
+  },[user]);
+
+  const setTheme = () => {
+    toggleTheme(!styleTheme);
+    localStorage.setItem('ui-theme', String(!styleTheme));
+  }
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -80,7 +86,7 @@ const App: React.FC = () => {
                 volcanoes={volcanoes}
                 hasLoaded={hasLoaded}
                 theme={styleTheme}
-                toggleTheme={() => toggleTheme(!styleTheme)}
+                toggleTheme={setTheme}
               />
             </Route>
             <Route exact path='/login' component={Login}/>

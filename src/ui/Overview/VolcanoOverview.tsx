@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Grow, Typography, Button, CircularProgress  } from '@material-ui/core';
+import { Grow, Typography, Button, CircularProgress, Theme } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
@@ -20,7 +20,7 @@ import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
 import formatTimeStamp from '../../api/volcano/formatThumbnail';
 
-const styles = () => createStyles({
+const styles = (theme:Theme) => createStyles({
     root: {
     },
     imgContainer: {
@@ -36,7 +36,7 @@ const styles = () => createStyles({
     },
     sidebar: {
         width:'10%',
-        backgroundColor:'white',
+        backgroundColor:theme.palette.background.default,
         boxShadow: '-2px 4px 8px #404040',
         display: 'grid',
         gridTemplateRows: '1fr 1fr 1fr',
@@ -55,7 +55,7 @@ const styles = () => createStyles({
     },
     bottomSec: {
         width:'10%',
-        backgroundColor:'white',
+        backgroundColor:theme.palette.background.default,
         display: 'grid',
         boxShadow: '2px 4px 8px #404040',
         gridTemplateRows: '1fr 1fr 1fr',
@@ -64,7 +64,7 @@ const styles = () => createStyles({
     },
     link: {
         textDecoration: 'none',
-        color: '#404040',
+        color: theme.palette.text.primary,
         opacity:'0.7',
         transition: '0.5s',
         cursor: 'pointer',
@@ -75,7 +75,7 @@ const styles = () => createStyles({
     },
     headerDiv: {
         padding:'20px',
-        backgroundColor:'white',
+        backgroundColor:theme.palette.background.default,
         borderBottom: '1px solid #404040',
         textAlign:'center',
         width:'100%',

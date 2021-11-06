@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import VolcanoCard from './VolcanoCard';
 import SatelliteCard from './SatelliteCard';
 import { AppState } from '../../redux/store';
-import { Volcano } from '../../api/volcano/headers';
+import { Volcano, VolcanoLocation } from '../../api/volcano/headers';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -33,10 +33,10 @@ const VolcanoMatrix: React.FC<Props> = ({ volcanoes }) => {
             {volcanoes.map(volcano => {
                 return(
                     <Fragment key={volcano.code}>
-                        {volcano.location === 'Vanuatu' && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                        {volcano.location === 'NZ' && showNZ && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                        {volcano.location === 'Central NI' && showCNI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                        {volcano.location === 'WI' && showWI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === VolcanoLocation.VANUATU && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === VolcanoLocation.NZ && showNZ && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === VolcanoLocation.CENTRAL_NI && showCNI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === VolcanoLocation.WI && showWI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
                     </Fragment>
                 );
             })}

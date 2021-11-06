@@ -1,19 +1,20 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Typography, Paper } from '@material-ui/core';
+import { Typography, Paper, Theme } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import apiCall from '../../api/APICall';
 import { AppState } from '../../redux/store';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        width:'100%'
+        width:'100%',
+        backgroundColor: theme.palette.background.default
     },
     header: {
         borderBottom: '1px solid #404040',
-        color:'#404040',
+        color:theme.palette.text.primary,
     },
     img: {
         position: 'absolute',
@@ -23,7 +24,8 @@ const useStyles = makeStyles(() => ({
         gridTemplateCOLUMNS: '1fr 1fr'
     },
     link: {
-        textDecoration:'none'
+        textDecoration:'none',
+        backgroundColor: theme.palette.background.default
     },
 }));
 

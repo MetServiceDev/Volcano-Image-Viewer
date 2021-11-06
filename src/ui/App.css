@@ -6,21 +6,15 @@ body {
   width: 10px;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
-  border-radius: 10px;
-}
- 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #bfbfbf; 
+  background: #808080; 
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #bfbfbf; 
+  background: #808080; 
 }
 
 .leaflet-container {

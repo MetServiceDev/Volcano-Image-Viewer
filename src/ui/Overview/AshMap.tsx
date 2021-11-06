@@ -66,7 +66,13 @@ const styles = () => createStyles({
     }
 })
 
-const metadata = [ 'Ash', 'Dust', 'True-Colour' ];
+enum ImageSetting {
+    ASH = 'Ash',
+    DUST = 'Dust',
+    TRUE_COLOR = 'True-Color'
+}
+
+const metadata = [ ImageSetting.ASH, ImageSetting.DUST, ImageSetting.TRUE_COLOR ];
 
 interface Props extends WithStyles<typeof styles> {}
 
@@ -110,7 +116,7 @@ const AshMapOverview: React.FC<Props> = ({ classes }) => {
                 {metadata.map((type, index) => {
                     const src = `https://loopy-files.s3-ap-southeast-2.amazonaws.com/loopy-pix/${type}.png`                 
                     return (
-                        <div onClick={()=>{setCurrentDisplay(type)}} className={classes.sidebarItem} key={index}>
+                        <div onClick={() => setCurrentDisplay(type)} className={classes.sidebarItem} key={index}>
                             <img src={'https://loopy-files.s3-ap-southeast-2.amazonaws.com/grid.png'} style={{zIndex:5}} alt='Satellite' width='100%' className={classes.img}/>
                             <img src={src} alt='Satellite' width='100%' className={classes.img}/>
                             <Typography variant='body1' className={classes.text}>{type}</Typography>

@@ -18,8 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         transition: '0.25s',
     },
     content: {
-        position: 'relative',
-        top:'7%',
+        marginTop:'70px',
         height: '92vh',
         overflow: 'auto',
         overflowX:'hidden'

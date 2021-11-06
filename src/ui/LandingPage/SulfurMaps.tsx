@@ -66,7 +66,7 @@ const SulfurMaps: React.FC<Props> = ({ sulfurMaps }) => {
                         </Paper>
                     </Link>
                 );
-            })};
+            })}
         </div>
     )
 };
