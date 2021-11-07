@@ -24,7 +24,8 @@ const styles = (theme: Theme) => createStyles({
         borderBottom: `1px solid ${theme.palette.primary.dark}`,
         zIndex: 5,
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     searchFilter: {
         width: '40%',
@@ -48,9 +49,9 @@ const styles = (theme: Theme) => createStyles({
     },
     selectRows: {
         zIndex: 5,
+        position: 'absolute',
         height: '4vh',
         padding:'0px',
-        position:'absolute',
         left:'15%',
         fontSize: '16px',
         outline: 'white',
@@ -78,9 +79,10 @@ interface Props extends WithStyles {
     logout: () => Promise<void>,
     theme: boolean,
     toggleTheme: () => void,
+    search: (e:any) => any
 }
 
-const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme }) => {
+const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search }) => {
     const dispatch = useDispatch();
     const [showFilter, toggleFilter] = React.useState<boolean>(false);
     const setGridDisplay = (size:number) => dispatch(setGrid(size));
@@ -131,7 +133,7 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme }) => {
                     size='small'
                     variant="outlined"
                     className={classes.searchField}
-                    onChange={(e) => filter(e, 'volcano-item', 'volcano-text')}
+                    onChange={search}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -163,16 +165,6 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme }) => {
                     toggleCNI={() => toggleCNI(!showCNI)}
                     toggleSAT={() => toggleSAT(!showSAT)}
                 />
-                
-                {/* // <Paper className={classes.filterMenu}>
-                //     <MenuList>
-                //         <Filter check={showVA} toggle={() => toggleVA(!showVA)} text='Vanuatu' />
-                //         <Filter check={showNZ} toggle={() => toggleNZ(!showNZ)} text='New Zealand' />
-                //         <Filter check={showCNI} toggle={() => toggleCNI(!showCNI)} text='Central NI' />
-                //         <Filter check={showWI} toggle={() => toggleWI(!showWI)} text='White Island' />
-                //         <Filter check={showSAT} toggle={() => toggleSAT(!showSAT)} text='Satellite' />
-                //     </MenuList>
-                // </Paper> */}
             </div>
             <div className={classes.rightIcons}>
                 <Tooltip title={`${!theme ? 'Dark' : 'Light'} theme`} arrow>

@@ -77,7 +77,7 @@ interface Props extends WithStyles<typeof styles> {
 interface Thumbnail {
     src: string,
     timestamp?: string,
-    hasntUpdated?: boolean
+    size?: number
 }
 
 const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
@@ -88,6 +88,19 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
 
     const [isLoaded, setLoading] = React.useState<boolean>(false);
 
+    async function downloadImages<T>(timestampKeys: T[]): Promise<void> {
+        const images = await Promise.all(timestampKeys.map(async(time): Promise<Thumbnail> => {
+            const downloadLink = `${imageBucket}/${s3Tag}/${s3Tag}-${time}.jpg`
+            const call = await fetch(downloadLink);
+            const size = Number(call.headers.get('Content-Length'));
+            const blob = await call.blob();
+            const src = URL.createObjectURL(blob);
+            return { src, size } as Thumbnail;
+        }));
+        setThumbnails(images);
+        setCurrent(images[images.length-1]);
+    };
+
     React.useEffect(() => {
         if (volcano.location !== VolcanoLocation.VANUATU && volcano.code !== 'ERB') {
             const times = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10];
@@ -96,22 +109,13 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
                 return formatThumbnail(volcano.code, indexedTime)
             }).reverse();
             setThumbnails(images);
+            setCurrent(images[images.length-1]);
         } else {
             const indexList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-            const images: Thumbnail[] = indexList.map(time => {
-                return {
-                    src: `${imageBucket}/${s3Tag}/${s3Tag}-${time}.jpg`,
-                }
-            })
-            setThumbnails(images)
+            downloadImages<string>(indexList);
         }
         setLoading(true)
     },[volcano]);
-
-    // const timestamps = times.map(time => {
-    //     const indexedTime = date.subtract('minutes', time);
-    //     return formatTimeStamp(indexedTime)
-    // }).reverse();
 
     const [allThumbnails, setThumbnails] = React.useState<Thumbnail[]>([]);
     const [currentImg, setCurrent] = React.useState(allThumbnails[allThumbnails.length-1]);
@@ -123,29 +127,28 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
 
     const enableRefresh = (bool: boolean) => dispatch(setRefresh(bool));
 
-    React.useEffect(() => {
-        if (volcano.location === VolcanoLocation.VANUATU || volcano.code === 'ERB') {
-            Promise.all(allThumbnails.map((item) => {
-                return new Promise(async(res, rej) => {
-                    const call = await fetch(item.src);
-                    const size = call.headers.get('Content-Length');
-                    res(size)
-                });
-            })).then((response) => {
-                console.log(volcano.name, response)
-                response.forEach((imgSize, index) => {
-                    if(imgSize === response[index-1]) {
-                        allThumbnails.splice(index-1, 0, {
-                           ...allThumbnails[index-1],
-                           hasntUpdated: true 
-                        })
-                        setThumbnails([...allThumbnails])
-                    }
-                })
-            })
-        }
+    // React.useEffect(() => {
+    //     const compareImages = async () => {
+    //         const response = await Promise.all(allThumbnails.map(async(item) => {
+    //             const call = await fetch(item.src);
+    //             const size = call.headers.get('Content-Length');
+    //             return size as string;
+    //         }));
+    //         // response.forEach((imgSize, index) => {
+    //         //     if(imgSize === response[index-1]) {
+    //         //         allThumbnails.splice(index-1, 0, {
+    //         //            ...allThumbnails[index-1],
+    //         //            hasntUpdated: true 
+    //         //         })
+    //         //         setThumbnails([...allThumbnails])
+    //         //     }
+    //         // })
+    //     };
+    //     if (volcano.location === VolcanoLocation.VANUATU || volcano.code === 'ERB') {
+    //         compareImages();
+    //     }
         
-    },[s3Tag, volcano.code, volcano.name]);
+    // },[allThumbnails]);
 
     if(!isLoaded){
         return (
@@ -176,17 +179,18 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
             width='100%'
             src={currentImg?.src || allThumbnails[11]?.src || ''}
             alt={volcano.name}
-            onMouseOver={()=> toggleExpand(true)}
+            onMouseOver={() => toggleExpand(true)}
         />
     )
 
-    return(
-        <div className={classes.root} onMouseLeave={()=>{toggleExpand(false); setCurrent(allThumbnails[11]);}}>
+    const currentIndex = allThumbnails.indexOf(currentImg);
+    return (
+        <div className={classes.root} onMouseLeave={()=>{ toggleExpand(false); setCurrent(allThumbnails[11]) }}>
             {expand && currentImg?.timestamp && <Typography className={classes.indexDisplay}>{currentImg?.timestamp}</Typography>}
-            {/* {metadata.length > 0 && metadata[thumbnail === '' ? 0 : (thumbnail-1)].updated === false  &&
+            {currentImg?.size && currentImg?.size === allThumbnails[currentIndex-1]?.size &&
                 <Alert severity={'error'} className={classes.updatedDisplay}>
                     Warning, image did not update!
-                </Alert>} */}
+                </Alert>}
             {isError.val ? <ErrorMessage msg={isError.msg}/> : primaryImg}
             <div className={classes.thumbnailGrid}>
                 {!isError.val && expand && returnThumnails()}

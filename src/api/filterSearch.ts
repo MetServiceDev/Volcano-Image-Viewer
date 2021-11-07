@@ -1,3 +1,5 @@
+import { Volcano } from "./volcano/headers";
+
 export const filter = (e: any, items: any, searchMatch: any) => {
     var a, i, txtValue;
     const searchItem = e.target.value.toUpperCase();
@@ -12,3 +14,17 @@ export const filter = (e: any, items: any, searchMatch: any) => {
         }
     }
 }
+
+export const searchVolcano = (query: string, volcanoes: Volcano[]): Volcano[] => {
+  if(!query || query === '') {
+    return volcanoes;
+  };
+
+  const results = volcanoes.map((volcano) => {
+    let regex = new RegExp(query.toLowerCase());
+    if(regex.test(volcano.name.toLowerCase())) {
+      return volcano
+    };
+  });
+  return results.filter(Boolean) as Volcano[];
+};

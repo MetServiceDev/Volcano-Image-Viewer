@@ -3,11 +3,11 @@ import { makeStyles } from '@material-ui/styles';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import { Theme } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
 import VolcanoMatrix from './VolcanoMatrix';
 import SulfurMaps from './SulfurMaps';
 import LightningAlerts from './LightningAlerts';
-import { useSelector } from 'react-redux';
 import VolcanoMap from './VolcanoMap';
 import LoaderUI from '../ReusedComponents/LoadingUI';
 import { CurrentDisplay } from '../../api/display/headers';
@@ -56,10 +56,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
+interface SulfurMap {
+    link: string,
+    name: string,
+    img: string
+}
+
 const WithLoadingMatrix = withLoading(VolcanoMatrix);
 
 interface Props {
-    sulfurMaps: any,
+    sulfurMaps: SulfurMap[],
     volcanoes: Volcano[],
     hasLoaded: boolean
 }

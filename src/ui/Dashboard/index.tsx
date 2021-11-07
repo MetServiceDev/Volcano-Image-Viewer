@@ -17,10 +17,11 @@ interface Props {
     volcanoes: Volcano[],
     hasLoaded: boolean,
     theme: boolean,
-    toggleTheme: () => void
+    toggleTheme: () => void,
+    search: (e:any) => any
 }
 
-const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme }) => {
+const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, search }) => {
     const { oktaAuth , authState } = useOktaAuth();
     const dispatch = useDispatch();
 
@@ -50,6 +51,7 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme }
                 logout={logout}
                 theme={theme}
                 toggleTheme={toggleTheme}
+                search={search}
             />
             <Sidebar/>
             <LandingPage

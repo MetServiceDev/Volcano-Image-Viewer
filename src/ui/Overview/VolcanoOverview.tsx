@@ -18,7 +18,7 @@ import VolcanicAlert from './VolcanicAlert';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 
 import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
-import formatTimeStamp from '../../api/volcano/formatThumbnail';
+import formatThumbnail from '../../api/volcano/formatThumbnail';
 
 const styles = (theme:Theme) => createStyles({
     root: {
@@ -172,7 +172,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
         } else {
             const date = moment().utc();
             date.subtract('minutes', 10).format('H:mm');
-            const { src } = formatTimeStamp(code, date);
+            const { src } = formatThumbnail(code, date);
             return src;
         }
     }
@@ -230,20 +230,20 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                 </div>
                 {volcanoObject.relatedVolcanoes && (
                     <div className={classes.bottomSec}>
-                    {volcanoObject.relatedVolcanoes.map((code, index) => {
-                        const imgSrc = fetchSrc(code);
-                        const volcano = volcanoes.find(v => v.code === code) as Volcano;
-                        return (
-                            <Link className={classes.link} to={`overview?volcano=${volcano.name}`} key={volcano.code} target='_blank'>
-                                <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
-                                    <div className={classes.sideItem}>
-                                        <img src={imgSrc} alt={volcano.name} width='100%'/>
-                                        <Typography>{volcano.name}</Typography>
-                                    </div>
-                                </Grow>
-                            </Link>
-                        )
-                    })}
+                        {volcanoObject.relatedVolcanoes.map((code, index) => {
+                            const imgSrc = fetchSrc(code);
+                            const volcano = volcanoes.find(v => v.code === code) as Volcano;
+                            return (
+                                <Link className={classes.link} to={`overview?volcano=${volcano.name}`} key={volcano.code} target='_blank'>
+                                    <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
+                                        <div className={classes.sideItem}>
+                                            <img src={imgSrc} alt={volcano.name} width='100%'/>
+                                            <Typography>{volcano.name}</Typography>
+                                        </div>
+                                    </Grow>
+                                </Link>
+                            )
+                        })}
                     </div>
                 )}  
             </div>

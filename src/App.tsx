@@ -25,6 +25,7 @@ import issueToken from './api/auth/issueToken';
 import { setLogin } from './redux/effects/loginEffect';
 import './ui/App.css';
 import { redirectUri } from './metadata/Endpoints';
+import { searchVolcano } from './api/filterSearch';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -42,7 +43,7 @@ const App: React.FC = () => {
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
   const [hasLoaded, setLoaded] = React.useState<boolean>(false);
 
-  const refreshSession = async (volcanoes: Volcano[]) => {
+  const refreshSession = async (volcanoes: Volcano[]): Promise<void> => {
     setVolcanoes(volcanoes);
     await authClient.session.refresh();
     const accessToken = await issueToken();
@@ -76,6 +77,11 @@ const App: React.FC = () => {
     localStorage.setItem('ui-theme', String(!styleTheme));
   }
 
+  const volcanoSearch = (e: any) => {
+    const results = searchVolcano(e.target.value, volcanoes);
+    setVolcanoes(results);
+  }
+
   return (
     <ThemeProvider theme={muiTheme}>
       <Paper style={{ height: '250vh' }} elevation={0}>
@@ -87,6 +93,7 @@ const App: React.FC = () => {
                 hasLoaded={hasLoaded}
                 theme={styleTheme}
                 toggleTheme={setTheme}
+                search={(e) => volcanoSearch(e)}
               />
             </Route>
             <Route exact path='/login' component={Login}/>
