@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 import { withStyles } from '@material-ui/styles';
 import { createStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, WithStyles, Theme } from '@material-ui/core';
 import { Volcano } from '../../api/volcano/headers';
+import { gnsRestEndpoint } from '../../metadata/Endpoints';
 
 const greenIcon = new L.Icon({
     iconUrl:"https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|03fc77&chf=a,s,ee00FFFF",
@@ -72,6 +73,36 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
     const volcanoStrings = volcanoes.map(v => v.mountain);
     const alertArray = [...new Set(volcanoStrings)].filter(Boolean)
     const mapRef = React.useRef<any>(null);
+
+    console.log(alertArray)
+
+    const [quakeHistory, setQuakeHistory] = React.useState<any>([]);
+
+    React.useEffect(() => {
+        const fetchHistory = async() => {
+            const history = await Promise.all(volcanoStrings.map(async(vol) => {
+                try {
+                    const query = vol?.toLowerCase().replace(/' '/g, '');
+                    const call = await fetch(`${gnsRestEndpoint}/volcano/quake/${query}`);
+                    const data = await call.json();
+                    return data
+                } catch (err) {
+                    return null
+                }
+                
+            }));
+            return history.filter(Boolean);
+        };
+        fetchHistory().then((res:any) => setQuakeHistory(res));
+    }, [volcanoStrings])
+
+    // React.useEffect(() => {
+    //     fetch(`${gnsRestEndpoint}/volcano/val`)
+    //         .then(res => res.json())
+    //         .then(data => {
+                
+    //         })
+    // },[])
 
     const alertTable = () => {
         return alertArray.map(volcano => {
