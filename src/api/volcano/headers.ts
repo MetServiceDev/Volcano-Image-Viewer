@@ -29,3 +29,9 @@ export enum OverviewDisplay {
 	DRUM_GRAPH = 'DRUM_GRAPH',
 	RSAM = 'RSAM'
 };
+
+export interface Thumbnail {
+    src: string,
+    timestamp?: string,
+    size?: number,
+};

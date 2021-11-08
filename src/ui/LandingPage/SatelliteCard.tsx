@@ -40,10 +40,12 @@ const SatelliteCard: React.FC<Props> = ({ fontSize }) => {
     const { gridDisplay, login } = useSelector((state: AppState) => state);
 
     React.useEffect(() => {
-        apiCall('get-utc-date', 'GET', login).then(date => {
-            setDate(date.body)
-        })
-    });
+        if (login) {
+            apiCall('get-utc-date', 'GET', login).then(date => {
+                setDate(date.body)
+            })
+        }
+    }, [login]);
     
 
     const ashImg = () => {

@@ -29,7 +29,9 @@ import { searchVolcano } from './api/filterSearch';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
-  const [styleTheme, toggleTheme] = React.useState<boolean>(Boolean(theme));
+  const themeBool = JSON.parse(theme as string)
+
+  const [styleTheme, toggleTheme] = React.useState<boolean>(themeBool);
   const muiTheme = appTheme(styleTheme);
   const history = useHistory();
   const restoreOriginalUri = async (_oktaAuth:any, originalUri:string) => {

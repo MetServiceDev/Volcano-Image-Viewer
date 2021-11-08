@@ -18,7 +18,7 @@ import VolcanicAlert from './VolcanicAlert';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 
 import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
-import formatThumbnail from '../../api/volcano/formatThumbnail';
+import formatThumbnailData from '../../api/volcano/formatThumbnail';
 
 const styles = (theme:Theme) => createStyles({
     root: {
@@ -146,7 +146,9 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
     const { name, volcanicAlerts, s3Link } = volcanoObject;
     const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL)
-    const landingImg = `${imageBucket}/${s3Link}/${s3Link}-12.jpg`
+    const landingImg = `${imageBucket}/${s3Link}/${s3Link}-12.jpg`;
+
+    const domesticVolcano = volcanoObject.location !== VolcanoLocation.VANUATU && volcanoObject.code !== 'ERB';
 
     const setDisplay = (currentDisplay: OverviewDisplay) => {
         switch(currentDisplay){
@@ -163,16 +165,14 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
         return null
     }
 
-    const fetchSrc = (code: string) => {
-        const volcano = volcanoes.find(v => v.code === code) as Volcano;
-        if (volcano.location === VolcanoLocation.VANUATU) {
-            const s3Tag = volcano.s3Link || ''
-            const src = `${imageBucket}/${s3Tag}/${s3Tag}-12.jpg`
+    const fetchSrc = (code: string, s3Tag?: string) => {
+        if (!domesticVolcano) {
+            const { src } = formatThumbnailData(code, '12', false, `${imageBucket}/${s3Tag}/${s3Tag}`);
             return src;
         } else {
             const date = moment().utc();
             date.subtract('minutes', 10).format('H:mm');
-            const { src } = formatThumbnail(code, date);
+            const { src } = formatThumbnailData(code, date, true);
             return src;
         }
     }
@@ -231,8 +231,8 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                 {volcanoObject.relatedVolcanoes && (
                     <div className={classes.bottomSec}>
                         {volcanoObject.relatedVolcanoes.map((code, index) => {
-                            const imgSrc = fetchSrc(code);
                             const volcano = volcanoes.find(v => v.code === code) as Volcano;
+                            const imgSrc = fetchSrc(code, volcano.s3Link);
                             return (
                                 <Link className={classes.link} to={`overview?volcano=${volcano.name}`} key={volcano.code} target='_blank'>
                                     <Grow in={true} {...(true ? { timeout: 1000*(index+1) } : {})}>
