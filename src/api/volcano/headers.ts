@@ -1,3 +1,5 @@
+import * as L from 'leaflet';
+
 export interface Volcano {
 	code: string;
 	coordinates: {
@@ -15,6 +17,7 @@ export interface Volcano {
 		msg: string;
 	};
 	relatedVolcanoes?: string[];
+	gnsID?: string;
 };
 
 export enum VolcanoLocation {
@@ -27,7 +30,8 @@ export enum VolcanoLocation {
 export enum OverviewDisplay {
 	THUMBNAIL = 'THUMBNAIL',
 	DRUM_GRAPH = 'DRUM_GRAPH',
-	RSAM = 'RSAM'
+	RSAM = 'RSAM',
+	QUAKES = 'QUAKES',
 };
 
 export interface Thumbnail {
@@ -35,3 +39,28 @@ export interface Thumbnail {
     timestamp?: string,
     size?: number,
 };
+
+export interface VAL {
+	msg: string;
+	level: string;
+	volcanoID?: string;
+	hazards?: string;
+};
+
+export const greenIcon = new L.Icon({
+    iconUrl:"https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|03fc77&chf=a,s,ee00FFFF",
+    popupAnchor: [1, -30],
+    iconAnchor: [10, 30]
+});
+
+export const yellowIcon = new L.Icon({
+    iconUrl:"https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|fcbe03&chf=a,s,ee00FFFF",
+    popupAnchor: [1, -30],
+    iconAnchor: [10, 30]
+});
+
+export const redIcon = new L.Icon({
+    iconUrl:"https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff2e2e&chf=a,s,ee00FFFF",
+    popupAnchor: [1, -30],
+    iconAnchor: [10, 30]
+});

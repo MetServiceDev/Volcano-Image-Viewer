@@ -1,44 +1,14 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
-import * as L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
 import { withStyles } from '@material-ui/styles';
-import { createStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, WithStyles, Theme } from '@material-ui/core';
-import { Volcano } from '../../api/volcano/headers';
-import { gnsRestEndpoint } from '../../metadata/Endpoints';
+import { createStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, WithStyles, Theme, Typography } from '@material-ui/core';
+import moment from 'moment';
 
-const greenIcon = new L.Icon({
-    iconUrl:"https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|03fc77&chf=a,s,ee00FFFF",
-    popupAnchor: [1, -30],
-    iconAnchor: [10, 30]
-});
-
-const yellowIcon = new L.Icon({
-    iconUrl:"https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|fcbe03&chf=a,s,ee00FFFF",
-    popupAnchor: [1, -30],
-    iconAnchor: [10, 30]
-});
-
-const redIcon = new L.Icon({
-    iconUrl:"https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff2e2e&chf=a,s,ee00FFFF",
-    popupAnchor: [1, -30],
-    iconAnchor: [10, 30]
-});
-
-const getIcon = (alertLevel: string) => {
-    switch(alertLevel){
-        case '0':
-        case '1':
-            return greenIcon;
-        case '2':
-        case '3':
-            return yellowIcon;
-        case '4':
-        case '5':
-            return redIcon;
-        default:
-            return greenIcon;
-    };
-};
+import { Volcano, VAL } from '../../api/volcano/headers';
+import { Quake } from '../../api/quakes/headers';
+import { quakeLevel, getIcon } from '../../api/quakes/setMarkers';
+import fetchQuakeHistory from '../../api/quakes/fetchQuakeHistory';
+import fetchVAL from '../../api/volcano/fetchVAL';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -71,43 +41,31 @@ interface Props extends WithStyles<typeof styles> {
 
 const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
     const volcanoStrings = volcanoes.map(v => v.mountain);
+    const volcanoIds = volcanoes.map(v => v.gnsID);
+    const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
+
     const alertArray = [...new Set(volcanoStrings)].filter(Boolean)
     const mapRef = React.useRef<any>(null);
 
-    console.log(alertArray)
-
-    const [quakeHistory, setQuakeHistory] = React.useState<any>([]);
+    const [quakeHistory, setQuakeHistory] = React.useState<Quake[]>([]);
+    const [volcanoAlertLevels, setVAL] = React.useState<VAL[]>([]);
 
     React.useEffect(() => {
-        const fetchHistory = async() => {
-            const history = await Promise.all(volcanoStrings.map(async(vol) => {
-                try {
-                    const query = vol?.toLowerCase().replace(/' '/g, '');
-                    const call = await fetch(`${gnsRestEndpoint}/volcano/quake/${query}`);
-                    const data = await call.json();
-                    return data
-                } catch (err) {
-                    return null
-                }
-                
-            }));
-            return history.filter(Boolean);
-        };
-        fetchHistory().then((res:any) => setQuakeHistory(res));
-    }, [volcanoStrings])
+        fetchQuakeHistory(gnsIDs).then(quakeData => setQuakeHistory(quakeData));
+    }, [])
 
-    // React.useEffect(() => {
-    //     fetch(`${gnsRestEndpoint}/volcano/val`)
-    //         .then(res => res.json())
-    //         .then(data => {
-                
-    //         })
-    // },[])
+    React.useEffect(() => {
+        fetchVAL().then(data => setVAL(data))
+    },[])
 
     const alertTable = () => {
         return alertArray.map(volcano => {
             const volcanoObject = volcanoes.find(v => { return v.mountain === volcano }) as Volcano;
-            const alertStats = volcanoObject.volcanicAlerts;
+
+            const alertStats = volcanoAlertLevels.find((v:any) => {
+                return volcanoObject.gnsID === v.volcanoID
+            }) || volcanoObject.volcanicAlerts;
+
             const { coordinates: {lat, long} } = volcanoObject;
             if (!alertStats?.level) {
                 return null
@@ -123,6 +81,28 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
             );
         });
     };
+
+    const quakePopup = (quake: Quake) => {
+        return (
+            <Popup>
+                <Typography variant="body1">
+                    <b>Earthquake {quake.properties.locality}</b>
+                </Typography>
+                <Typography variant="body2">
+                    <b>Magnitude:</b> {Math.round(quake.properties.magnitude * 100) / 100}
+                </Typography>
+                <Typography variant="body2">
+                    <b>Depth:</b> {Math.round(quake.properties.depth * 100) / 100}
+                </Typography>
+                <Typography variant="body2">
+                    <b>Intensity:</b> {quake.properties.intensity}
+                </Typography>
+                <Typography variant="body2">
+                    <b>Time NZDT:</b> {moment(quake.properties.time).format('LLLL')}
+                </Typography>
+            </Popup>
+        )
+    }
 
     const map = () => {
         return (
@@ -142,6 +122,22 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
                         </Marker>
                     );
                 })};
+
+                {quakeHistory.map(quake => {
+                    const coordinates = quake.geometry.coordinates;
+                    const severity = quakeLevel(quake.properties.mmi)
+                    return (
+                        <CircleMarker
+                            key={quake.properties.publicID}
+                            center={[coordinates[1], coordinates[0]]}
+                            radius={severity.radius}
+                            fillColor={severity.bg}
+                            color={severity.primary}
+                        >
+                            {quakePopup(quake)}
+                        </CircleMarker>
+                    )
+                })}
             </MapContainer>
         );
     };

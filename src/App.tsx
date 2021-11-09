@@ -5,14 +5,14 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
+import { useDispatch, useSelector } from 'react-redux';
 
 import authClient from './api/auth/Auth';
 import appTheme from './AppTheme';
 import store, { AppState } from './redux/store/index';
 
 import Dashboard from './ui/Dashboard';
-import VolcanoOverview from './ui/Overview/VolcanoOverview';
-import { useDispatch, useSelector } from 'react-redux';
+import VolcanoOverview from './ui/Overview';
 import Login from './ui/LoginForm/Login';
 import AshMapOverview from './ui/Overview/AshMap';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
@@ -23,9 +23,9 @@ import { toggleSidebar } from './redux/effects/sidebarEffect';
 import { setGrid } from './redux/effects/gridEffect';
 import issueToken from './api/auth/issueToken';
 import { setLogin } from './redux/effects/loginEffect';
-import './ui/App.css';
 import { redirectUri } from './metadata/Endpoints';
 import { searchVolcano } from './api/filterSearch';
+import './ui/App.css';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');

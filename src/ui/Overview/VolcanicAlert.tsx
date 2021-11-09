@@ -5,8 +5,7 @@ import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined'
 
 const useStyles = makeStyles(() => ({
     root: {
-        width:'25%',
-        float:'right',
+        width:'30%',
         marginRight:'60px'
     },
     alert: {
