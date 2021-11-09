@@ -35,10 +35,33 @@ const LineGraph: React.FC<Props> = ({ datasets, labels, height }) => {
         datasets:datasets
     };
 
+    const options = {
+        scales: {
+          yAxes: [{
+            id: 'A',
+            type: 'linear',
+            position: 'left',
+            ticks: {
+                beginAtZero: true,
+                min: 0
+            }
+          }, {
+            id: 'B',
+            type: 'linear',
+            position: 'right',
+            ticks: {
+                beginAtZero: true,
+                min: 0
+            }
+          }]
+        }
+    } as any;
+
     return(
         <Line
             data={data}
             height={height}
+            options={options}
         />
     )
 };

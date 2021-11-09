@@ -19,5 +19,6 @@ export interface LineData<T> {
     id?: string;
     borderWidth?: number;
     fill?: boolean,
-    pointRadius?: number
+    pointRadius?: number;
+    yAxisID?: string;
 }

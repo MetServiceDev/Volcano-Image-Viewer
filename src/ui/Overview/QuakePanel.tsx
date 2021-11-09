@@ -110,6 +110,18 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
         backgroundColor: 'rgba(255, 187, 0, 0.5)',
         borderColor: '#ffbb00',
         pointRadius: 8,
+        yAxisID: 'A',
+    };
+
+    const depthLevel: LineData<number[]> = {
+        label: 'Depth (km)',
+        data: quakes.map(quake => quake.properties.depth),
+        backgroundColor: 'rgba(10, 13, 79, 0.25)',
+        borderColor: '#0a0d4f',
+        fill: true,
+        pointRadius: 0,
+        borderWidth: 1,
+        yAxisID: 'B',
     };
 
     const barDataset = [
@@ -118,7 +130,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
             data: quakeFrequency,
             backgroundColor: backgroundColors,
             borderColor: borderColors,
-            borderWidth: 1
+            borderWidth: 2
         },
     ]
     
@@ -136,7 +148,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
     const overviewGraph = (
         <GraphComponent
             graphType={GraphType.LINE}
-            data={[magnitudeLevels]}
+            data={[magnitudeLevels, depthLevel]}
             height={80}
             labels={quakes.map(quake => moment(quake.properties.time).format('llll'))}
         />

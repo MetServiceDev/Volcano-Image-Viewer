@@ -36,6 +36,7 @@ const styles = (theme:Theme) => createStyles({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: theme.spacing(1),
+        paddingLeft: '0px',
         zIndex: 4,
     },
     homeIcon: {

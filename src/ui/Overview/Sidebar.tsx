@@ -13,7 +13,7 @@ const styles = (theme: Theme) => createStyles({
         height: '100vh',
         position: 'fixed',
         backgroundColor: theme.palette.background.default,
-        width: theme.spacing(5)
+        width: theme.spacing(5),
     },
     icon: {
         borderRadius: '0%',
