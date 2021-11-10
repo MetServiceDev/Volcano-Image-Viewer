@@ -5,7 +5,7 @@ import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 const styles = (theme: Theme) => createStyles({
     root: {
         backgroundColor: theme.palette.background.default,
-        maxWidth: '100%'
+        maxWidth: '80%'
     },
     img: {
         width: '100%',
