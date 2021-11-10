@@ -1,5 +1,5 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import { Typography } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { makeStyles } from '@material-ui/styles';
 
@@ -10,20 +10,38 @@ const useStyles = makeStyles(() => ({
     },
     icon: {
         color: '#e31e10',
-        fontSize:'128px'
+        fontSize:'64px'
+    },
+    button: {
+        textTransform: 'none',
     }
 }));
 
 interface Props {
-    msg: string
+    volcanoName: string,
+    refresh: () => void,
 }
 
-const ErrorMessage: React.FC<Props> = ({ msg }) => {
+const ErrorMessage: React.FC<Props> = ({ volcanoName, refresh }) => {
     const classes = useStyles();
+    const [countdown, setCountdown] = React.useState<number>(3);
+
+    React.useEffect(() => {
+        if(countdown === 0) {
+            refresh();
+            setCountdown(3)
+        } else {
+            setTimeout(() => {
+                setCountdown(countdown - 1)
+            }, 1000)
+        }
+    }, [countdown]);
+
     return (
         <div className={classes.root}>
             <ErrorOutlineIcon className={classes.icon}/>
-            <Typography>{msg}</Typography>
+            <Typography>Failed to fetch latest images for {volcanoName}</Typography>
+            <Typography>Retrying in {countdown}</Typography>
         </div>
     );
 };

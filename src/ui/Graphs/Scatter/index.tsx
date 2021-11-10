@@ -15,13 +15,13 @@ const styles = (theme:any) => createStyles({
     }
 })
 
-interface Dataset {
-    label: string,
-    data: number[],
-    backgroundColor: string,
-    borderColor: string,
-    fill: boolean
-}
+// interface Dataset {
+//     label: string,
+//     data: number[],
+//     backgroundColor: string,
+//     borderColor: string,
+//     fill: boolean
+// }
 
 interface Props extends WithStyles<typeof styles> {
     data: any,

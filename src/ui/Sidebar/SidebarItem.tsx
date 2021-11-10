@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Theme, Collapse } from '@material-ui/core';
+import { Typography, Theme } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';

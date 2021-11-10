@@ -3,11 +3,11 @@ import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Theme, Paper } from '@material-ui/core';
 import moment from 'moment';
 
-import GraphComponent from '../Graphs';
-import { GraphType, LineData } from '../../api/graph/headers';
-import { Quake, quakeMarker, VolcanoLevels } from '../../api/quakes/headers';
-import { Volcano } from '../../api/volcano/headers';
-import { gnsRestEndpoint } from '../../metadata/Endpoints';
+import GraphComponent from '../../Graphs';
+import { GraphType, LineData } from '../../../api/graph/headers';
+import { Quake, quakeMarker, VolcanoLevels } from '../../../api/quakes/headers';
+import { Volcano } from '../../../api/volcano/headers';
+import { gnsRestEndpoint } from '../../../metadata/Endpoints';
 import HistoryTable from './HistoryTable';
 
 const styles = (theme: Theme) => createStyles({
@@ -94,9 +94,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
         }, {});
     };
 
-    const quakeFrequency = Object.entries(groupBy()).map((obj: any) => {
-        return obj[1].length
-    });
+    const quakeFrequency = Object.entries(groupBy()).map((obj: any) => obj[1].length);
 
     React.useEffect(() => {
         if (volcano.gnsID) {
@@ -119,14 +117,14 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
         backgroundColor: 'rgba(10, 13, 79, 0.25)',
         borderColor: '#0a0d4f',
         fill: true,
-        pointRadius: 0,
+        pointRadius: 3,
         borderWidth: 1,
         yAxisID: 'B',
     };
 
     const barDataset = [
         {
-            label: 'Earthquake frequency',
+            label: `Earthquake frequency since ${moment(quakes[0]?.properties.time).format('ll')}`,
             data: quakeFrequency,
             backgroundColor: backgroundColors,
             borderColor: borderColors,

@@ -3,7 +3,7 @@ import moment from 'moment';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Theme, Paper, Table, TableBody, TableCell, TableRow, TableHead, TableContainer } from '@material-ui/core';
 
-import { Quake } from '../../api/quakes/headers';
+import { Quake } from '../../../api/quakes/headers';
 
 const styles = (theme: Theme) => createStyles({
     root: {

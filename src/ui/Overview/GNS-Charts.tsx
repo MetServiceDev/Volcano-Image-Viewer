@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
-import { Theme, Typography } from '@material-ui/core';
+import { Theme, Typography, Grow } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -32,37 +32,59 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     src: string,
-    domesticVolcano: boolean
+    domesticVolcano: boolean,
+    FIT_ID?: string,
 }
 
-const GNSCharts: React.FC<Props> = ({ classes, src, domesticVolcano }) => {
+const GNSCharts: React.FC<Props> = ({ classes, src, domesticVolcano, FIT_ID }) => {
     const [currentImg, setImg] = React.useState<string>(domesticVolcano ? `${src}-drum.png` : src);
-    const [img1, toggleImg] = React.useState<boolean>(true);
+    const [header, setHeader] = React.useState<string>('Drum Plot');
+
+    const sulfurSrc = `https://fits.geonet.org.nz/plot?siteID=${FIT_ID}000&typeID=SO2-flux-a&type=scatter&showMethod=true`;
+
+    const select = (src:string, header:string) => () => {
+        setImg(src);
+        setHeader(header);
+    }
 
     return (
         <div className={classes.root}>
             <div className={classes.container}>
                 <Typography variant='h5'>
-                    {img1 ? 'Drum Plot' : 'RSAM & SSAM'}
+                    {header}
                 </Typography>
                 <img
                     src={currentImg}
                     className={classes.mainImg}
+                    alt="Current display"
                 />
                 <div className={classes.bottomImgs}>
-                    <img
-                        src={domesticVolcano ? `${src}-drum.png` : src}
-                        className={classes.imgThumb}
-                        style={{ opacity: img1 ? '1' : '0.5' }}
-                        onClick={() => { setImg(domesticVolcano ? `${src}-drum.png` : src); toggleImg(true); }}
-                    />
-                    {domesticVolcano &&
+                    <Grow in={true} {...(true ? { timeout: 1000 } : {})}>
                         <img
-                            src={`${src}-combined.png`}
+                            src={domesticVolcano ? `${src}-drum.png` : src}
                             className={classes.imgThumb}
-                            style={{ opacity: !img1 ? '1' : '0.5' }}
-                            onClick={() => { setImg(`${src}-combined.png`); toggleImg(false); }}
-                        />}
+                            onClick={select(domesticVolcano ? `${src}-drum.png` : src, 'Drum Plot')}
+                            alt="Drum Plot"
+                        />
+                    </Grow>
+                    {domesticVolcano &&
+                        <Grow in={true} {...(true ? { timeout: 2000 } : {})}>
+                            <img
+                                alt="RSAM & SSAM"
+                                src={`${src}-combined.png`}
+                                className={classes.imgThumb}
+                                onClick={select(`${src}-combined.png`, 'RSAM & SSAM')}
+                            />
+                        </Grow>}
+                    {FIT_ID &&
+                        <Grow in={true} {...(true ? { timeout: 3000 } : {})}>
+                            <img
+                                alt="Sular Plot"
+                                src={sulfurSrc}
+                                className={classes.imgThumb}
+                                onClick={select(sulfurSrc, 'Sulphur Dioxide')}
+                            />
+                        </Grow>}
                 </div>
             </div>
         </div>

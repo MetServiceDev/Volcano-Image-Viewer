@@ -18,6 +18,7 @@ export interface Volcano {
 	};
 	relatedVolcanoes?: string[];
 	gnsID?: string;
+	FIT_ID?: string;
 };
 
 export enum VolcanoLocation {
@@ -38,6 +39,7 @@ export interface Thumbnail {
     src: string,
     timestamp?: string,
     size?: number,
+	hasntUpdated?: boolean
 };
 
 export interface VAL {

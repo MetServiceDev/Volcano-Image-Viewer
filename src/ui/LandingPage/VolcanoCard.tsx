@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 import { Paper, Typography, Theme } from '@material-ui/core';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 import AlertIcon from '../ReusedComponents/AlertIcon';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
@@ -55,7 +54,6 @@ const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
                     </Typography>
                     <span className={classes.icons}>{alert && 
                         <AlertIcon data={alert} fontSize={fontSize}/>}
-                        <OpenInNewIcon className={classes.icon} style={{ fontSize }}/>
                     </span>
                 </div>
                 <VolcanoThumbnails volcano={volcano}/>

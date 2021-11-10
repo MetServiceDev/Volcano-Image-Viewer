@@ -12,7 +12,9 @@ import fetchVAL from '../../api/volcano/fetchVAL';
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        marginTop:'60px'
+        position: 'fixed',
+        width: '100%',
+        top: theme.spacing(8)
     },
     mapContainer: {
         width:'70%',
@@ -56,16 +58,16 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
 
     React.useEffect(() => {
         fetchVAL().then(data => setVAL(data))
-    },[])
+    },[]);
+
+    const volcanicAlertLevel = (volcano: Volcano) => volcanoAlertLevels.find((v:VAL) => {
+        return volcano.gnsID === v.volcanoID
+    }) || volcano.volcanicAlerts as VAL;
 
     const alertTable = () => {
         return alertArray.map(volcano => {
             const volcanoObject = volcanoes.find(v => { return v.mountain === volcano }) as Volcano;
-
-            const alertStats = volcanoAlertLevels.find((v:any) => {
-                return volcanoObject.gnsID === v.volcanoID
-            }) || volcanoObject.volcanicAlerts;
-
+            const alertStats = volcanicAlertLevel(volcanoObject);
             const { coordinates: {lat, long} } = volcanoObject;
             if (!alertStats?.level) {
                 return null
@@ -102,6 +104,23 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
                 </Typography>
             </Popup>
         )
+    };
+
+    const volcanoPopup = (volcano: Volcano) => {
+        const alertStats = volcanicAlertLevel(volcano);
+        return (
+            <Popup>
+                <Typography variant="body1">
+                    <b>{volcano.mountain}</b> - Volcanic level {alertStats.level}
+                </Typography>
+                <Typography variant="body2">
+                    <b>Activity:</b> {alertStats.msg}
+                </Typography>
+                {alertStats.hazards && <Typography variant="body2">
+                    <b>Hazards:</b> {alertStats.hazards}
+                </Typography>}
+            </Popup>
+        )
     }
 
     const map = () => {
@@ -118,7 +137,8 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
                     const icon = getIcon(alertStats?.level as string);
                     return (
                         <Marker position={[lat, long]} icon={icon} key={volcanoObject.code}>
-                            <Popup>{volcanoObject.mountain}: Alert level {alertStats?.level} - {alertStats?.msg}</Popup>
+                            {/* <Popup>{volcanoObject.mountain}: Alert level {alertStats?.level} - {alertStats?.msg}</Popup> */}
+                            {volcanoPopup(volcanoObject)}
                         </Marker>
                     );
                 })};

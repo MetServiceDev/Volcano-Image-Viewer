@@ -6,6 +6,7 @@ import { displayReducer } from './displayReducer';
 import { lightningReducer } from './lightningReducer';
 import { refreshReducer } from './refreshReducer';
 import { sidebarReducer } from './sidebarReducer';
+import { imagesReducer } from './imagesReducer';
 
 const rootReducer = combineReducers({
     gridDisplay: gridDisplayReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
     lightningAlerts: lightningReducer,
     requireRefresh: refreshReducer,
     expandSidebar: sidebarReducer,
+    images: imagesReducer,
 });
   
 export default rootReducer;

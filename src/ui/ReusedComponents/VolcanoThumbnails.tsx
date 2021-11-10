@@ -11,6 +11,7 @@ import { Volcano, VolcanoLocation, Thumbnail } from '../../api/volcano/headers';
 import downloadImage from '../../api/volcano/downloadImage';
 import apiCall from '../../api/APICall';
 import { AppState } from '../../redux/store';
+import { fetchImages } from '../../api/images/fetchImages';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -81,46 +82,63 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
     const [isLoading, setLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<ErrorType>(false);
 
-    const user = useSelector((state:AppState) => state.login)
+    const user = useSelector((state:AppState) => state.login);
 
-    async function downloadImages(thumbnails: Thumbnail[]): Promise<void> {
+    const fetchThumbnails = async(): Promise<void> => {
+        setLoading(true);
         try {
-            const images = await Promise.all(thumbnails.map(i => downloadImage(i.src)));
+            const images = await fetchImages(volcano, user);
             setThumbnails(images);
-            setCurrent(images[images.length-1]);
-        } catch (err) {
-            setError(String(err));
-        };
+            setCurrent(images[images.length -1 ])
+            setError(false);
+        } catch(err) {
+            setError(true);
+        }
+        setLoading(false);
     };
 
-    const fetchGNSImages = async() => {
-        try {
-            const images = await apiCall(`gns-links?volcano=${volcano.code}`, 'GET', user) as any;
-            setThumbnails(images);
-            setCurrent(images[images.length-1]);
-        } catch (err) {
-            setError(String(err));     
-        }
-    }
-
     React.useEffect(() => {
-        const fetchImages = async (): Promise<void> => {
-            setLoading(true);
-            if (domesticVolcano) {
-                await fetchGNSImages()
-            } else {
-                const indexList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-                const links = indexList.map(i => {
-                    return {
-                        src: `${imageBucket}/${volcano.s3Link}/${volcano.s3Link}-${i}.jpg`
-                    }
-                });
-                await downloadImages(links);
-            };
-            setLoading(false);
+        if (user) {
+            fetchThumbnails()
         };
-        fetchImages();
-    },[volcano]);
+    }, [volcano]);
+
+    // async function downloadImages(thumbnails: Thumbnail[]): Promise<void> {
+    //     try {
+    //         const images = await Promise.all(thumbnails.map(i => downloadImage(i.src)));
+    //         setThumbnails(images);
+    //         setCurrent(images[images.length-1]);
+    //         setError(false);
+    //     } catch (err) {
+    //         setError(true);
+    //     };
+    // };
+
+    // const fetchGNSImages = async(): Promise<void> => {
+    //     try {
+    //         const images = await apiCall(`gns-links?volcano=${volcano.code}`, 'GET', user) as any;
+    //         setThumbnails(images);
+    //         setCurrent(images[images.length-1]);
+    //         setError(false);
+    //     } catch (err) {
+    //         setError(true);     
+    //     }
+    // }
+    // const fetchImages = async (): Promise<void> => {
+    //     setLoading(true);
+    //     if (domesticVolcano) {
+    //         await fetchGNSImages()
+    //     } else {
+    //         const indexList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    //         const links = indexList.map(i => {
+    //             return {
+    //                 src: `${imageBucket}/${volcano.s3Link}/${volcano.s3Link}-${i}.jpg`
+    //             }
+    //         });
+    //         await downloadImages(links);
+    //     };
+    //     setLoading(false);
+    // };
 
     const loadingUI = (
         <div className={classes.loadingDiv}>
@@ -155,15 +173,18 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
         )
 
         const currentIndex = allThumbnails.indexOf(currentImg);
-        const notUpdated = currentImg?.size && currentImg?.size === allThumbnails[currentIndex-1]?.size;
+        const notUpdated = (currentImg?.size && currentImg?.size === allThumbnails[currentIndex-1]?.size) || currentImg?.hasntUpdated;
         return (
-            <div className={classes.root} onMouseLeave={()=>{ toggleExpand(false); setCurrent(allThumbnails[11]) }}>
-                {expand && currentImg?.timestamp && <Typography className={classes.indexDisplay}>{currentImg?.timestamp}</Typography>}
-                {notUpdated &&
+            <div className={classes.root} onMouseLeave={() => { toggleExpand(false); setCurrent(allThumbnails[11]) }}>
+                {!error && expand && currentImg?.timestamp && <Typography className={classes.indexDisplay}>{currentImg?.timestamp}</Typography>}
+                {!error && notUpdated &&
                     <Alert severity={'error'} className={classes.updatedDisplay}>
                         Warning, image did not update!
                     </Alert>}
-                {error ? <ErrorMessage msg={error as string}/> : primaryImg}
+                {error ? <ErrorMessage
+                            volcanoName={volcano.name}
+                            refresh={() => fetchThumbnails()}
+                        /> : primaryImg}
                 <div className={classes.thumbnailGrid}>
                     {!error && expand && returnThumnails()}
                 </div>

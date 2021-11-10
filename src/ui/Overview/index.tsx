@@ -12,15 +12,14 @@ import { User } from '../../api/User/headers';
 import { AppState } from '../../redux/store/index';
 import { poll } from '../../api/poller';
 
-import { imageBucket } from '../../metadata/Endpoints';
 import VolcanicAlert from './VolcanicAlert';
 
 import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
 
-import LiveImages from './LiveImages';
+import LiveImages from './live-images';
 import GNSCharts from './GNS-Charts';
-import QuakePanel from './QuakePanel';
+import QuakePanel from './quake-panel';
 
 const styles = (theme:Theme) => createStyles({
     root: {
@@ -75,7 +74,6 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const user = useSelector((state:AppState) => state.login) as User;
     const dispatch = useDispatch();
 
-    const [hasLoaded, setLoaded] = React.useState<boolean>(false);
     const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
 
     React.useEffect(() => {
@@ -91,7 +89,6 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
         if (user) {
             poll(user).then(res => {
                 setVolcanoes(res);
-                setLoaded(true)
             });
         }
     }, [user]);
@@ -99,9 +96,8 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     let query = useQuery();
     const volcano = query.get('volcano')
     const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
-    const { name, volcanicAlerts, s3Link } = volcanoObject;
-    const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL)
-    const landingImg = `${imageBucket}/${s3Link}/${s3Link}-12.jpg`;
+    const { name, volcanicAlerts } = volcanoObject;
+    const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL);
 
     const domesticVolcano = volcanoObject.location !== VolcanoLocation.VANUATU && volcanoObject.code !== 'ERB';
 
@@ -138,6 +134,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                             return <GNSCharts
                                         domesticVolcano={domesticVolcano}
                                         src={volcanoObject.drumLink as string}
+                                        FIT_ID={volcanoObject?.FIT_ID}
                                     />
                         case OverviewDisplay.QUAKES:
                             return <QuakePanel

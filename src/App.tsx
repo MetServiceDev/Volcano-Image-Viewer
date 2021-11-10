@@ -7,6 +7,7 @@ import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
 import { useDispatch, useSelector } from 'react-redux';
 
+import './ui/App.css';
 import authClient from './api/auth/Auth';
 import appTheme from './AppTheme';
 import store, { AppState } from './redux/store/index';
@@ -25,7 +26,10 @@ import issueToken from './api/auth/issueToken';
 import { setLogin } from './redux/effects/loginEffect';
 import { redirectUri } from './metadata/Endpoints';
 import { searchVolcano } from './api/filterSearch';
-import './ui/App.css';
+import { fetchAllImages } from './api/images/fetchImages';
+import { setImages } from './redux/effects/imagesEffect';
+
+
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -83,6 +87,12 @@ const App: React.FC = () => {
     const results = searchVolcano(e.target.value, volcanoes);
     setVolcanoes(results);
   }
+
+  // React.useEffect(() => {
+  //   if(user) {
+  //     fetchAllImages(volcanoes, user).then(res => dispatch(setImages(res)));
+  //   };
+  // }, [volcanoes])
 
   return (
     <ThemeProvider theme={muiTheme}>
