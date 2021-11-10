@@ -7,6 +7,8 @@ import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/s
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector  } from 'react-redux';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 
 import { filter } from '../../api/filterSearch';
 import MapToggle from './MapToggle';
@@ -168,11 +170,14 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search }
             </div>
             <div className={classes.rightIcons}>
                 <Tooltip title={`${!theme ? 'Dark' : 'Light'} theme`} arrow>
-                    <Switch
-                        checked={theme}
-                        onChange={toggleTheme}
-                        color="primary"
-                    />
+                    <>
+                        {theme ? <DarkModeIcon/> : <LightModeIcon/>}
+                        <Switch
+                            checked={theme}
+                            onChange={toggleTheme}
+                            color="primary"
+                        />
+                    </>
                 </Tooltip>
                 <Tooltip title='logout' arrow>
                     <IconButton>

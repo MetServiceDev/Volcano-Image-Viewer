@@ -11,9 +11,6 @@ const useStyles = makeStyles(() => ({
     icon: {
         color: '#e31e10',
         fontSize:'64px'
-    },
-    button: {
-        textTransform: 'none',
     }
 }));
 

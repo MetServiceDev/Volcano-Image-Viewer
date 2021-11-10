@@ -33,6 +33,7 @@ export enum OverviewDisplay {
 	DRUM_GRAPH = 'DRUM_GRAPH',
 	RSAM = 'RSAM',
 	QUAKES = 'QUAKES',
+	GAS_EMISSION = 'GAS_EMISSION'
 };
 
 export interface Thumbnail {

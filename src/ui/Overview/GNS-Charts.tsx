@@ -33,14 +33,11 @@ const styles = (theme: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles> {
     src: string,
     domesticVolcano: boolean,
-    FIT_ID?: string,
 }
 
-const GNSCharts: React.FC<Props> = ({ classes, src, domesticVolcano, FIT_ID }) => {
+const GNSCharts: React.FC<Props> = ({ classes, src, domesticVolcano }) => {
     const [currentImg, setImg] = React.useState<string>(domesticVolcano ? `${src}-drum.png` : src);
     const [header, setHeader] = React.useState<string>('Drum Plot');
-
-    const sulfurSrc = `https://fits.geonet.org.nz/plot?siteID=${FIT_ID}000&typeID=SO2-flux-a&type=scatter&showMethod=true`;
 
     const select = (src:string, header:string) => () => {
         setImg(src);
@@ -74,15 +71,6 @@ const GNSCharts: React.FC<Props> = ({ classes, src, domesticVolcano, FIT_ID }) =
                                 src={`${src}-combined.png`}
                                 className={classes.imgThumb}
                                 onClick={select(`${src}-combined.png`, 'RSAM & SSAM')}
-                            />
-                        </Grow>}
-                    {FIT_ID &&
-                        <Grow in={true} {...(true ? { timeout: 3000 } : {})}>
-                            <img
-                                alt="Sular Plot"
-                                src={sulfurSrc}
-                                className={classes.imgThumb}
-                                onClick={select(sulfurSrc, 'Sulphur Dioxide')}
                             />
                         </Grow>}
                 </div>

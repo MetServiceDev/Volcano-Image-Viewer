@@ -52,6 +52,12 @@ export enum VolcanoLevels {
     EXTREME = 'Extreme'
 }
 
+export enum EmissionElements {
+    SO2 = 'SO2',
+    CO2 = 'CO2',
+    H2S = 'H2S'
+};
+
 export const quakeMarker = {
     unnoticable: {
         primary: '#ffc65c',

@@ -20,7 +20,6 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const HistoryTable: React.FC<Props> = ({ classes, quakes }) => {
-
     const roundValue = (value: number) => Math.round(value * 100) / 100;
 
     const historyItem = (quake: Quake) => {

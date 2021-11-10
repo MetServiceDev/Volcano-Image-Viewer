@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grow, Typography, Theme } from '@material-ui/core';
+import { Grow, Typography, Theme, CircularProgress } from '@material-ui/core';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -10,26 +10,18 @@ import { User } from '../../../api/User/headers';
 import { AppState } from '../../../redux/store';
 
 const styles = (theme:Theme) => createStyles({
-    root: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        width: '100%',
-    },
-    thumnbailWrapper: {
-        width: '60%',
-    },
-    relatedVolcanoes: {
-        width: '10%',
-        marginRight: theme.spacing(4)
-    },
     sideItem: {
         width: '100%',
-        marginBottom: theme.spacing(4)
+        marginBottom: theme.spacing(4),
     },
     link: {
         textDecoration: 'none',
         color: theme.palette.text.primary,
-        textAlign: 'center'
+        textAlign: 'center',
+    },
+    loader: {
+        display: 'block',
+        marginBottom: theme.spacing(4)
     }
 });
 
@@ -41,21 +33,27 @@ interface Props extends WithStyles<typeof styles> {
 const RelatedVolcano: React.FC<Props> = ({ volcano, classes, index }) => {
 
     const [imgSrc, setSrc] = React.useState<string>('');
+    const [loading, isLoading] = React.useState<boolean>(false);
     const user = useSelector((state:AppState) => state.login) as User;
 
     const fetchSrc = async():Promise<string> => {
+        isLoading(true);
         const imageSrc = await fetchImages(volcano, user);
+        isLoading(false);
         return imageSrc[imageSrc.length-1].src;
     }
 
     React.useEffect(() => {
         if(user) {
             fetchSrc().then(src => setSrc(src));
-        };
-        
+        };      
     },[volcano, user]);
 
-    return (
+    const loadingUI = (
+        <CircularProgress className={classes.loader}/>
+    );
+
+    const thumbnail = (
         <Link className={classes.link} to={`overview?volcano=${volcano.name}`} key={volcano.code} target='_blank'>
             <Grow in={true} {...(true ? { timeout: 1000*(index) } : {})}>
                 <div className={classes.sideItem}>
@@ -65,6 +63,12 @@ const RelatedVolcano: React.FC<Props> = ({ volcano, classes, index }) => {
             </Grow>
         </Link>
     )
+
+    return (
+        <>
+            {loading ? loadingUI : thumbnail}
+        </>
+    );
 };
 
 export default withStyles(styles)(RelatedVolcano);

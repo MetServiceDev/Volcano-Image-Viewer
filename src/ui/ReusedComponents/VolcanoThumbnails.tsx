@@ -6,10 +6,7 @@ import { Typography, LinearProgress, Zoom, Theme } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
-import { imageBucket } from '../../metadata/Endpoints';
 import { Volcano, VolcanoLocation, Thumbnail } from '../../api/volcano/headers';
-import downloadImage from '../../api/volcano/downloadImage';
-import apiCall from '../../api/APICall';
 import { AppState } from '../../redux/store';
 import { fetchImages } from '../../api/images/fetchImages';
 
@@ -73,8 +70,6 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
     const date = moment().utc();
     date.format('H:mm');
 
-    const domesticVolcano = volcano.location !== VolcanoLocation.VANUATU && volcano.code !== 'ERB';
-
     const [allThumbnails, setThumbnails] = React.useState<Thumbnail[]>([]);
     const [currentImg, setCurrent] = React.useState(allThumbnails[allThumbnails.length-1]);
     const [expand, toggleExpand] = React.useState<boolean>(false);
@@ -102,43 +97,6 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
             fetchThumbnails()
         };
     }, [volcano]);
-
-    // async function downloadImages(thumbnails: Thumbnail[]): Promise<void> {
-    //     try {
-    //         const images = await Promise.all(thumbnails.map(i => downloadImage(i.src)));
-    //         setThumbnails(images);
-    //         setCurrent(images[images.length-1]);
-    //         setError(false);
-    //     } catch (err) {
-    //         setError(true);
-    //     };
-    // };
-
-    // const fetchGNSImages = async(): Promise<void> => {
-    //     try {
-    //         const images = await apiCall(`gns-links?volcano=${volcano.code}`, 'GET', user) as any;
-    //         setThumbnails(images);
-    //         setCurrent(images[images.length-1]);
-    //         setError(false);
-    //     } catch (err) {
-    //         setError(true);     
-    //     }
-    // }
-    // const fetchImages = async (): Promise<void> => {
-    //     setLoading(true);
-    //     if (domesticVolcano) {
-    //         await fetchGNSImages()
-    //     } else {
-    //         const indexList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-    //         const links = indexList.map(i => {
-    //             return {
-    //                 src: `${imageBucket}/${volcano.s3Link}/${volcano.s3Link}-${i}.jpg`
-    //             }
-    //         });
-    //         await downloadImages(links);
-    //     };
-    //     setLoading(false);
-    // };
 
     const loadingUI = (
         <div className={classes.loadingDiv}>

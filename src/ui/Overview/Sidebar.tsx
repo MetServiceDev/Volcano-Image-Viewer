@@ -4,9 +4,10 @@ import { Theme, IconButton, Tooltip } from '@material-ui/core';
 
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
-import TimelineIcon from '@material-ui/icons/Timeline'; 
+import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 
-import { OverviewDisplay } from '../../api/volcano/headers';
+import { OverviewDisplay, Volcano } from '../../api/volcano/headers';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -29,13 +30,15 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles> {
+    volcano: Volcano
     openLiveView: () => void,
     openGraphs: () => void,
     openQuakes: () => void,
+    openEmissions: () => void,
     currentDisplay: OverviewDisplay
 }
 
-const Sidebar: React.FC<Props> = ({ classes, openLiveView, openGraphs, openQuakes, currentDisplay }) => {
+const Sidebar: React.FC<Props> = ({ classes, volcano, openLiveView, openGraphs, openQuakes, openEmissions, currentDisplay }) => {
 
     const sbIcon = (icon: JSX.Element, click: () => void, msg: string, option: OverviewDisplay) => {
         const color = currentDisplay === option ? '#ffbb00' : '';
@@ -52,8 +55,9 @@ const Sidebar: React.FC<Props> = ({ classes, openLiveView, openGraphs, openQuake
         <div className={classes.root}>
             <div className={classes.innerWrapper}>
                 {sbIcon(<PhotoCameraIcon/>, openLiveView, 'Live Images', OverviewDisplay.THUMBNAIL)}
-                {sbIcon(<InsertChartIcon/>, openGraphs, 'DRUM, RASM & SSAM', OverviewDisplay.DRUM_GRAPH)}
-                {sbIcon(<TimelineIcon/>, openQuakes, 'Earthquake Stats', OverviewDisplay.QUAKES)}
+                {sbIcon(<InsertChartIcon/>, openGraphs, 'DRUM, RSAM & SSAM', OverviewDisplay.DRUM_GRAPH)}
+                {volcano?.gnsID && sbIcon(<StackedLineChartIcon/>, openQuakes, 'Earthquake Stats', OverviewDisplay.QUAKES)}
+                {volcano?.FIT_ID && sbIcon(<ScatterPlotIcon/>, openEmissions, 'Gas Emission', OverviewDisplay.GAS_EMISSION)}
             </div>
         </div>
     )

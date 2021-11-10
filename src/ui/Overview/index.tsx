@@ -20,6 +20,7 @@ import Sidebar from './Sidebar';
 import LiveImages from './live-images';
 import GNSCharts from './GNS-Charts';
 import QuakePanel from './quake-panel';
+import GasEmission from './gas-emission';
 
 const styles = (theme:Theme) => createStyles({
     root: {
@@ -107,7 +108,9 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                 openLiveView={() => setCurrentDisplay(OverviewDisplay.THUMBNAIL)}
                 openGraphs={() => setCurrentDisplay(OverviewDisplay.DRUM_GRAPH)}
                 openQuakes={() => setCurrentDisplay(OverviewDisplay.QUAKES)}
+                openEmissions={() => setCurrentDisplay(OverviewDisplay.GAS_EMISSION)}
                 currentDisplay={currentDisplay}
+                volcano={volcanoObject}
             />
             <div className={classes.navbar}>
                 <div style={{display: 'flex', alignItems: 'center'}}>
@@ -134,11 +137,14 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                             return <GNSCharts
                                         domesticVolcano={domesticVolcano}
                                         src={volcanoObject.drumLink as string}
-                                        FIT_ID={volcanoObject?.FIT_ID}
                                     />
                         case OverviewDisplay.QUAKES:
                             return <QuakePanel
                                         volcano={volcanoObject}
+                                    />
+                        case OverviewDisplay.GAS_EMISSION:
+                            return <GasEmission
+                                        FIT_ID={volcanoObject?.FIT_ID as string}
                                     />
                     }
                 })()}
