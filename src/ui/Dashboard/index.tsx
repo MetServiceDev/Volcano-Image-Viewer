@@ -53,6 +53,13 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
         return <Redirect to='/login'/>
     };
 
+    const returnSnackbar = () => {
+        return recentQuakes.map(quake => {
+            const volcano = volcanoes.find(v => v.gnsID === quake.volcanoID) as Volcano;
+            return <EruptionPopup volcano={volcano} intensity={quake.intensity} key={volcano.code}/>
+        })
+    }
+
     return(
         <>
             <Navbar
@@ -68,6 +75,7 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
                 volcanoes={volcanoes}
                 hasLoaded={hasLoaded}
             />
+            {returnSnackbar()}
         </>
     )
 };

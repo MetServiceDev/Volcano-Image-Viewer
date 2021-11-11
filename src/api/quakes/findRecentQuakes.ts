@@ -6,7 +6,7 @@ const findRecentQuakes = (quakeHistory: QuakeWithLocation[]): RecentQuake[] => {
     const recentQuakes: RecentQuake[] = []
     quakeHistory.forEach((quake) => {
         quake.history.forEach(q => {
-            if (moment(q.properties.time).isSame(now, 'date')) {
+            if (moment(q.properties.time).isSame(now, 'date') && q.properties.mmi >= 4) {
                 recentQuakes.push({
                     volcanoID: quake.volcanoID,
                     intensity: q.properties.intensity

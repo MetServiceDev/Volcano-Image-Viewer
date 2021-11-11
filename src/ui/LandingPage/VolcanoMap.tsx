@@ -137,7 +137,6 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
                     const icon = getIcon(alertStats?.level as string);
                     return (
                         <Marker position={[lat, long]} icon={icon} key={volcanoObject.code}>
-                            {/* <Popup>{volcanoObject.mountain}: Alert level {alertStats?.level} - {alertStats?.msg}</Popup> */}
                             {volcanoPopup(volcanoObject)}
                         </Marker>
                     );

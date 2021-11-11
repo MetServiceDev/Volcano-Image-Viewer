@@ -16,13 +16,13 @@ const fetchLightning = async(user: User): Promise<LightningData> => {
             lightningData.msg = 'No current lightning alerts for possible eruptions';
         } else if(alertCheck > 0 && innerCheck > 0){
             lightningData.severity = 'error';
-            lightningData.msg = `${areas}: Possible eruption at ${alertNames.map((name: string) => {return `${name}`})} --- ${twentyKStrikes} lightning strikes also reported within 20km of ${innerNames.map((name: string) => {return `${name}`})}`;
+            lightningData.msg = `${areas}: Possible eruption at ${alertNames.map((name: string) => `${name}`)} --- ${twentyKStrikes} lightning strikes also reported within 20km of ${innerNames.map((name: string) => `${name}`)}`;
         } else if(alertCheck > 0 && innerCheck === 0){
             lightningData.severity = 'warning';
-            lightningData.msg = `${areas}: Lightning data indicates possible eruption happening at ${alertNames.map((name: string) => {return `${name}`})}  --- Please check latest imagery!`;
+            lightningData.msg = `${areas}: Lightning data indicates possible eruption happening at ${alertNames.map((name: string) => `${name}`)}  --- Please check latest imagery!`;
         } else if(alertCheck === 0 && innerCheck > 0){
             lightningData.severity = 'warning'; 
-            lightningData.msg = `${areas}: Lightning data shows ${twentyKStrikes} strikes within 20km and ${hundredKStrikes} strikes within 100km of ${innerNames.map((name: string) => {return `${name}`})}  Please check latest imagery.`;
+            lightningData.msg = `${areas}: Lightning data shows ${twentyKStrikes} strikes within 20km and ${hundredKStrikes} strikes within 100km of ${innerNames.map((name: string) => `${name}`)}  Please check latest imagery.`;
         };
         return lightningData;
     } catch(err) {
