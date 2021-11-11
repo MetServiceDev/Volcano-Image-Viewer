@@ -27,6 +27,16 @@ export interface Quake {
     properties: QuakeProperties;
 };
 
+export interface QuakeWithLocation {
+    history: Quake[];
+    volcanoID: string;
+};
+
+export interface RecentQuake {
+    volcanoID: string;
+    intensity: QuakeProperties['intensity'];
+}
+
 interface VALProperties {
     acc: string;
     activity: string;

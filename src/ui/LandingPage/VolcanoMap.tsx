@@ -3,12 +3,14 @@ import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaf
 import { withStyles } from '@material-ui/styles';
 import { createStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, WithStyles, Theme, Typography } from '@material-ui/core';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 
 import { Volcano, VAL } from '../../api/volcano/headers';
 import { Quake } from '../../api/quakes/headers';
 import { quakeLevel, getIcon } from '../../api/quakes/setMarkers';
 import fetchQuakeHistory from '../../api/quakes/fetchQuakeHistory';
 import fetchVAL from '../../api/volcano/fetchVAL';
+import { AppState } from '../../redux/store';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -28,13 +30,16 @@ const styles = (theme: Theme) => createStyles({
         left:'0%' ,
         height: '100vh',
         backgroundColor: theme.palette.background.paper,
-        zIndex: 4
+        zIndex: 4,
     },
     tableRow: {
         '&:nth-of-type(odd)': {
           backgroundColor: theme.palette.background.default,
         }
     },
+    tableHeader: {
+        fontWeight: 'bold'
+    }
 });
 
 interface Props extends WithStyles<typeof styles> {
@@ -43,18 +48,12 @@ interface Props extends WithStyles<typeof styles> {
 
 const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
     const volcanoStrings = volcanoes.map(v => v.mountain);
-    const volcanoIds = volcanoes.map(v => v.gnsID);
-    const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
+    const alertArray = [...new Set(volcanoStrings)].filter(Boolean);
 
-    const alertArray = [...new Set(volcanoStrings)].filter(Boolean)
     const mapRef = React.useRef<any>(null);
 
-    const [quakeHistory, setQuakeHistory] = React.useState<Quake[]>([]);
     const [volcanoAlertLevels, setVAL] = React.useState<VAL[]>([]);
-
-    React.useEffect(() => {
-        fetchQuakeHistory(gnsIDs).then(quakeData => setQuakeHistory(quakeData));
-    }, [])
+    const quakeHistory = useSelector((state:AppState) => state.quakes);
 
     React.useEffect(() => {
         fetchVAL().then(data => setVAL(data))
@@ -124,6 +123,7 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
     }
 
     const map = () => {
+        const allQuakes: Quake[] = quakeHistory.map(i => i.history).flat();
         return (
             <MapContainer center={[-33.431441,175.059385]} zoom={5} whenCreated={ mapInstance => { mapRef.current = mapInstance }}>
                 <TileLayer
@@ -143,7 +143,7 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
                     );
                 })};
 
-                {quakeHistory.map(quake => {
+                {allQuakes.map(quake => {
                     const coordinates = quake.geometry.coordinates;
                     const severity = quakeLevel(quake.properties.mmi)
                     return (
@@ -168,10 +168,10 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
                 <TableContainer>
                     <Table>
                         <TableHead>
-                            <TableRow style={{backgroundColor:'#404040'}}>
-                                <TableCell style={{color: 'white', fontWeight: 'bold'}} align="left">Volcano</TableCell>
-                                <TableCell style={{color: 'white', fontWeight: 'bold'}} align="left">Level</TableCell>
-                                <TableCell style={{color: 'white', fontWeight: 'bold'}} align="left">Volcanic Activity</TableCell>
+                            <TableRow>
+                                <TableCell className={classes.tableHeader} align="left">Volcano</TableCell>
+                                <TableCell className={classes.tableHeader} align="left">Level</TableCell>
+                                <TableCell className={classes.tableHeader} align="left">Volcanic Activity</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>{alertTable()}</TableBody>

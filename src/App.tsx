@@ -26,10 +26,9 @@ import issueToken from './api/auth/issueToken';
 import { setLogin } from './redux/effects/loginEffect';
 import { redirectUri } from './metadata/Endpoints';
 import { searchVolcano } from './api/filterSearch';
-import { fetchAllImages } from './api/images/fetchImages';
-import { setImages } from './redux/effects/imagesEffect';
 
-
+import { setQuakes } from './redux/effects/quakeEffect';
+import fetchQuakeHistory from './api/quakes/fetchQuakeHistory';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -88,11 +87,14 @@ const App: React.FC = () => {
     setVolcanoes(results);
   }
 
-  // React.useEffect(() => {
-  //   if(user) {
-  //     fetchAllImages(volcanoes, user).then(res => dispatch(setImages(res)));
-  //   };
-  // }, [volcanoes])
+  React.useEffect(() => {
+    const volcanoIds = volcanoes.map(v => v.gnsID);
+    const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
+    if(user) {
+      fetchQuakeHistory(gnsIDs)
+        .then(res => dispatch(setQuakes(res)));
+    };
+  }, [volcanoes, user])
 
   return (
     <ThemeProvider theme={muiTheme}>

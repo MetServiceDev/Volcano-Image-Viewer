@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import { InputAdornment, Switch, Select, IconButton, Tooltip, MenuItem } from '@material-ui/core';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
-// import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@material-ui/lab';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector  } from 'react-redux';
@@ -16,6 +16,7 @@ import { setGrid } from '../../redux/effects/gridEffect';
 import { setNZFilter, setVAFilter, setCNIFilter, setWIFilter, setSATFilter } from '../../redux/effects/filterEffects';
 import FilterMenu from './FilterMenu';
 import { AppState } from '../../redux/store';
+import { Volcano } from '../../api/volcano/headers';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -62,14 +63,6 @@ const styles = (theme: Theme) => createStyles({
             background: 'none',
         },
     },
-    rightIcons: {
-        // left:'90%',
-        // top:'25%',
-        // position:'absolute',
-        // display: 'inline-block',
-        // marginRight:"20px",
-        // verticalAlign:'middle',
-    },
     userIcon: {
     },
     link: {
@@ -78,15 +71,15 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface Props extends WithStyles {
-    logout: () => Promise<void>,
-    theme: boolean,
-    toggleTheme: () => void,
-    search: (e:any) => any
+    logout: () => Promise<void>;
+    theme: boolean;
+    toggleTheme: () => void;
+    search: (e:any) => any;
+    volcanoes: Volcano[];
 }
 
-const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search }) => {
+const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, volcanoes }) => {
     const dispatch = useDispatch();
-    const [showFilter, toggleFilter] = React.useState<boolean>(false);
     const setGridDisplay = (size:number) => dispatch(setGrid(size));
 
     const toggleNZ = (val:boolean) => dispatch(setNZFilter(val));
@@ -111,6 +104,8 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search }
 
     const handleClose = () => setAnchorEl(null);
 
+    const volcanoLabels = volcanoes.map(volcano => volcano.name)
+
     return (
         <div className={classes.root}>
             <span className={classes.toggleButton}><MapToggle/></span>
@@ -130,20 +125,27 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search }
                     </MenuItem>)}
             </Select>
             <div className={classes.searchFilter}>
-                <TextField
-                    label="Search"
-                    size='small'
-                    variant="outlined"
+                <Autocomplete
                     className={classes.searchField}
-                    onChange={search}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon/>
-                            </InputAdornment>
-                        ),
-                    }}
+                    id="navbar-search"
+                    options={volcanoLabels}
+                    renderInput={(params) => <TextField
+                        {...params}
+                        label="Search"
+                        size='small'
+                        variant="outlined"
+                        onChange={search}
+                        InputProps={{
+                            ...params.InputProps,
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon/>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />}
                 />
+                
                 <Tooltip title='filters' arrow>
                     <IconButton
                         className={classes.filterButton}
@@ -168,10 +170,10 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search }
                     toggleSAT={() => toggleSAT(!showSAT)}
                 />
             </div>
-            <div className={classes.rightIcons}>
+            <div>
                 <Tooltip title={`${!theme ? 'Dark' : 'Light'} theme`} arrow>
                     <>
-                        {theme ? <DarkModeIcon/> : <LightModeIcon/>}
+                        {theme ? <DarkModeIcon /> : <LightModeIcon />}
                         <Switch
                             checked={theme}
                             onChange={toggleTheme}
