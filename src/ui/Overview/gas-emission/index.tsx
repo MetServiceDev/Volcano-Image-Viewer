@@ -94,7 +94,7 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID }) => {
                 hidden={true}
                 ref={linkRef}
                 download
-            />
+            >download</a>
         </>
     )
 };

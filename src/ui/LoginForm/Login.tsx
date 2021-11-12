@@ -75,38 +75,12 @@ const Login: React.FC = () => {
 
     const [passwordError, setPasswordError] = React.useState(false);
     const passRef = React.useRef<any>(null);
-    // const setLogin = bool => dispatch(handleLogin(bool));
-
-    // const setToken = token => dispatch(handleToken(token));
 
     const [errMsg, setErr] = React.useState(null);
 
     const { oktaAuth, authState } = useOktaAuth();
 
     if(authState && authState.isAuthenticated) { return <Redirect to='/'/> };
-
-    // const login = async() => {
-    //     if(username === ''){
-    //         setEERR(true);
-    //         setErr('Email Required'); 
-    //         return;
-    //     }
-    //     if(password === ''){
-    //         setPasswordError(true);
-    //         passRef.current.focus();
-    //         passRef.current.placeholder = 'Invalid Password';
-    //         return;
-    //     }
-    //     setLoading(true);
-    //     try{
-    //         setErr(null)
-    //         const  { sessionToken } = await oktaAuth.signInWithCredentials({ username, password });
-    //         await oktaAuth.signInWithRedirect({ sessionToken });
-    //     } catch(err){
-    //         setErr(err.toString());
-    //         setLoading(false);
-    //     };
-    // };
 
     const login = async () => {
         setLoading(true);
@@ -131,24 +105,6 @@ const Login: React.FC = () => {
             setErr(err.toString());
             setLoading(false);
         };
-
-        // oktaAuth.signInWithCredentials({ username, password }).then(async(res) => {
-        //     if (res.status === 'SUCCESS') {
-        //         const successResult = await authClient.token.getWithoutPrompt({
-        //             responseType: ['id_token', 'token'],
-        //             sessionToken: res.sessionToken,
-        //             redirectUri: redirectUri,
-        //         });
-        //         const accessToken = successResult.tokens.accessToken.accessToken;
-        //         authClient.tokenManager.setTokens(successResult);
-        //         localStorage.setItem('token', accessToken);
-        //         setToken(accessToken);
-        //         setLogin(true);
-        //     }
-        // }).catch(e => {
-        //     setLoading(false);
-        //     setError({msg: e.toString(), show:true});
-        // });
     };
 
     return (

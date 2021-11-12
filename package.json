@@ -9,6 +9,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@mui/icons-material": "^5.1.0",
+    "@mui/material": "^5.1.0",
     "@okta/okta-auth-js": "^4.9.1",
     "@okta/okta-react": "^5.1.2",
     "@testing-library/jest-dom": "^5.11.4",

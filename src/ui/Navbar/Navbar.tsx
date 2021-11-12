@@ -10,7 +10,6 @@ import { useDispatch, useSelector  } from 'react-redux';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
-import { filter } from '../../api/filterSearch';
 import MapToggle from './MapToggle';
 import { setGrid } from '../../redux/effects/gridEffect';
 import { setNZFilter, setVAFilter, setCNIFilter, setWIFilter, setSATFilter } from '../../redux/effects/filterEffects';
@@ -76,9 +75,10 @@ interface Props extends WithStyles {
     toggleTheme: () => void;
     search: (e:any) => any;
     volcanoes: Volcano[];
+    openVolcano: (e: any, val: any) => void
 }
 
-const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, volcanoes }) => {
+const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, volcanoes, openVolcano }) => {
     const dispatch = useDispatch();
     const setGridDisplay = (size:number) => dispatch(setGrid(size));
 
@@ -129,6 +129,7 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, 
                     className={classes.searchField}
                     id="navbar-search"
                     options={volcanoLabels}
+                    onChange={openVolcano}
                     renderInput={(params) => <TextField
                         {...params}
                         label="Search"

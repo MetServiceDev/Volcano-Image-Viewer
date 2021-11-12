@@ -31,7 +31,8 @@ const ErrorMessage: React.FC<Props> = ({ volcanoName, refresh }) => {
             setTimeout(() => {
                 setCountdown(countdown - 1)
             }, 1000)
-        }
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [countdown]);
 
     return (

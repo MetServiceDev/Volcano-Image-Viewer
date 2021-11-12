@@ -1,7 +1,7 @@
 import React from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 import { setLogin } from '../../redux/effects/loginEffect';
 import { User } from '../../api/User/headers';
@@ -33,6 +33,8 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
     const quakeHistory = useSelector((state:AppState) => state.quakes);
     
     const [recentQuakes, setRecentQuakes] = React.useState<RecentQuake[]>([]);
+    const [volcanoToOpen, setVolcano] = React.useState<string>('');
+    const volcanoRef = React.useRef<HTMLAnchorElement>(null);
 
     React.useEffect(() => {
         if(authState && authState.isAuthenticated){ 
@@ -58,16 +60,23 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
             const volcano = volcanoes.find(v => v.gnsID === quake.volcanoID) as Volcano;
             return <EruptionPopup volcano={volcano} intensity={quake.intensity} key={volcano.code}/>
         })
+    };
+
+    const openVolcano = (volcanoName: string) => {
+        setVolcano(volcanoName)
+        setTimeout(() => volcanoRef?.current?.click(), 100);
     }
 
     return(
         <>
+            <Link to={`/overview?volcano=${volcanoToOpen}`} ref={volcanoRef} hidden={true} target='_blank'/>
             <Navbar
                 logout={logout}
                 theme={theme}
                 toggleTheme={toggleTheme}
                 search={search}
                 volcanoes={volcanoes}
+                openVolcano={(e:any, val:string) => openVolcano(val)}
             />
             <Sidebar/>
             <LandingPage

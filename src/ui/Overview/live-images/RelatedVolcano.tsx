@@ -46,7 +46,8 @@ const RelatedVolcano: React.FC<Props> = ({ volcano, classes, index }) => {
     React.useEffect(() => {
         if(user) {
             fetchSrc().then(src => setSrc(src));
-        };      
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
     },[volcano, user]);
 
     const loadingUI = (

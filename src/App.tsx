@@ -75,6 +75,7 @@ const App: React.FC = () => {
         clearInterval(poller);
       },60000*10);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user]);
 
   const setTheme = () => {
@@ -94,6 +95,7 @@ const App: React.FC = () => {
       fetchQuakeHistory(gnsIDs)
         .then(res => dispatch(setQuakes(res)));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [volcanoes, user])
 
   return (

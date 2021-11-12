@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { Volcano, VAL } from '../../api/volcano/headers';
 import { Quake } from '../../api/quakes/headers';
 import { quakeLevel, getIcon } from '../../api/quakes/setMarkers';
-import fetchQuakeHistory from '../../api/quakes/fetchQuakeHistory';
 import fetchVAL from '../../api/volcano/fetchVAL';
 import { AppState } from '../../redux/store';
 

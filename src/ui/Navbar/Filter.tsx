@@ -14,29 +14,6 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-// const theme = createMuiTheme({
-//     overrides: {
-//       MuiSwitch: {
-//         switchBase: {
-//           color: "white"
-//         },
-//         colorSecondary: {
-//           "&$checked": {
-//             color: "#ffbb00"
-//           }
-//         },
-//         track: {
-//           opacity: 0.2,
-//           backgroundColor: "#ffbb00",
-//           "$checked$checked + &": {
-//             opacity: 0.7,
-//             backgroundColor: "#ffbb00"
-//           }
-//         }
-//       }
-//     }
-// });
-
 interface Props {
   check: boolean,
   toggle: () => void,

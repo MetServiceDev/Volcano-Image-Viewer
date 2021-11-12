@@ -32,7 +32,7 @@ const MapToggle = () => {
 
     const toggleButton = (display: CurrentDisplay, icon: JSX.Element | string, value: string) => (
         <ToggleButton
-            onClick={()=>{setCurrentDisplay(display)}}
+            onClick={() => setCurrentDisplay(display)}
             value={value}
             aria-label="left aligned"
             className={classes.button}

@@ -100,6 +100,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
         if (volcano.gnsID) {
             fetchData().then(res => setQuakes(res));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const magnitudeLevels: LineData<number[]> = {

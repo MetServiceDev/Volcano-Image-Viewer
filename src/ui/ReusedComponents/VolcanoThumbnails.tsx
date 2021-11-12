@@ -6,7 +6,7 @@ import { Typography, LinearProgress, Zoom, Theme } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
-import { Volcano, VolcanoLocation, Thumbnail } from '../../api/volcano/headers';
+import { Volcano, Thumbnail } from '../../api/volcano/headers';
 import { AppState } from '../../redux/store';
 import { fetchImages } from '../../api/images/fetchImages';
 
@@ -61,7 +61,7 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles> {
-    volcano: Volcano
+    volcano: Volcano,
 };
 
 type ErrorType = boolean | string;
@@ -84,7 +84,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
         try {
             const images = await fetchImages(volcano, user);
             setThumbnails(images);
-            setCurrent(images[images.length -1 ])
+            setCurrent(images[images.length -1 ]);
             setError(false);
         } catch(err) {
             setError(true);
@@ -94,8 +94,9 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
 
     React.useEffect(() => {
         if (user) {
-            fetchThumbnails()
+            fetchThumbnails();
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [volcano]);
 
     const loadingUI = (
@@ -132,8 +133,11 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
 
         const currentIndex = allThumbnails.indexOf(currentImg);
         const notUpdated = (currentImg?.size && currentImg?.size === allThumbnails[currentIndex-1]?.size) || currentImg?.hasntUpdated;
+
+        const reset = () => { toggleExpand(false); setCurrent(allThumbnails[11]); };
+
         return (
-            <div className={classes.root} onMouseLeave={() => { toggleExpand(false); setCurrent(allThumbnails[11]) }}>
+            <div className={classes.root} onMouseLeave={() => reset()}>
                 {!error && expand && currentImg?.timestamp && <Typography className={classes.indexDisplay}>{currentImg?.timestamp}</Typography>}
                 {!error && notUpdated &&
                     <Alert severity={'error'} className={classes.updatedDisplay}>

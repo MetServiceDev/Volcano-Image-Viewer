@@ -57,7 +57,7 @@ const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, 
                 hidden={true}
                 ref={linkRef}
                 download
-            />
+            >download</a>
         </Paper>
     );
 };
