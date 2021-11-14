@@ -50,9 +50,7 @@ const RelatedVolcano: React.FC<Props> = ({ volcano, classes, index }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps 
     },[volcano, user]);
 
-    const loadingUI = (
-        <CircularProgress className={classes.loader}/>
-    );
+    const loadingUI = <CircularProgress className={classes.loader}/>
 
     const thumbnail = (
         <Link className={classes.link} to={`overview?volcano=${volcano.name}`} key={volcano.code} target='_blank'>

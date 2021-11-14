@@ -1,15 +1,22 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
-import { Theme, Paper, Button, Typography } from '@material-ui/core';
+import { Theme, Paper, Typography, IconButton, Collapse, Tooltip } from '@material-ui/core';
 
+import BarChartIcon from '@mui/icons-material/BarChart';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+
+import { EmissionMeasures } from '../../../api/volcano/headers';
+import EmissionTable from './EmissonsTable';
 
 const styles = (theme: Theme) => createStyles({
     root: {
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing(2),
-        marginBottom: theme.spacing(4),
+        margin: theme.spacing(2),
         width: '45%',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        display: 'inline-block'
     },
     img: {
         width: '100%',
@@ -32,20 +39,32 @@ interface Props extends WithStyles<typeof styles> {
     csvLink: string;
     open: () => void;
     title: string;
+    emissionData?: EmissionMeasures
 }
 
-const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, title }) => {
+const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, title, emissionData }) => {
     const linkRef = React.useRef<HTMLAnchorElement>(null);
+    const [displayTable, toggleTable] = React.useState<boolean>(false);
+
+    const headerIcon = (title:string, icon: JSX.Element, action: () => void) => {
+        return (
+            <Tooltip title={title} arrow>
+                <IconButton onClick={action}>
+                    {icon}
+                </IconButton>
+            </Tooltip>
+        );
+    };
+
     return (
-        <Paper className={classes.root} elevation={3} onClick={open}>
+        <Paper className={classes.root} elevation={3}>
             <div className={classes.header}>
                 <Typography variant='h5'>{title}</Typography>
-                <Button
-                    className={classes.button}
-                    onClick={() => linkRef.current?.click()}
-                >
-                    Export to CSV
-                </Button>
+                <div>
+                    {emissionData && headerIcon('Show Table', <BarChartIcon/>, () => toggleTable(!displayTable))}
+                    {headerIcon('Full Screen', <FullscreenIcon/>, open)}
+                    {headerIcon('Download to CSV', <FileDownloadIcon/>, () => linkRef.current?.click())}
+                </div>
             </div>
             <img
                 src={src}
@@ -58,6 +77,14 @@ const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, 
                 ref={linkRef}
                 download
             >download</a>
+            {emissionData &&
+                <Collapse in={displayTable}>
+                    <EmissionTable
+                        element={element}
+                        emissionData={emissionData}
+                    />
+                </Collapse>
+            }
         </Paper>
     );
 };

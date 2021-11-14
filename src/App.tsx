@@ -50,10 +50,13 @@ const App: React.FC = () => {
 
   const refreshSession = async (volcanoes: Volcano[]): Promise<void> => {
     setVolcanoes(volcanoes);
-    await authClient.session.refresh();
-    const accessToken = await issueToken();
-    user['token'] = accessToken
-    dispatch(setLogin({...user} as User));
+    const activeSession = await authClient.session.exists()
+    if (activeSession) {
+      await authClient.session.refresh();
+      const accessToken = await issueToken();
+      user['token'] = accessToken
+      dispatch(setLogin({...user} as User));
+    };
   };
 
   React.useEffect(() => {
@@ -92,8 +95,7 @@ const App: React.FC = () => {
     const volcanoIds = volcanoes.map(v => v.gnsID);
     const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
     if(user) {
-      fetchQuakeHistory(gnsIDs)
-        .then(res => dispatch(setQuakes(res)));
+      dispatch(setQuakes(gnsIDs))
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [volcanoes, user])

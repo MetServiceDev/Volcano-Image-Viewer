@@ -6,7 +6,7 @@ import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/s
 import { Autocomplete } from '@material-ui/lab';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useDispatch, useSelector  } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
@@ -66,6 +66,9 @@ const styles = (theme: Theme) => createStyles({
     },
     link: {
         textDecoration:'none'
+    },
+    themeIcon: {
+        verticalAlign: 'middle'
     }
 });
 
@@ -174,7 +177,7 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, 
             <div>
                 <Tooltip title={`${!theme ? 'Dark' : 'Light'} theme`} arrow>
                     <>
-                        {theme ? <DarkModeIcon /> : <LightModeIcon />}
+                        {theme ? <DarkModeIcon className={classes.themeIcon}/> : <LightModeIcon className={classes.themeIcon}/>}
                         <Switch
                             checked={theme}
                             onChange={toggleTheme}

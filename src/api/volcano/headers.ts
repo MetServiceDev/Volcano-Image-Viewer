@@ -50,6 +50,20 @@ export interface VAL {
 	hazards?: string;
 };
 
+export interface EmissionMeasures {
+	element: string;
+	data: {
+		time: string;
+		measurement: number;
+		error: Number;
+	}[];
+};
+
+export interface EmissionData {
+	volcano: string;
+	data: EmissionMeasures[];
+}
+
 export const greenIcon = new L.Icon({
     iconUrl:"https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|03fc77&chf=a,s,ee00FFFF",
     popupAnchor: [1, -30],

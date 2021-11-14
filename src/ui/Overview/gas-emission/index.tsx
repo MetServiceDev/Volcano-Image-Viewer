@@ -5,6 +5,7 @@ import { Theme } from '@material-ui/core';
 import EmissionChart from './EmissionChart';
 import { EmissionElements } from '../../../api/quakes/headers';
 import PopupChart from './PopupChart';
+import { EmissionData } from '../../../api/volcano/headers';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -14,14 +15,14 @@ const styles = (theme: Theme) => createStyles({
         width: theme.spacing(5),
     },
     wrapper: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between'
+        // flexWrap: 'wrap',
+        // justifyContent: 'space-between'
     }
 });
 
 interface Props extends WithStyles<typeof styles> {
-    FIT_ID: string
+    FIT_ID: string;
+    emissionData?: EmissionData;
 }
 
 interface SelectedChart {
@@ -41,7 +42,7 @@ const formatTitle = (element: EmissionElements): string => {
     }
 }
 
-const GasEmission: React.FC<Props> = ({ classes, FIT_ID }) => {
+const GasEmission: React.FC<Props> = ({ classes, FIT_ID, emissionData }) => {
     const linkRef = React.useRef<HTMLAnchorElement>(null);
 
     const imgSrc = (gas: string) => `https://fits.geonet.org.nz/plot?siteID=${FIT_ID}000&typeID=${gas}-flux-a&type=scatter&showMethod=true`;
@@ -63,6 +64,7 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID }) => {
                     const title = formatTitle(gas);
                     const dataLink = csvLink(gas)
                     const details = { src, title, dataLink }
+                    const elementEmission = emissionData?.data.find(emission => emission.element === gas);
                     return (
                         <EmissionChart
                             key={gas}
@@ -71,6 +73,7 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID }) => {
                             element={gas}
                             csvLink={dataLink}
                             title={title}
+                            emissionData={elementEmission}
                         />
                     )
                 })}

@@ -72,6 +72,11 @@ enum ImageSetting {
     TRUE_COLOR = 'True-Color'
 }
 
+interface Response {
+    code: number;
+    body: any;
+};
+
 const metadata = [ ImageSetting.ASH, ImageSetting.DUST, ImageSetting.TRUE_COLOR ];
 
 interface Props extends WithStyles<typeof styles> {}
@@ -84,7 +89,7 @@ const AshMapOverview: React.FC<Props> = ({ classes }) => {
 
     React.useEffect(() => {
         if (user) {
-            apiCall('get-utc-date', 'GET', user).then(date => setDate(date.body));
+            apiCall<Response>('get-utc-date', 'GET', user).then(date => setDate(date.body));
         }
         
     },[user])

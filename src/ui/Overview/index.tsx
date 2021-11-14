@@ -11,10 +11,11 @@ import { setLogin } from '../../redux/effects/loginEffect';
 import { User } from '../../api/User/headers';
 import { AppState } from '../../redux/store/index';
 import { poll } from '../../api/poller';
+import fetchGasEmissions from '../../api/volcano/fetchGasEmissions';
 
 import VolcanicAlert from './VolcanicAlert';
 
-import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
+import { Volcano, OverviewDisplay, VolcanoLocation, EmissionData } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
 
 import LiveImages from './live-images';
@@ -76,6 +77,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const dispatch = useDispatch();
 
     const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+    const [gasEmissions, setGasEmissions] = React.useState<EmissionData | undefined>();
 
     React.useEffect(() => {
         if(authState && authState.isAuthenticated){ 
@@ -86,14 +88,6 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[authState]);
 
-    React.useEffect(() => {
-        if (user) {
-            poll(user).then(res => {
-                setVolcanoes(res);
-            });
-        }
-    }, [user]);
-
     let query = useQuery();
     const volcano = query.get('volcano')
     const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
@@ -101,6 +95,24 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL);
 
     const domesticVolcano = volcanoObject.location !== VolcanoLocation.VANUATU && volcanoObject.code !== 'ERB';
+
+    React.useEffect(() => {
+        if (user) {
+            poll(user).then(res => {
+                setVolcanoes(res);
+            });
+            
+        }
+    }, [user]);
+
+    React.useEffect(() => {
+        if (user) {
+            fetchGasEmissions(user).then((res) => {
+                const emissionData = res.find(i => i.volcano === volcanoObject.FIT_ID);
+                setGasEmissions(emissionData)
+            });
+        };
+    }, [user, volcanoObject])
 
     return (
         <div className={classes.root}>
@@ -145,6 +157,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                         case OverviewDisplay.GAS_EMISSION:
                             return <GasEmission
                                         FIT_ID={volcanoObject?.FIT_ID as string}
+                                        emissionData={gasEmissions}
                                     />
                     }
                 })()}

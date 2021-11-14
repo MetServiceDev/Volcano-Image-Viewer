@@ -1,9 +1,10 @@
 import { SET_QUAKES, QuakeType } from "../types/quakeHistoryType";
-import { QuakeWithLocation } from "../../api/quakes/headers";
+import fetchQuakeHistory from "../../api/quakes/fetchQuakeHistory";
 
-export const quakeAction = (quakes:QuakeWithLocation[]): QuakeType => {
+export const quakeAction = async(gnsIDs:string[]): Promise<QuakeType> => {
+    const allQuakes = await fetchQuakeHistory(gnsIDs);
     return {
         type: SET_QUAKES,
-        payload: quakes
+        payload: allQuakes
     };
 };

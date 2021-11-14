@@ -14,12 +14,7 @@ interface Config {
     headers:any;
 };
 
-interface Response {
-    code: number;
-    body: any;
-};
-
-const setConfig = (method: string, token: string, body?: object) => {
+const setConfig = <T>(method: string, token: string, body?: T) => {
     if(method === 'GET'){
         let config : Config = {
             method: Method['GET'],
@@ -38,14 +33,14 @@ const setConfig = (method: string, token: string, body?: object) => {
     };
 };
 
-const apiCall = async (route: string, method: string, user: User, body?: object): Promise<Response> => {
+const apiCall = async <T, P = {}>(route: string, method: string, user: User, body?: P): Promise<T> => {
     if (!user) {
         throw new Error('401: User not valid')
     }
     try{
         const call = await fetch(`${apiEndpoint}/${route}`, setConfig(method, user.token, body));
         const response = await call.json();
-        return response as Response;
+        return response as T;
     }catch(err){
         throw err;
     }

@@ -35,17 +35,18 @@ interface Props {
 
 const SatelliteCard: React.FC<Props> = ({ fontSize }) => {
     const classes = useStyles();
-    const [dateString, setDate] = React.useState('');
+    const [dateString, setDate] = React.useState<string>('');
 
-    const { gridDisplay, login } = useSelector((state: AppState) => state);
+    const { gridDisplay } = useSelector((state: AppState) => state);
+    const user = useSelector((state:AppState) => state.login);
 
     React.useEffect(() => {
-        if (login) {
-            apiCall('get-utc-date', 'GET', login).then(date => {
-                setDate(date.body)
+        if (user) {
+            apiCall<string>('utc', 'GET', user).then(date => {
+                setDate(date)
             })
         }
-    }, [login]);
+    }, [user]);
     
 
     const ashImg = () => {
