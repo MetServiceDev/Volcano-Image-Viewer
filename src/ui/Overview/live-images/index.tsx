@@ -27,17 +27,18 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
-
     const relatedVolcanoes = () => {
         return (
             <div className={classes.relatedVolcanoes}>
                 {volcano?.relatedVolcanoes?.map((code, index) => {
-                    const volc = volcanoes.find(v => v.code === code) as Volcano || {};
+                    const volc = volcanoes.find(v => v.code === code) as Volcano;
                     return (
-                        <RelatedVolcano
-                            volcano={volc}
-                            index={index}
-                        />
+                        <>
+                            {volc && <RelatedVolcano
+                                volcano={volc}
+                                index={index}
+                            />}
+                        </>
                     )
                 })}
             </div>
@@ -47,9 +48,9 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
     return (
         <div className={classes.root}>
             <div className={classes.thumnbailWrapper}>
-                <VolcanoThumbnails
+                {volcano.code && <VolcanoThumbnails
                     volcano={volcano}
-                />      
+                />}
             </div>
             {relatedVolcanoes()}
         </div>

@@ -15,7 +15,6 @@ const styles = (theme: Theme) => createStyles({
         padding: theme.spacing(2),
         margin: theme.spacing(2),
         width: '45%',
-        cursor: 'pointer',
         display: 'inline-block'
     },
     img: {

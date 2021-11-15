@@ -49,7 +49,7 @@ const fetchAllImages = async (volcanoes: Volcano[], user:User): Promise<VolcanoI
           images
         } as VolcanoImages;
     }));
-    return allImages
+    return allImages;
 };
 
 export { fetchAllImages, fetchImages }
