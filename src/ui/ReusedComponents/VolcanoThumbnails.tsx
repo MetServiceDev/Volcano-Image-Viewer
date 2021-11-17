@@ -62,11 +62,12 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     volcano: Volcano,
+    s3Tags: string[],
 };
 
 type ErrorType = boolean | string;
 
-const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
+const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags }) => {
     const date = moment().utc();
     date.format('H:mm');
 
@@ -74,7 +75,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
     const [currentImg, setCurrent] = React.useState(allThumbnails[allThumbnails.length-1]);
     const [expand, toggleExpand] = React.useState<boolean>(false);
 
-    const [isLoading, setLoading] = React.useState<boolean>(false);
+    const [isLoading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<ErrorType>(false);
 
     const user = useSelector((state:AppState) => state.login);
@@ -82,7 +83,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
     const fetchThumbnails = async(): Promise<void> => {
         setLoading(true);
         try {
-            const images = await fetchImages(volcano, user);
+            const images = await fetchImages(s3Tags);
             setThumbnails(images);
             setCurrent(images[images.length -1 ]);
             setError(false);
@@ -93,11 +94,11 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano }) => {
     };
 
     React.useEffect(() => {
-        if (user) {
+        if (user && s3Tags.length > 0) {
             fetchThumbnails();
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [volcano]);
+    }, [volcano, s3Tags]);
 
     const loadingUI = (
         <div className={classes.loadingDiv}>

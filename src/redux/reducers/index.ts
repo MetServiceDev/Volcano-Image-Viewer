@@ -8,6 +8,7 @@ import { refreshReducer } from './refreshReducer';
 import { sidebarReducer } from './sidebarReducer';
 import { imagesReducer } from './imagesReducer';
 import { quakeReducer } from './quakeReducer';
+import { LinksReducer } from './s3LinksReducer';
 
 const rootReducer = combineReducers({
     gridDisplay: gridDisplayReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     expandSidebar: sidebarReducer,
     images: imagesReducer,
     quakes: quakeReducer,
+    s3ImageTags: LinksReducer,
 });
   
 export default rootReducer;

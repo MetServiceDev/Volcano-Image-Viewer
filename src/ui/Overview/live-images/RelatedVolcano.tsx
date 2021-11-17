@@ -8,6 +8,7 @@ import { Volcano } from '../../../api/volcano/headers';
 import { fetchImages } from '../../../api/images/fetchImages';
 import { User } from '../../../api/User/headers';
 import { AppState } from '../../../redux/store';
+import formatS3Tags from '../../../api/images/formatS3Tags';
 
 const styles = (theme:Theme) => createStyles({
     sideItem: {
@@ -33,22 +34,31 @@ interface Props extends WithStyles<typeof styles> {
 const RelatedVolcano: React.FC<Props> = ({ volcano, classes, index }) => {
 
     const [imgSrc, setSrc] = React.useState<string>('');
-    const [loading, isLoading] = React.useState<boolean>(false);
+    const [loading, isLoading] = React.useState<boolean>(true);
     const user = useSelector((state:AppState) => state.login) as User;
+    const allS3Tags = useSelector((state:AppState) => state.s3ImageTags);
 
+    const [s3Tags, setS3Tags] = React.useState<string[]>([]);
+
+    React.useEffect(() => {
+        const s3Tags = formatS3Tags(allS3Tags, volcano.code);
+        setS3Tags(s3Tags)
+    },[volcano, allS3Tags]);
+
+    
     const fetchSrc = async():Promise<string> => {
         isLoading(true);
-        const imageSrc = await fetchImages(volcano, user);
+        const imageSrc = await fetchImages(s3Tags);
         isLoading(false);
         return imageSrc[imageSrc.length-1].src;
     }
 
     React.useEffect(() => {
-        if(user) {
+        if(user && s3Tags.length > 0) {
             fetchSrc().then(src => setSrc(src));
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps 
-    },[volcano, user]);
+    },[volcano, user, s3Tags]);
 
     const loadingUI = <CircularProgress className={classes.loader}/>
 

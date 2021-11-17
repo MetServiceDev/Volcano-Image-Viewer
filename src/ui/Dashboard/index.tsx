@@ -6,6 +6,8 @@ import { Redirect, Link } from 'react-router-dom';
 import { setLogin } from '../../redux/effects/loginEffect';
 import { User } from '../../api/User/headers';
 import { SulfurMaps } from '../../metadata/SulfurMaps';
+import authClient from '../../api/auth/Auth';
+import issueToken from '../../api/auth/issueToken';
 
 import Navbar from '../Navbar/Navbar';
 import Sidebar from '../Sidebar/Sidebar';
@@ -16,21 +18,22 @@ import { redirectUri } from '../../metadata/Endpoints';
 import { AppState } from '../../redux/store';
 import findQuakes from '../../api/quakes/findRecentQuakes';
 import EruptionPopup from './EruptionPopup';
+import { setS3ImageTags } from '../../redux/effects/s3LinksEffect';
+import { poll } from '../../api/poller';
 
 interface Props {
-    volcanoes: Volcano[],
-    hasLoaded: boolean,
     theme: boolean,
     toggleTheme: () => void,
     search: (e:any) => any
 }
 
-const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, search }) => {
+const Dashboard: React.FC<Props> = ({ theme, toggleTheme, search }) => {
     const { oktaAuth , authState } = useOktaAuth();
     const dispatch = useDispatch();
 
     const logout = async (): Promise<void> => await oktaAuth.signOut({postLogoutRedirectUri: redirectUri });
     const quakeHistory = useSelector((state:AppState) => state.quakes);
+    const user = useSelector((state:AppState) => state.login) as User;
     
     const [recentQuakes, setRecentQuakes] = React.useState<RecentQuake[]>([]);
     const [volcanoToOpen, setVolcano] = React.useState<string>('');
@@ -45,6 +48,42 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[authState]);
+
+    React.useEffect(() => {
+        if (user) {
+          dispatch(setS3ImageTags(user));
+          poll(user).then(async(res) => {
+            setVolcanoes(res);
+            setLoaded(true);
+          }).catch(err => console.log(err));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      },[user]);
+
+    const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+    const [hasLoaded, setLoaded] = React.useState<boolean>(false);
+
+    const refreshSession = async (): Promise<void> => {
+        const activeSession = await authClient.session.exists()
+        if (activeSession) {
+        await authClient.session.refresh();
+        const accessToken = await issueToken();
+        user['token'] = accessToken
+        dispatch(setLogin({...user} as User));
+        };
+    };
+
+    React.useEffect(() => {
+        if (authState.isAuthenticated) {
+            const poller = setInterval(async() => {
+                setLoaded(false)
+                await refreshSession();
+                dispatch(setS3ImageTags(user));
+                setLoaded(true);
+                clearInterval(poller);
+            },60000*10);
+        }
+    }, [authState]);
 
 
     if(!authState) {

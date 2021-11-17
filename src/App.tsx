@@ -18,17 +18,17 @@ import Login from './ui/LoginForm/Login';
 import AshMapOverview from './ui/Overview/AshMap';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import { Volcano } from './api/volcano/headers';
-import { poll } from './api/poller';
+// import { poll } from './api/poller';
 import { User } from './api/User/headers';
 import { toggleSidebar } from './redux/effects/sidebarEffect';
 import { setGrid } from './redux/effects/gridEffect';
-import issueToken from './api/auth/issueToken';
-import { setLogin } from './redux/effects/loginEffect';
+// import issueToken from './api/auth/issueToken';
+// import { setLogin } from './redux/effects/loginEffect';
 import { redirectUri } from './metadata/Endpoints';
 import { searchVolcano } from './api/filterSearch';
 
 import { setQuakes } from './redux/effects/quakeEffect';
-import fetchQuakeHistory from './api/quakes/fetchQuakeHistory';
+// import { setS3ImageTags } from './redux/effects/s3LinksEffect';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -46,37 +46,36 @@ const App: React.FC = () => {
   const user = useSelector((state:AppState) => state.login) as User;
 
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
-  const [hasLoaded, setLoaded] = React.useState<boolean>(false);
+  // const [hasLoaded, setLoaded] = React.useState<boolean>(false);
 
-  const refreshSession = async (volcanoes: Volcano[]): Promise<void> => {
-    setVolcanoes(volcanoes);
-    const activeSession = await authClient.session.exists()
-    if (activeSession) {
-      await authClient.session.refresh();
-      const accessToken = await issueToken();
-      user['token'] = accessToken
-      dispatch(setLogin({...user} as User));
-    };
-  };
+  // const refreshSession = async (): Promise<void> => {
+  //   const activeSession = await authClient.session.exists()
+  //   if (activeSession) {
+  //     await authClient.session.refresh();
+  //     const accessToken = await issueToken();
+  //     user['token'] = accessToken
+  //     dispatch(setLogin({...user} as User));
+  //   };
+  // };
+
+  // // React.useEffect(() => {
+  // //   if (user) {
+  // //     var poller = setInterval(async() => {
+  // //       setLoaded(false)
+  // //       await refreshSession();
+  // //       dispatch(setS3ImageTags(user));
+  // //       setLoaded(true);
+  // //       clearInterval(poller);
+  // //     },60000*10);
+  // //   }
+  // // }, [user]);
 
   React.useEffect(() => {
     if (user) {
-      poll(user).then(async(res) => {
-        setVolcanoes(res);
-        setLoaded(true);
-      });
       const expandSidebar = localStorage.getItem('expandSidebar');
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar) { dispatch(toggleSidebar(JSON.parse(expandSidebar.toLowerCase()))); };
       if(gridSize) { dispatch(setGrid(Number(gridSize))); };
-      var poller = setInterval(() => {
-        setLoaded(false)
-        poll(user).then(async(res) => {
-          setLoaded(true);
-          await refreshSession(res);
-        });
-        clearInterval(poller);
-      },60000*10);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user]);
@@ -107,8 +106,6 @@ const App: React.FC = () => {
           <Switch>
             <Route exact path='/'>
               <Dashboard
-                volcanoes={volcanoes}
-                hasLoaded={hasLoaded}
                 theme={styleTheme}
                 toggleTheme={setTheme}
                 search={(e) => volcanoSearch(e)}
@@ -119,7 +116,6 @@ const App: React.FC = () => {
             <SecureRoute exact path='/Vanuatu Satellite'>
               <AshMapOverview />
             </SecureRoute>
-            {/* <Route component={ErrorPage}/> */}
             <Route exact path='/login/callback' component={LoginCallback} />
             <Route component={ErrorPage}/>
           </Switch>

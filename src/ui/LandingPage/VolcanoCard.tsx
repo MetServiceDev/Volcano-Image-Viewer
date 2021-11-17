@@ -2,10 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 import { Paper, Typography, Theme } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
 import AlertIcon from '../ReusedComponents/AlertIcon';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 import { Volcano } from '../../api/volcano/headers';
+import { AppState } from '../../redux/store';
+import formatS3Tags from '../../api/images/formatS3Tags';
 
 const styles = (theme: Theme) => createStyles({
     div: {
@@ -44,7 +47,15 @@ interface Props extends WithStyles<typeof styles> {
 };
 
 const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
-    const alert = volcano.volcanicAlerts
+    const alert = volcano.volcanicAlerts;
+
+    const allS3Tags = useSelector((state:AppState) => state.s3ImageTags);
+    const [s3Tags, setTags] = React.useState<string[]>([]);
+
+    React.useEffect(() => {
+        setTags(formatS3Tags(allS3Tags, volcano.code));
+    }, [allS3Tags]);
+
     return (
         <Link className={classes.link} to={`overview?volcano=${volcano.name}`} target='_blank' key={volcano.code}>
             <Paper className={classes.div} elevation={3}>
@@ -56,7 +67,10 @@ const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
                         <AlertIcon data={alert} fontSize={fontSize}/>}
                     </span>
                 </div>
-                <VolcanoThumbnails volcano={volcano}/>
+                <VolcanoThumbnails
+                    volcano={volcano}
+                    s3Tags={s3Tags}
+                />
             </Paper>
         </Link>
     );

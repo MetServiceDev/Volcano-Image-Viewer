@@ -1,22 +1,23 @@
 import React from 'react';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Theme } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 import { useSelector } from 'react-redux';
 
-import apiCall from '../../api/APICall';
+import { apiEndpoint } from '../../metadata/Endpoints';
 import { AppState } from '../../redux/store';
 import { User } from '../../api/User/headers';
 
-const styles = () => createStyles({
+const styles = (theme: Theme) => createStyles({
     root:{},
     headerDiv: {
         padding:'20px',
-        backgroundColor:'white',
+        backgroundColor: theme.palette.background.default,
         borderBottom: '1px solid #404040',
         position:'fixed',
-        width: '100%'
+        width: '100%',
+        zIndex:50,
     },
     homeIcon: {
         borderRadius: '5px',
@@ -28,11 +29,11 @@ const styles = () => createStyles({
     },
     sidebar: {
         width:'10%',
-        backgroundColor:'white',
+        backgroundColor:theme.palette.background.default,
         boxShadow: '-2px 0px 8px #404040',     
         height: '100%',
         position:'fixed',
-        zIndex:-2,
+        zIndex:2,
         padding: '20px'
     },
     sidebarInner: {
@@ -89,9 +90,10 @@ const AshMapOverview: React.FC<Props> = ({ classes }) => {
 
     React.useEffect(() => {
         if (user) {
-            apiCall<Response>('get-utc-date', 'GET', user).then(date => setDate(date.body));
+            fetch(`${apiEndpoint}/utc`, {
+                headers: { 'Authorization' : user.token }
+            }).then(res => res.text()).then(data => setDate(data)).catch(err => console.log(err))
         }
-        
     },[user])
 
     const renderImg = () => {

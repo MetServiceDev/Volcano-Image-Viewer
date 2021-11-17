@@ -7,8 +7,23 @@ const fetchQuakeHistory = async(ids: string[]): Promise<QuakeWithLocation[]> => 
         try {
             const call = await fetch(`${gnsRestEndpoint}/volcano/quake/${id}`);
             const data = await call.json();
+            let features = data.features;
+            if (id === 'kermadecislands') {
+                features = data.features.map((plot: any) => {
+                    return {
+                        ...plot,
+                        geometry: {
+                            ...plot.geometry,
+                            coordinates: [
+                                Number(plot.geometry.coordinates[0].toString().replace('-', '')),
+                                Number(plot.geometry.coordinates[1]),
+                            ]
+                        }
+                    }
+                })
+            }
             return {
-                history: data.features,
+                history: features,
                 volcanoID: id
             };
         } catch (err) {
