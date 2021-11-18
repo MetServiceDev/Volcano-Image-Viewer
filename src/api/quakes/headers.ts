@@ -53,7 +53,7 @@ export interface GNSVAL {
 }
 
 export enum VolcanoLevels {
-    UNNOTICABLE = 'Unnoticable',
+    UNNOTICABLE = 'Unnoticeable',
     WEAK = 'Weak',
     LIGHT = 'Light',
     MODERATE = 'Moderate',

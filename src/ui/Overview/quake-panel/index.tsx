@@ -80,6 +80,11 @@ const borderColors = [
 const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
     const [quakes, setQuakes] = React.useState<Quake[]>([]);
 
+    const allLevels = [
+        VolcanoLevels.UNNOTICABLE, VolcanoLevels.WEAK, VolcanoLevels.LIGHT, VolcanoLevels.MODERATE,
+        VolcanoLevels.STRONG, VolcanoLevels.SEVERE, VolcanoLevels.EXTREME
+    ]
+
     const fetchData = async(): Promise<Quake[]> => {
         const call = await fetch(`${gnsRestEndpoint}/volcano/quake/${volcano?.gnsID}`);
         const data = await call.json();
@@ -94,7 +99,12 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
         }, {});
     };
 
-    const quakeFrequency = Object.entries(groupBy()).map((obj: any) => obj[1].length);
+    const quakeFrequency = Object.entries(groupBy()).map((obj: any) => {
+        return {
+            level: obj[0],
+            frequency: obj[1].length
+        } 
+    });
 
     React.useEffect(() => {
         if (volcano.gnsID) {
@@ -126,7 +136,13 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
     const barDataset = [
         {
             label: `Earthquake frequency since ${moment(quakes[0]?.properties.time).format('ll')}`,
-            data: quakeFrequency,
+            data: allLevels.map(eachLevel => {
+                const quakeLevel = quakeFrequency.find(q => q.level === eachLevel.toLowerCase())
+                if (quakeLevel) {
+                    return quakeLevel.frequency
+                }
+                return 0
+            }),
             backgroundColor: backgroundColors,
             borderColor: borderColors,
             borderWidth: 2
