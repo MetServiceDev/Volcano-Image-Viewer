@@ -124,17 +124,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
             };
         },
         [volcanoObject.FIT_ID]
-    )
-
-    // const fetchEmissionEffect = async (): Promise<void> => {
-    //     const activeSession = await getSession();
-    //     if (activeSession) {
-    //         fetchGasEmissions(user.token).then((res) => {
-    //             const emissionData = res.find(i => i.volcano === volcanoObject.FIT_ID);
-    //             setGasEmissions(emissionData)
-    //         });
-    //     };
-    // }
+    );
 
     React.useEffect(() => { poller() }, [poller]);
     React.useEffect(() => { fetchEmission() }, [fetchEmission]);
