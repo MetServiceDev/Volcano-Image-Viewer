@@ -1,5 +1,4 @@
 import { apiEndpoint } from '../metadata/Endpoints';
-import { User } from './User/headers';
 
 enum Method {
     GET = 'GET',
@@ -33,12 +32,12 @@ const setConfig = <T>(method: string, token: string, body?: T) => {
     };
 };
 
-const apiCall = async <T, P = {}>(route: string, method: string, user: User, body?: P): Promise<T> => {
-    if (!user) {
-        throw new Error('401: User not valid')
+const apiCall = async <T, P = {}>(route: string, method: string, token: string, body?: P): Promise<T> => {
+    if (!token) {
+        throw new Error('401: Token required')
     }
     try{
-        const call = await fetch(`${apiEndpoint}/${route}`, setConfig(method, user.token, body));
+        const call = await fetch(`${apiEndpoint}/${route}`, setConfig(method, token, body));
         const response = await call.json();
         return response as T;
     }catch(err){

@@ -5,12 +5,12 @@ import HomeIcon from '@material-ui/icons/Home';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { setLogin } from '../../redux/effects/loginEffect';
 import { User } from '../../api/User/headers';
-import { AppState } from '../../redux/store/index';
 import { poll } from '../../api/poller';
+import authClient from '../../api/auth/Auth';
 import fetchGasEmissions from '../../api/volcano/fetchGasEmissions';
 
 import VolcanicAlert from './VolcanicAlert';
@@ -73,7 +73,6 @@ interface Props extends WithStyles<typeof styles> {}
 
 const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const { authState } = useOktaAuth();
-    const user = useSelector((state:AppState) => state.login) as User;
     const dispatch = useDispatch();
 
     const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
@@ -96,23 +95,49 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
 
     const domesticVolcano = volcanoObject.location !== VolcanoLocation.VANUATU && volcanoObject.code !== 'ERB';
 
-    React.useEffect(() => {
-        if (user) {
-            poll(user).then(res => {
-                setVolcanoes(res);
-            });
-            
-        }
-    }, [user]);
+    const getSession = async(): Promise<boolean> => {
+        const activeSession = await authClient.session.exists();
+        return activeSession;
+    };
 
-    React.useEffect(() => {
-        if (user) {
-            fetchGasEmissions(user).then((res) => {
-                const emissionData = res.find(i => i.volcano === volcanoObject.FIT_ID);
-                setGasEmissions(emissionData)
-            });
-        };
-    }, [user, volcanoObject])
+    const poller = React.useCallback(
+        async(): Promise<void> => {
+            const activeSession = await getSession();
+            if (activeSession) {
+                const token = authClient.getAccessToken() as string;
+                const volcanoes = await poll(token)
+                setVolcanoes(volcanoes);
+            };
+        },
+        []
+    );
+
+    const fetchEmission = React.useCallback(
+        async (): Promise<void> => {
+            const activeSession = await getSession();
+            if (activeSession) {
+                const token = authClient.getAccessToken() as string;
+                fetchGasEmissions(token).then((res) => {
+                    const emissionData = res.find(i => i.volcano === volcanoObject.FIT_ID);
+                    setGasEmissions(emissionData)
+                });
+            };
+        },
+        [volcanoObject.FIT_ID]
+    )
+
+    // const fetchEmissionEffect = async (): Promise<void> => {
+    //     const activeSession = await getSession();
+    //     if (activeSession) {
+    //         fetchGasEmissions(user.token).then((res) => {
+    //             const emissionData = res.find(i => i.volcano === volcanoObject.FIT_ID);
+    //             setGasEmissions(emissionData)
+    //         });
+    //     };
+    // }
+
+    React.useEffect(() => { poller() }, [poller]);
+    React.useEffect(() => { fetchEmission() }, [fetchEmission]);
 
     return (
         <div className={classes.root}>

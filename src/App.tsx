@@ -18,17 +18,15 @@ import Login from './ui/LoginForm/Login';
 import AshMapOverview from './ui/Overview/AshMap';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import { Volcano } from './api/volcano/headers';
-// import { poll } from './api/poller';
+import { poll } from './api/poller';
 import { User } from './api/User/headers';
 import { toggleSidebar } from './redux/effects/sidebarEffect';
 import { setGrid } from './redux/effects/gridEffect';
-// import issueToken from './api/auth/issueToken';
-// import { setLogin } from './redux/effects/loginEffect';
 import { redirectUri } from './metadata/Endpoints';
 import { searchVolcano } from './api/filterSearch';
 
 import { setQuakes } from './redux/effects/quakeEffect';
-// import { setS3ImageTags } from './redux/effects/s3LinksEffect';
+import { setS3ImageTags } from './redux/effects/s3LinksEffect';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -46,32 +44,26 @@ const App: React.FC = () => {
   const user = useSelector((state:AppState) => state.login) as User;
 
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
-  // const [hasLoaded, setLoaded] = React.useState<boolean>(false);
+  const [hasLoaded, setLoaded] = React.useState<boolean>(false);
 
-  // const refreshSession = async (): Promise<void> => {
-  //   const activeSession = await authClient.session.exists()
-  //   if (activeSession) {
-  //     await authClient.session.refresh();
-  //     const accessToken = await issueToken();
-  //     user['token'] = accessToken
-  //     dispatch(setLogin({...user} as User));
-  //   };
-  // };
-
-  // // React.useEffect(() => {
-  // //   if (user) {
-  // //     var poller = setInterval(async() => {
-  // //       setLoaded(false)
-  // //       await refreshSession();
-  // //       dispatch(setS3ImageTags(user));
-  // //       setLoaded(true);
-  // //       clearInterval(poller);
-  // //     },60000*10);
-  // //   }
-  // // }, [user]);
+  React.useEffect(() => {
+    setInterval(async() => {
+      setLoaded(false)
+      await authClient.session.refresh();
+      const token = authClient.getAccessToken() as string;
+      dispatch(setS3ImageTags(token));
+      setLoaded(true);
+    },60000*10);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     if (user) {
+      dispatch(setS3ImageTags(user.token));
+      poll(user.token).then(async(res) => {
+        setVolcanoes(res);
+        setLoaded(true);
+      }).catch(err => console.log(err))
       const expandSidebar = localStorage.getItem('expandSidebar');
       const gridSize = localStorage.getItem('gridSize');
       if(expandSidebar) { dispatch(toggleSidebar(JSON.parse(expandSidebar.toLowerCase()))); };
@@ -93,11 +85,13 @@ const App: React.FC = () => {
   React.useEffect(() => {
     const volcanoIds = volcanoes.map(v => v.gnsID);
     const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
-    if(user) {
-      dispatch(setQuakes(gnsIDs))
-    };
+    authClient.session.exists().then(session => {
+      if(session) {
+        dispatch(setQuakes(gnsIDs))
+      };
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [volcanoes, user])
+  }, [volcanoes])
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -106,6 +100,8 @@ const App: React.FC = () => {
           <Switch>
             <Route exact path='/'>
               <Dashboard
+                volcanoes={volcanoes}
+                hasLoaded={hasLoaded}
                 theme={styleTheme}
                 toggleTheme={setTheme}
                 search={(e) => volcanoSearch(e)}

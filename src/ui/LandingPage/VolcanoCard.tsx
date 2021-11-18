@@ -54,6 +54,7 @@ const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
 
     React.useEffect(() => {
         setTags(formatS3Tags(allS3Tags, volcano.code));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [allS3Tags]);
 
     return (

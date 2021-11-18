@@ -1,5 +1,4 @@
-import { Thumbnail, Volcano } from '../volcano/headers';
-import { VolcanoImages } from './headers';
+import { Thumbnail } from '../volcano/headers';
 import downloadImage from '../../api/volcano/downloadImage';
 import { imageBucket } from '../../metadata/Endpoints';
 

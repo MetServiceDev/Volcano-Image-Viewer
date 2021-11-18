@@ -73,11 +73,6 @@ enum ImageSetting {
     TRUE_COLOR = 'True-Color'
 }
 
-interface Response {
-    code: number;
-    body: any;
-};
-
 const metadata = [ ImageSetting.ASH, ImageSetting.DUST, ImageSetting.TRUE_COLOR ];
 
 interface Props extends WithStyles<typeof styles> {}

@@ -1,9 +1,8 @@
 import apiCall from "../APICall";
-import { User } from "../User/headers";
 import { EmissionData } from "./headers";
 
-const fetchGasEmissions = async(user: User): Promise<EmissionData[]> => {
-    const data = await apiCall<EmissionData[]>('emissions', 'GET', user);
+const fetchGasEmissions = async(token: string): Promise<EmissionData[]> => {
+    const data = await apiCall<EmissionData[]>('emissions', 'GET', token);
     return data;
 };
 

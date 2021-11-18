@@ -25,6 +25,7 @@ export const searchVolcano = (query: string, volcanoes: Volcano[]): Volcano[] =>
     if(regex.test(volcano.name.toLowerCase())) {
       return volcano
     };
+    return null;
   });
   return results.filter(Boolean) as Volcano[];
 };

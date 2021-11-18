@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Typography, LinearProgress, Zoom, Theme } from '@material-ui/core';
@@ -7,7 +6,6 @@ import Alert from '@material-ui/lab/Alert';
 
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
 import { Volcano, Thumbnail } from '../../api/volcano/headers';
-import { AppState } from '../../redux/store';
 import { fetchImages } from '../../api/images/fetchImages';
 
 const styles = (theme: Theme) => createStyles({
@@ -78,8 +76,6 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags }) => {
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<ErrorType>(false);
 
-    const user = useSelector((state:AppState) => state.login);
-
     const fetchThumbnails = async(): Promise<void> => {
         setLoading(true);
         try {
@@ -94,7 +90,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags }) => {
     };
 
     React.useEffect(() => {
-        if (user && s3Tags.length > 0) {
+        if (s3Tags.length > 0) {
             fetchThumbnails();
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLightningAlerts } from '../../redux/effects/lightningEffect';
 import fetchLightning from '../../api/lightning/FetchLightning';
 import { AppState } from '../../redux/store';
-import { User } from '../../api/User/headers';
+import authClient from '../../api/auth/Auth';
 
 const useStyles =  makeStyles(() => ({
     root: {
@@ -40,15 +40,18 @@ const LightningAlerts: React.FC = () => {
     const [alerts, setAlerts] = React.useState({severity:'success', msg: ''});
     const [loaded, setLoaded] = React.useState(false);
     const currentAlerts = useSelector((state: AppState) => state.lightningAlerts);
-    const user = useSelector((state: AppState) => state.login) as User;
 
     const fetchData = async() => {
         setLoaded(false);
         try {
-            const data = await fetchLightning(user);
-            setAlerts(data);
-            dispatch(setLightningAlerts(data))
-            setLoaded(true);
+            const activeSession = await authClient.session.exists();
+            if (activeSession) {
+                const token = authClient.getAccessToken() as string;
+                const data = await fetchLightning(token);
+                setAlerts(data);
+                dispatch(setLightningAlerts(data))
+                setLoaded(true);
+            }
         } catch (err){
             console.log(err);
             setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'});
@@ -58,22 +61,20 @@ const LightningAlerts: React.FC = () => {
 
     React.useEffect(()=> { 
         setInterval(() => {
-            if (user) {
-                fetchData();
-            }
+            fetchData();
         }, 60000*10);
     // eslint-disable-next-line
     },[]);
 
     React.useEffect(() => {
-        if(!currentAlerts.severity && user){
+        if(!currentAlerts.severity){
             fetchData();
         }else{
             setLoaded(true); 
             setAlerts(currentAlerts)
         }
     // eslint-disable-next-line
-    },[user]);
+    },[currentAlerts]);
 
     if(!loaded){
         return (
