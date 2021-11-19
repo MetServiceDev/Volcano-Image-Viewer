@@ -114,7 +114,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
     }, []);
 
     const magnitudeLevels: LineData<number[]> = {
-        label: 'Earthquake magnitude',
+        label: 'Magnitude (ML)',
         data: quakes.map(quake => quake.properties.magnitude),
         backgroundColor: 'rgba(255, 187, 0, 0.5)',
         borderColor: '#ffbb00',
@@ -165,6 +165,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
             graphType={GraphType.LINE}
             data={[magnitudeLevels, depthLevel]}
             height={80}
+            volcanoName={volcano.name}
             labels={quakes.map(quake => moment(quake.properties.time).format('llll'))}
         />
     )

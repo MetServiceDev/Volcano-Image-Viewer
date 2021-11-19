@@ -24,36 +24,46 @@ interface Dataset {
 }
 
 interface Props extends WithStyles<typeof styles> {
-    datasets: Dataset[],
-    labels: string[],
-    height: number
+    datasets: Dataset[];
+    labels: string[];
+    height: number;
+    volcanoName: string;
 };
 
-const LineGraph: React.FC<Props> = ({ datasets, labels, height }) => {
+const LineGraph: React.FC<Props> = ({ datasets, labels, height, volcanoName }) => {
     const data = {
         labels:labels,
         datasets:datasets
     };
 
     const options = {
+        plugins: {
+            title: {
+                display: true,
+                text: `Earthquake History for ${volcanoName}`
+            }
+        },
         scales: {
-          yAxes: [{
-            id: 'A',
-            type: 'linear',
-            position: 'left',
-            ticks: {
-                beginAtZero: true,
-                min: 0
-            }
-          }, {
-            id: 'B',
-            type: 'linear',
-            position: 'right',
-            ticks: {
-                beginAtZero: true,
-                min: 0
-            }
-          }]
+            A: {
+                display: true,
+                id: 'A',
+                position: 'left',
+                title: {
+                    display: true,
+                    text: 'magnitude (ML)'
+                },
+                beginAtZero: true
+            },
+            B: {
+                display: true,
+                id: 'B',
+                position: 'right',
+                title: {
+                    display: true,
+                    text: 'depth (km)'
+                },
+                beginAtZero: true
+            },
         }
     } as any;
 
