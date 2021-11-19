@@ -5,18 +5,19 @@ import { GraphType } from '../../api/graph/headers';
 import ScatterGraph from './Scatter';
 
 interface Props {
-    graphType: GraphType,
-    data: any,
-    labels?: string[],
-    height?: number
+    graphType: GraphType;
+    data: any;
+    labels?: string[];
+    height?: number;
+    volcanoName?:string;
 }
 
-const GraphComponent: React.FC<Props> = ({ graphType, data, labels, height }) => {
+const GraphComponent: React.FC<Props> = ({ graphType, data, labels, height, volcanoName }) => {
 
     const renderGraph = () => {
         switch(graphType){
             case GraphType.LINE:
-                return <LineGraph datasets={data} labels={labels as string[]} height={height as number}/>
+                return <LineGraph datasets={data} labels={labels as string[]} height={height as number} volcanoName={volcanoName as string}/>
             case GraphType.SCATTER:
                 return <ScatterGraph data={data} height={height as number}/>
             case GraphType.BAR:

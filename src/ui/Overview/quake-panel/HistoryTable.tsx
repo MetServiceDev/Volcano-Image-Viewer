@@ -34,8 +34,8 @@ const HistoryTable: React.FC<Props> = ({ classes, quakes }) => {
               <TableCell align="left">{properties.locality}</TableCell>
               <TableCell align="left">{moment(properties.time).format('H:mm DD/MM')}</TableCell>
             </TableRow>
-        )
-    }
+        );
+    };
 
     return (
         <TableContainer component={Paper} className={classes.root}>
@@ -43,7 +43,7 @@ const HistoryTable: React.FC<Props> = ({ classes, quakes }) => {
                 <TableHead>
                     <TableRow>
                         <TableCell>Intensity</TableCell>
-                        <TableCell align="left">Magnitude</TableCell>
+                        <TableCell align="left">Magnitude (ML)</TableCell>
                         <TableCell align="left">Depth (km)</TableCell>
                         <TableCell align="left">Locality</TableCell>
                         <TableCell align="left">Time</TableCell>
@@ -54,7 +54,7 @@ const HistoryTable: React.FC<Props> = ({ classes, quakes }) => {
                 </TableBody>
             </Table>
         </TableContainer>
-    )
+    );
 };
 
 export default withStyles(styles)(HistoryTable);
