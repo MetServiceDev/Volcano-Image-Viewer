@@ -1,5 +1,5 @@
-export const apiEndpoint = 'https://nsg4nwonug.execute-api.ap-southeast-2.amazonaws.com/prod/v0/rest';
-export const imageBucket = 'https://d2e7bw4oknorz6.cloudfront.net';
+export const apiEndpoint = 'https://2p4rq8q5g8.execute-api.ap-southeast-2.amazonaws.com/prod/v0/rest';
+export const imageBucket = 'https://d3tdg999z8uo5q.cloudfront.net';
 export const loopyBucket = 'https://loopy-files.s3-ap-southeast-2.amazonaws.com';
 export const redirectUri = window.location.origin;
 
