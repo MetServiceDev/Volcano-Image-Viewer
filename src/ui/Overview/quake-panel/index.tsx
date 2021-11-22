@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import GraphComponent from '../../Graphs';
 import { GraphType, LineData } from '../../../api/graph/headers';
-import { Quake, quakeMarker, VolcanoLevels } from '../../../api/quakes/headers';
+import { Quake, quakeMarker, VolcanoLevels, IntensityFreq } from '../../../api/quakes/headers';
 import { Volcano } from '../../../api/volcano/headers';
 import { gnsRestEndpoint } from '../../../metadata/Endpoints';
 import HistoryTable from './HistoryTable';
@@ -83,7 +83,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
     const allLevels = [
         VolcanoLevels.UNNOTICABLE, VolcanoLevels.WEAK, VolcanoLevels.LIGHT, VolcanoLevels.MODERATE,
         VolcanoLevels.STRONG, VolcanoLevels.SEVERE, VolcanoLevels.EXTREME
-    ]
+    ];
 
     const fetchData = async(): Promise<Quake[]> => {
         const call = await fetch(`${gnsRestEndpoint}/volcano/quake/${volcano?.gnsID}`);
@@ -91,18 +91,17 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
         return data.features.reverse();
     };
 
-    const groupBy = () => {
-        return quakes.reduce(function(memo: any, x: any) {
+    const groupBy = (): IntensityFreq => {
+        return quakes.reduce((memo: any, x: any) => {
           if (!memo[x['properties']['intensity']]) { memo[x['properties']['intensity']] = []; }
           memo[x['properties']['intensity']].push(x);
           return memo;
-        }, {});
+        }, {}) as IntensityFreq;
     };
-
-    const quakeFrequency = Object.entries(groupBy()).map((obj: any) => {
+    const quakeFrequency = Object.entries(groupBy()).map((obj) => {
         return {
             level: obj[0],
-            frequency: obj[1].length
+            frequency: obj[1]?.length
         } 
     });
 
@@ -147,7 +146,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
             borderColor: borderColors,
             borderWidth: 2
         },
-    ]
+    ];
     
     const barGraph = (
         <Paper elevation={3} className={classes.barGraphWrapper}>
@@ -158,7 +157,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
                 height={140}
             />
         </Paper>
-    )
+    );
 
     const overviewGraph = (
         <GraphComponent
@@ -168,7 +167,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
             volcanoName={volcano.name}
             labels={quakes.map(quake => moment(quake.properties.time).format('llll'))}
         />
-    )
+    );
 
     return (
         <>
@@ -178,7 +177,7 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
                 <HistoryTable quakes={quakes}/>
             </div>
         </>
-    )
+    );
 };
 
 export default withStyles(styles)(QuakePanel);

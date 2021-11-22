@@ -68,6 +68,8 @@ export enum EmissionElements {
     H2S = 'H2S'
 };
 
+export type IntensityFreq = NodeJS.Dict<Quake[]>
+
 export const quakeMarker = {
     unnoticable: {
         primary: '#ffc65c',

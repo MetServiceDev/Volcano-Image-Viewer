@@ -49,9 +49,13 @@ const App: React.FC = () => {
   React.useEffect(() => {
     setInterval(async() => {
       setLoaded(false)
-      await authClient.session.refresh();
-      const token = authClient.getAccessToken() as string;
-      dispatch(setS3ImageTags(token));
+      try {
+        await authClient.session.refresh();
+        const token = authClient.getAccessToken() as string;
+        dispatch(setS3ImageTags(token));
+      } catch (err) {
+        console.log(err)
+      };
       setLoaded(true);
     },60000*10);
   // eslint-disable-next-line react-hooks/exhaustive-deps
