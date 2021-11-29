@@ -1,12 +1,18 @@
 import React from 'react';
 import moment from 'moment';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
-import { Typography, LinearProgress, Zoom, Theme } from '@material-ui/core';
+import { Typography, LinearProgress, Zoom, Theme, IconButton, Tooltip } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import { useSelector } from 'react-redux';
 
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
 import { Volcano, Thumbnail } from '../../api/volcano/headers';
 import { fetchImages } from '../../api/images/fetchImages';
+import apiCall from '../../api/APICall';
+import authClient from '../../api/auth/Auth';
+import { AppState } from '../../redux/store';
+import { User } from '../../api/User/headers';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -20,6 +26,23 @@ const styles = (theme: Theme) => createStyles({
         borderRadius: '5px',
         padding: '10px',
         fontSize: '22px',
+        color: '#202020'
+    },
+    imgCapture: {
+        position:'absolute',
+        top:'5%',
+        left: '5%',
+        backgroundColor: 'rgba(219, 219, 219, 0.5)',
+        color: '#202020',
+    },
+    savedText: {
+        position:'absolute',
+        top:'5%',
+        left: '12%',
+        backgroundColor: 'rgba(219, 219, 219, 0.5)',
+        borderRadius: '5px',
+        padding: '10px',
+        fontSize: '16px',
         color: '#202020'
     },
     updatedDisplay:{
@@ -61,11 +84,12 @@ const styles = (theme: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles> {
     volcano: Volcano,
     s3Tags: string[],
+    captureImage?: boolean,
 };
 
 type ErrorType = boolean | string;
 
-const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags }) => {
+const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureImage }) => {
     const date = moment().utc();
     date.format('H:mm');
 
@@ -75,6 +99,10 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags }) => {
 
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<ErrorType>(false);
+
+    const login = useSelector((state:AppState) => state.login) as User;
+
+    const [imgSaved, setImgSaved] = React.useState<boolean>(false);
 
     const fetchThumbnails = async(): Promise<void> => {
         setLoading(true);
@@ -115,7 +143,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags }) => {
                     />
                 </div>
             </Zoom>
-        ));; 
+        ));
     };
 
     const window = () => {
@@ -133,6 +161,14 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags }) => {
 
         const reset = () => { toggleExpand(false); setCurrent(allThumbnails[11]); };
 
+        const saveImage = async(): Promise<void> => {
+            const token = authClient.getAccessToken() as string;
+            const fileKey = s3Tags[currentIndex];
+            await apiCall<null>('user/images', 'POST', token, { userId: login.aud, fileKey });
+            setImgSaved(true);
+            setTimeout(() => setImgSaved(false), 2000);
+        };
+
         return (
             <div className={classes.root} onMouseLeave={() => reset()}>
                 {!error && expand && currentImg?.timestamp && <Typography className={classes.indexDisplay}>{currentImg?.timestamp}</Typography>}
@@ -144,6 +180,16 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags }) => {
                             volcanoName={volcano.name}
                             refresh={() => fetchThumbnails()}
                         /> : primaryImg}
+                {captureImage && expand &&
+                    <Tooltip title='Save Image' arrow>
+                        <IconButton
+                            className={classes.imgCapture}
+                            onClick={() => saveImage()}
+                        >
+                            <PhotoCameraIcon fontSize='large'/>
+                        </IconButton>
+                    </Tooltip>}
+                {imgSaved && <Typography className={classes.savedText}>Image successfully saved</Typography>}
                 <div className={classes.thumbnailGrid}>
                     {!error && expand && returnThumnails()}
                 </div>

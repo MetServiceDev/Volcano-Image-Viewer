@@ -57,6 +57,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
                 {volcano.code && <VolcanoThumbnails
                     volcano={volcano}
                     s3Tags={s3Tags}
+                    captureImage={true}
                 />}
             </div>
             {relatedVolcanoes()}

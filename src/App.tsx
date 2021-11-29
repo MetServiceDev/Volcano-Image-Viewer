@@ -16,6 +16,7 @@ import Dashboard from './ui/Dashboard';
 import VolcanoOverview from './ui/Overview';
 import Login from './ui/LoginForm/Login';
 import AshMapOverview from './ui/Overview/AshMap';
+import UserDashboard from './ui/UserDashboard';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import { Volcano } from './api/volcano/headers';
 import { poll } from './api/poller';
@@ -116,6 +117,7 @@ const App: React.FC = () => {
             <SecureRoute exact path='/Vanuatu Satellite'>
               <AshMapOverview />
             </SecureRoute>
+            <SecureRoute exact path='/id/:id' component={UserDashboard} />
             <Route exact path='/login/callback' component={LoginCallback} />
             <Route component={ErrorPage}/>
           </Switch>
