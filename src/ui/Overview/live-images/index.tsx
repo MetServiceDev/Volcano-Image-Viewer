@@ -8,6 +8,7 @@ import { Volcano } from '../../../api/volcano/headers';
 import RelatedVolcano from './RelatedVolcano';
 import { AppState } from '../../../redux/store';
 import formatS3Tags from '../../../api/images/formatS3Tags';
+import Notes from './Notes';
 
 const styles = (theme:Theme) => createStyles({
     root: {
@@ -59,6 +60,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
                     s3Tags={s3Tags}
                     captureImage={true}
                 />}
+                <Notes/>
             </div>
             {relatedVolcanoes()}
         </div>

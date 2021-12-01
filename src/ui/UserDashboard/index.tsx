@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Typography, Theme, Tooltip } from '@material-ui/core';
@@ -12,6 +12,7 @@ import { userSavedImagesCDN } from '../../metadata/Endpoints';
 import { Volcano } from '../../api/volcano/headers';
 import { formatDate } from '../../api/volcano/formatThumbnail';
 import Navbar from './Navbar';
+import ImagePopup from './ImagePopup';
 
 const styles = (theme: Theme) => createStyles({
     root: {},
@@ -34,6 +35,12 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
+interface SelectedImage {
+    src: string;
+    title: string;
+    volcano: string;
+}
+
 interface Props extends WithStyles<typeof styles> {
     volcanoes: Volcano[]
 }
@@ -44,24 +51,27 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
     const token = authClient.getAccessToken() as string;
     const login = useSelector((state:AppState) => state.login) as User || {};
 
+    const [selectedImg, setSelected] = useState<SelectedImage>({ src: '', title: '', volcano: '' });
+    const [expaned, toggleExpand] = React.useState<boolean>(false);
+
+    const openPopup = (src: string, title: string, volcano:string) => {
+        toggleExpand(true);
+        setSelected({ src, title, volcano })
+    };
+
     const fetchImages = React.useCallback(
         async(): Promise<void> => {
             const savedImages = await apiCall<string[]>(`user?userId=${login.aud}`, 'GET', token);
-            // const downloadImages = await Promise.all(savedImages.map(async(imageSrc) => {
-            //     const image = await downloadImage(`${userSavedImagesCDN}/${imageSrc}`);
-            //     console.log(image)
-            //     return image;
-            // }));
             setSavedImages(savedImages);
         },
-        [token]
+        [token, login.aud]
     );
 
     React.useEffect(() => {
         if(token) {
             fetchImages();
         }
-    }, [fetchImages]);
+    }, [fetchImages, token]);
 
     const getVolcanoName = (imgLink: string) => {
         let volcCode = `${imgLink.split('.')[4]}.${imgLink.split('.')[5]}`;
@@ -75,14 +85,17 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
     const imagePreview = (imgLink: string) => {
         const timestamp = formatDate(imgLink);
         const volcano = getVolcanoName(imgLink);
+        const src = `${userSavedImagesCDN}/${imgLink}`;
+        const title = `${moment(timestamp).format('HH:mm MMMM Do YYYY')} UTC`
         return (
-            <Tooltip title={`${moment(timestamp).format('HH:mm MMMM Do YYYY')} UTC`} arrow>
+            <Tooltip title={title} arrow>
                 <div className={classes.imgPreview}>
                     <img
-                        src={`${userSavedImagesCDN}/${imgLink}`}
+                        src={src}
                         alt={imgLink}
                         width='25%'
                         className={classes.imgThumbnail}
+                        onClick={() => openPopup(src, title, volcano)}
                     />
                     <Typography
                         variant="subtitle1"
@@ -103,6 +116,13 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
             <div className={classes.imgWrapper}>
                 {savedImages.map(imgLink => imagePreview(imgLink))}
             </div>
+            <ImagePopup
+                src={selectedImg.src}
+                handleClose={() => toggleExpand(false)}
+                open={expaned}
+                title={selectedImg.title}
+                volcano={selectedImg.volcano}
+            />
         </>
     );
 };

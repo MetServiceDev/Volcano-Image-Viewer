@@ -32,6 +32,10 @@ const styles = (theme: Theme) => createStyles({
             opacity:'1',
         }
     },
+    userText: {
+        display: 'flex',
+        marginRight: theme.spacing(4),
+    },
 })
 
 interface Props extends WithStyles<typeof styles> {
@@ -53,8 +57,8 @@ const Navbar: React.FC<Props> = ({ classes, username }) => {
                     Saved Images
                 </Typography>
             </div>
-            <Typography style={{ display: 'flex' }}>
-                <AccountCircleIcon/> {username}
+            <Typography className={classes.userText}>
+                <AccountCircleIcon style={{marginRight: '5px' }}/> {username}
             </Typography>
         </div>
     )

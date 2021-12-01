@@ -143,7 +143,7 @@ const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
 
                 {allQuakes.map(quake => {
                     const coordinates = quake.geometry.coordinates;
-                    const severity = quakeLevel(quake.properties.mmi)
+                    const severity = quakeLevel(quake.properties.intensity);
                     return (
                         <CircleMarker
                             key={quake.properties.publicID}
