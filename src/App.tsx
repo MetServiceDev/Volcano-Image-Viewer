@@ -117,7 +117,11 @@ const App: React.FC = () => {
             <SecureRoute exact path='/Vanuatu Satellite'>
               <AshMapOverview />
             </SecureRoute>
-            <SecureRoute exact path='/id/:id' component={UserDashboard} />
+            <SecureRoute exact path='/user/:id'>
+              <UserDashboard
+                volcanoes={volcanoes}
+              />
+            </SecureRoute>
             <Route exact path='/login/callback' component={LoginCallback} />
             <Route component={ErrorPage}/>
           </Switch>

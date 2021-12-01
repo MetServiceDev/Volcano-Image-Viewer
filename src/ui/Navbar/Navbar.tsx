@@ -73,7 +73,7 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface Props extends WithStyles {
+interface Props extends WithStyles<typeof styles> {
     logout: () => Promise<void>;
     theme: boolean;
     toggleTheme: () => void;
@@ -205,6 +205,7 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, 
                     anchorEl={userAnchorEl}
                     open={openUser}
                     handleClose={handleUserClose}
+                    logout={logout}
                 />
             </div>
         </div>

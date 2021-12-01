@@ -31,9 +31,10 @@ interface Props {
     anchorEl: null | HTMLElement,
     open: boolean,
     handleClose: () => void,
+    logout: () => Promise<void>;
 }
 
-const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose }) => {
+const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout }) => {
     const classes = useStyles();
     const login = useSelector((state:AppState) => state.login) as User || {};
 
@@ -51,13 +52,13 @@ const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose }) => {
                 <Typography className={classes.header}>Signed in as {login.name}</Typography>
             </MenuItem>
             <Divider/>
-            <Link to={`/id/${login.aud}`} className={classes.link}>
+            <Link to={`/user/${login.aud}`} className={classes.link}>
                 <MenuItem className={classes.menuItem}>
                     <Typography>Dashboard</Typography>
                     <GridViewIcon/>
                 </MenuItem>
             </Link>
-            <MenuItem className={classes.menuItem}>
+            <MenuItem className={classes.menuItem} onClick={logout}>
                 <Typography>Logout</Typography>
                 <ExitToAppIcon/>
             </MenuItem>

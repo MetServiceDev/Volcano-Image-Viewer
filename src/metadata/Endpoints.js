@@ -5,3 +5,4 @@ export const redirectUri = window.location.origin;
 
 export const gnsEndpont = 'https://data.geonet.org.nz/camera/volcano/images';
 export const gnsRestEndpoint = 'https://api.geonet.org.nz';
+export const userSavedImagesCDN = 'https://d2efv4fh1ac8ox.cloudfront.net'
