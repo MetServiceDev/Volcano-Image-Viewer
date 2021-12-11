@@ -21,6 +21,16 @@ export interface Volcano {
 	FIT_ID?: string;
 };
 
+export interface Note {
+    id: string;
+    postedBy: string;
+    postedTime: string;
+    content: string;
+    attachments?: string[];
+    volcano: string;
+    valid: string;
+};
+
 export enum VolcanoLocation {
 	VANUATU = 'Vanuatu',
 	NZ = 'NZ',
@@ -62,6 +72,11 @@ export interface EmissionMeasures {
 export interface EmissionData {
 	volcano: string;
 	data: EmissionMeasures[];
+}
+
+export enum PlotType {
+    Scatter = 'scatter',
+    Line = 'line'
 }
 
 export const greenIcon = new L.Icon({

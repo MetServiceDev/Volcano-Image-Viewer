@@ -5,6 +5,7 @@ import { Redirect, Link } from 'react-router-dom';
 
 import { setLogin } from '../../redux/effects/loginEffect';
 import { User } from '../../api/User/headers';
+import authClient from '../../api/auth/Auth';
 import { SulfurMaps } from '../../metadata/SulfurMaps';
 
 import Navbar from '../Navbar/Navbar';
@@ -45,6 +46,18 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[authState]);
+
+    const checkLogin = React.useCallback(
+        async (): Promise<void> => {
+            const activeSession = await authClient.session.exists();
+            if (!activeSession) {
+                await oktaAuth.signInWithRedirect({ originalUri: '/' });
+            }
+        },
+        [oktaAuth]
+    );
+
+    React.useEffect(() => { checkLogin() }, [checkLogin]);
 
 
     if(!authState) {

@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
-import { Paper, Typography, Theme } from '@material-ui/core';
+import { Paper, Typography, Theme, Tooltip } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 
 import AlertIcon from '../ReusedComponents/AlertIcon';
+import MapIcon from '@mui/icons-material/Map';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 import { Volcano } from '../../api/volcano/headers';
 import { AppState } from '../../redux/store';
 import formatS3Tags from '../../api/images/formatS3Tags';
+import { FITS_ENDPOINT } from '../../metadata/Endpoints';
 
 const styles = (theme: Theme) => createStyles({
     div: {
@@ -57,6 +59,12 @@ const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [allS3Tags]);
 
+    const mapOutline = (
+        <>
+            <img src={`${FITS_ENDPOINT}/map/site?siteID=${volcano?.FIT_ID}001`} alt='marker'/>
+        </>
+    )
+
     return (
         <Link className={classes.link} to={`overview?volcano=${volcano.name}`} target='_blank' key={volcano.code}>
             <Paper className={classes.div} elevation={3}>
@@ -64,8 +72,11 @@ const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
                     <Typography variant='h4' className={classes.nameText} style={{ fontSize }}>
                         {volcano.name}
                     </Typography>
-                    <span className={classes.icons}>{alert && 
-                        <AlertIcon data={alert} fontSize={fontSize}/>}
+                    <span className={classes.icons}>
+                        {volcano?.FIT_ID && <Tooltip title={mapOutline} arrow>
+                            <MapIcon className={classes.icon}/>
+                        </Tooltip>}
+                        {alert && <AlertIcon data={alert} fontSize={fontSize}/>}
                     </span>
                 </div>
                 <VolcanoThumbnails

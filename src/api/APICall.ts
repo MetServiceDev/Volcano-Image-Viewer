@@ -14,17 +14,26 @@ interface Config {
 };
 
 const setConfig = <T>(method: string, token: string, body?: T) => {
-    if(method === 'GET'){
+    if (method === 'GET'){
         let config : Config = {
-            method: Method['GET'],
+            method: Method.GET,
             headers: { 'Authorization' : token }
         };
         return config;
     }
 
-    else if(method === 'POST'){
+    else if (method === 'POST'){
         let config : Config = {
-            method: Method['POST'],
+            method: Method.POST,
+            body: JSON.stringify(body),
+            headers: { 'Authorization' : token }
+        };
+        return config;
+    }
+
+    else if (method === 'DELETE'){
+        let config : Config = {
+            method: Method.DELETE,
             body: JSON.stringify(body),
             headers: { 'Authorization' : token }
         };

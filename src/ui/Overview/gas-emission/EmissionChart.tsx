@@ -1,13 +1,13 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Theme, Paper, Typography, IconButton, Collapse, Tooltip } from '@material-ui/core';
-
 import BarChartIcon from '@mui/icons-material/BarChart';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 
-import { EmissionMeasures } from '../../../api/volcano/headers';
+import { EmissionMeasures, PlotType } from '../../../api/volcano/headers';
 import EmissionTable from './EmissonsTable';
+import Toolbar from './Toolbar';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -29,6 +29,11 @@ const styles = (theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'space-between',
         marginBottom: theme.spacing(1)
+    },
+    bottomToolbar: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
     }
 });
 
@@ -36,7 +41,7 @@ interface Props extends WithStyles<typeof styles> {
     src: string;
     element: string;
     csvLink: string;
-    open: () => void;
+    open: (a?: any) => void;
     title: string;
     emissionData?: EmissionMeasures
 }
@@ -45,7 +50,10 @@ const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, 
     const linkRef = React.useRef<HTMLAnchorElement>(null);
     const [displayTable, toggleTable] = React.useState<boolean>(false);
 
-    const headerIcon = (title:string, icon: JSX.Element, action: () => void) => {
+    const [dayLength, setDayLength] = React.useState<number>(18*30);
+    const [plotType, setPlotType] = React.useState<PlotType>(PlotType.Scatter);
+
+    const headerIcon = (title:string, icon: JSX.Element, action: (a?: any) => any) => {
         return (
             <Tooltip title={title} arrow>
                 <IconButton onClick={action}>
@@ -61,12 +69,12 @@ const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, 
                 <Typography variant='h5'>{title}</Typography>
                 <div>
                     {emissionData && headerIcon('Show Table', <BarChartIcon/>, () => toggleTable(!displayTable))}
-                    {headerIcon('Full Screen', <FullscreenIcon/>, open)}
+                    {headerIcon('Full Screen', <FullscreenIcon/>, () => open({ dayLength, plotType }))}
                     {headerIcon('Download to CSV', <FileDownloadIcon/>, () => linkRef.current?.click())}
                 </div>
             </div>
             <img
-                src={src}
+                src={`${src}&days=${dayLength}&type=${plotType}&showMethod=true`}
                 alt={element}
                 className={classes.img}
             />
@@ -76,6 +84,11 @@ const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, 
                 ref={linkRef}
                 download
             >download</a>
+            <Toolbar
+                setPlotType={(e) => setPlotType(e.target.value as PlotType)}
+                setDayLength={(e, val) => setDayLength(30 * val as number)}
+                plotType={plotType}
+            />
             {emissionData &&
                 <Collapse in={displayTable}>
                     <EmissionTable

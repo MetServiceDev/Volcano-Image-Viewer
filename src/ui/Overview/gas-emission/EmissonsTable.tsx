@@ -30,8 +30,8 @@ const EmissionTable: React.FC<Props> = ({ classes, element, emissionData }) => {
     const emssionItem = (data: Data) => {
         return (
             <TableRow key={data.time} className={classes.tableRow}>
-              <TableCell component="th" scope="row">
-                {moment(data.time).format('MMM DD')}
+              <TableCell component="th" scope="row" title={moment(data.time).format('Do MMMM YYYY')}>
+                {moment(data.time).format('Do MMM YY')}
               </TableCell>
               <TableCell align="left">{data.measurement}</TableCell>
               <TableCell align="left">{data.error}</TableCell>

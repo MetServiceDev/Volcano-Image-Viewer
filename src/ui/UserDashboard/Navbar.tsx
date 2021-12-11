@@ -40,7 +40,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     username: string;
-}
+};
 
 const Navbar: React.FC<Props> = ({ classes, username }) => {
     return (
