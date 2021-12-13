@@ -68,7 +68,7 @@ export interface EmissionMeasures {
 
 export interface EmissionData {
 	volcano: string;
-	data: Record<string, EmissionMeasures[]>;
+	emissions: Record<string, EmissionMeasures[]>;
 }
 
 export enum PlotType {
