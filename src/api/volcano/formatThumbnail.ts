@@ -17,4 +17,19 @@ const formatThumbnailData = (code:string, currentTime: any, isDomestic: boolean,
      }
 };
 
+export const formatDate = (dateCode: string): Date | undefined => {
+    try {
+        const dateCodeSplit = dateCode.split('.');
+        const year = Number(dateCodeSplit[0].split('/')[1]);
+        const numericDay = Number(dateCodeSplit[1]);
+        const hour = dateCodeSplit[2].slice(0, 2);
+        const minute = dateCodeSplit[2].slice(2);
+        const date = moment().clone().year(year).startOf('year')
+            .add(numericDay-1, 'days').add(hour, 'hours').add(minute, 'minutes')
+        return date.toDate();
+    } catch (err) {
+        return undefined;
+    }; 
+};
+
 export default formatThumbnailData;

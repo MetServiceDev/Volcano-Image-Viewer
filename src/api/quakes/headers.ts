@@ -3,6 +3,16 @@ enum GNSTypes {
     FEATURE = 'Feature',
 }
 
+export enum VolcanoLevels {
+    UNNOTICABLE = 'Unnoticeable',
+    WEAK = 'Weak',
+    LIGHT = 'Light',
+    MODERATE = 'Moderate',
+    STRONG = 'Strong',
+    SEVERE = 'Severe',
+    EXTREME = 'Extreme'
+}
+
 interface Geometry {
     coordinates: [number, number];
     type: GNSTypes.POINT;
@@ -14,7 +24,7 @@ interface QuakeProperties {
     depth: number;
     magnitude: number;
     locality: string;
-    intensity: string;
+    intensity: VolcanoLevels;
     regionIntensity: string;
     mmi: number;
     quality: string;
@@ -50,16 +60,6 @@ export interface GNSVAL {
     type: GNSTypes.FEATURE;
     geometry: Geometry;
     properties: VALProperties
-}
-
-export enum VolcanoLevels {
-    UNNOTICABLE = 'Unnoticeable',
-    WEAK = 'Weak',
-    LIGHT = 'Light',
-    MODERATE = 'Moderate',
-    STRONG = 'Strong',
-    SEVERE = 'Severe',
-    EXTREME = 'Extreme'
 }
 
 export enum EmissionElements {

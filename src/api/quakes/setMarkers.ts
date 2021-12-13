@@ -1,26 +1,21 @@
-import { quakeMarker } from './headers';
+import { quakeMarker, VolcanoLevels } from './headers';
 import { greenIcon, yellowIcon, redIcon } from '../volcano/headers';
 
-export const quakeLevel = (mmi: number) => {
-    switch (mmi) {
-        case 1:
-        case 2:
+export const quakeLevel = (intensity: VolcanoLevels) => {
+    switch (intensity) {
+        case VolcanoLevels.UNNOTICABLE.toLowerCase():
             return quakeMarker.unnoticable;
-        case 3:
+        case VolcanoLevels.WEAK.toLowerCase():
             return quakeMarker.weak;
-        case 4:
+        case VolcanoLevels.LIGHT.toLowerCase():
             return quakeMarker.light;
-        case 5:
+        case VolcanoLevels.MODERATE.toLowerCase():
             return quakeMarker.moderate;
-        case 6:
+        case VolcanoLevels.STRONG.toLowerCase():
             return quakeMarker.strong;
-        case 7:
+        case VolcanoLevels.SEVERE.toLowerCase():
             return quakeMarker.severe;
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:   
+        case VolcanoLevels.EXTREME.toLowerCase():  
             return quakeMarker.extreme;
         default:
             return quakeMarker.unnoticable;

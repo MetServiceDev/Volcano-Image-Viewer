@@ -12,10 +12,11 @@ import { User } from '../../api/User/headers';
 import { poll } from '../../api/poller';
 import authClient from '../../api/auth/Auth';
 import fetchGasEmissions from '../../api/volcano/fetchGasEmissions';
+import apiCall from '../../api/APICall';
 
 import VolcanicAlert from './VolcanicAlert';
 
-import { Volcano, OverviewDisplay, VolcanoLocation, EmissionData } from '../../api/volcano/headers';
+import { Volcano, OverviewDisplay, VolcanoLocation, EmissionData, Note } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
 
 import LiveImages from './live-images';
@@ -78,6 +79,8 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
     const [gasEmissions, setGasEmissions] = React.useState<EmissionData | undefined>();
 
+    const [notes, setNotes] = React.useState<Note[]>([]);
+
     React.useEffect(() => {
         if(authState && authState.isAuthenticated){ 
             const { email, aud, name } = authState?.idToken?.claims as any;
@@ -121,10 +124,13 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                     const emissionData = res.find(i => i.volcano === volcanoObject.FIT_ID);
                     setGasEmissions(emissionData)
                 });
+                const notes = await apiCall<Note[]>(`volcanoes/notes?volcanoId=${volcanoObject.code}`, 'GET', token);
+                setNotes(notes);
             };
         },
-        [volcanoObject.FIT_ID]
+        [volcanoObject.FIT_ID, volcanoObject.code]
     );
+
 
     React.useEffect(() => { poller() }, [poller]);
     React.useEffect(() => { fetchEmission() }, [fetchEmission]);
@@ -157,6 +163,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                     switch (currentDisplay) {
                         case OverviewDisplay.THUMBNAIL:
                             return <LiveImages
+                                        notes={notes}
                                         volcano={volcanoObject}
                                         volcanoes={volcanoes}
                                     />

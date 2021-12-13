@@ -57,7 +57,7 @@ const Sidebar: React.FC<Props> = ({ classes, volcano, openLiveView, openGraphs, 
                 {sbIcon(<PhotoCameraIcon/>, openLiveView, 'Live Images', OverviewDisplay.THUMBNAIL)}
                 {sbIcon(<InsertChartIcon/>, openGraphs, 'DRUM, RSAM & SSAM', OverviewDisplay.DRUM_GRAPH)}
                 {volcano?.gnsID && sbIcon(<StackedLineChartIcon/>, openQuakes, 'Earthquake Stats', OverviewDisplay.QUAKES)}
-                {volcano?.FIT_ID && sbIcon(<ScatterPlotIcon/>, openEmissions, 'Gas Emission', OverviewDisplay.GAS_EMISSION)}
+                {volcano?.FIT_ID && sbIcon(<ScatterPlotIcon/>, openEmissions, 'Gas Discharge', OverviewDisplay.GAS_EMISSION)}
             </div>
         </div>
     )
