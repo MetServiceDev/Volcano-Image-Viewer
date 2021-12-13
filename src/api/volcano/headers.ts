@@ -61,17 +61,14 @@ export interface VAL {
 };
 
 export interface EmissionMeasures {
-	element: string;
-	data: {
-		time: string;
-		measurement: number;
-		error: Number;
-	}[];
+	time: string;
+	measurement: number;
+	error: Number;
 };
 
 export interface EmissionData {
 	volcano: string;
-	data: EmissionMeasures[];
+	data: Record<string, EmissionMeasures[]>;
 }
 
 export enum PlotType {

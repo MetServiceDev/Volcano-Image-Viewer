@@ -16,18 +16,18 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     element: string;
-    emissionData: EmissionMeasures
+    emissionData: EmissionMeasures[];
 }
 
-interface Data {
-    time: string;
-	measurement: number;
-	error: Number;
-}
+// interface Data {
+//     time: string;
+// 	measurement: number;
+// 	error: Number;
+// }
 
 const EmissionTable: React.FC<Props> = ({ classes, element, emissionData }) => {
 
-    const emssionItem = (data: Data) => {
+    const emssionItem = (data: EmissionMeasures) => {
         return (
             <TableRow key={data.time} className={classes.tableRow}>
               <TableCell component="th" scope="row" title={moment(data.time).format('Do MMMM YYYY')}>
@@ -45,7 +45,7 @@ const EmissionTable: React.FC<Props> = ({ classes, element, emissionData }) => {
             tableHeaders={['Date', `${element} in air (kg/s)`, 'Error (kg/s)'].map((header) => {
                 return <TableCell align="left">{header}</TableCell>
             })}
-            tableContent={emissionData.data.map(item => emssionItem(item))}
+            tableContent={emissionData.map((item) => emssionItem(item))}
         />
     )
 };

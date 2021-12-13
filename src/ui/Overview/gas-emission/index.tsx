@@ -5,7 +5,7 @@ import { Theme } from '@material-ui/core';
 import EmissionChart from './EmissionChart';
 import { EmissionElements } from '../../../api/quakes/headers';
 import PopupChart from './PopupChart';
-import { EmissionData } from '../../../api/volcano/headers';
+import { EmissionData, EmissionMeasures } from '../../../api/volcano/headers';
 import { FITS_ENDPOINT } from '../../../metadata/Endpoints';
 
 const styles = (theme: Theme) => createStyles({
@@ -64,8 +64,7 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID, emissionData }) => {
                     const src = imgSrc(gas);
                     const title = formatTitle(gas);
                     const dataLink = csvLink(gas);
-                    const elementEmission = emissionData?.data.find(emission => emission.element === gas);
-                    // const details = { src, title, dataLink };
+                    const elementEmission = emissionData?.data[gas] as EmissionMeasures[];
                     return (
                         <EmissionChart
                             key={gas}

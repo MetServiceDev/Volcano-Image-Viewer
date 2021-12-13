@@ -43,7 +43,7 @@ interface Props extends WithStyles<typeof styles> {
     csvLink: string;
     open: (a?: any) => void;
     title: string;
-    emissionData?: EmissionMeasures
+    emissionData?: EmissionMeasures[];
 }
 
 const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, title, emissionData }) => {
