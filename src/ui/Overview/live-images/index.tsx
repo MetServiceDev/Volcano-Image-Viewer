@@ -13,7 +13,6 @@ import { Volcano } from '../../../api/volcano/headers';
 import RelatedVolcano from './RelatedVolcano';
 import { AppState } from '../../../redux/store';
 import formatS3Tags from '../../../api/images/formatS3Tags';
-import Notes from './Notes';
 import { Note } from '../../../api/volcano/headers';
 import SelectImageDialog from './SelectImageDialog';
 import authClient from '../../../api/auth/Auth';
@@ -137,11 +136,11 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
                     s3Tags={s3Tags}
                     captureImage={true}
                 />}
-                <Notes
+                {/* <Notes
                     selectedImages={checkedImages}
                     notes={notes}
                     openDialog={() => toggleDialog(true)}
-                />
+                /> */}
             </div>
             {relatedVolcanoes()}
             <SelectImageDialog
