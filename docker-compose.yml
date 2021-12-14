@@ -1,7 +1,8 @@
 version: '3.7'
 
 services:
-  via_dev:
+
+  app:
     container_name: via_dev
     build:
       context: .
@@ -10,6 +11,6 @@ services:
       - '.:/app'
       - '/app/node_modules'
     ports:
-      - 3200:3200
+      - 3200:3000
     environment:
       - CHOKIDAR_USEPOLLING=true
