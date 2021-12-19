@@ -1,3 +1,4 @@
+import React from 'react';
 import { apiEndpoint } from '../metadata/Endpoints';
 
 enum Method {
@@ -51,8 +52,18 @@ const apiCall = async <T, P = {}>(route: string, method: string, token: string, 
         return response as T;
     }catch(err){
         throw err;
-    }
-    
+    } 
 };
+
+export const useApi = <T, P = {}>(route: string, method: string, token: string, body?: P) => {
+    const [data, setData] = React.useState<T>();
+  
+    React.useEffect(() => {
+        apiCall<T>(route, method, token, body)
+            .then((res) => setData(res))
+    }, [route, method, token, body]);
+  
+    return [data];
+  };
 
 export default apiCall;

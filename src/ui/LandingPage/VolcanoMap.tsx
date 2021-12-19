@@ -10,6 +10,7 @@ import { Quake } from '../../api/quakes/headers';
 import { quakeLevel, getIcon } from '../../api/quakes/setMarkers';
 import fetchVAL from '../../api/volcano/fetchVAL';
 import { AppState } from '../../redux/store';
+import VolcanoContext from './VolcanoContext';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -41,11 +42,10 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface Props extends WithStyles<typeof styles> {
-    volcanoes: Volcano[]
-}
+interface Props extends WithStyles<typeof styles> {}
 
-const VolcanoMap: React.FC<Props> = ({ classes, volcanoes }) => {
+const VolcanoMap: React.FC<Props> = ({ classes }) => {
+    const volcanoes = React.useContext(VolcanoContext);
     const volcanoStrings = volcanoes.map(v => v.mountain);
     const alertArray = [...new Set(volcanoStrings)].filter(Boolean);
 
