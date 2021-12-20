@@ -17,7 +17,6 @@ import { Note } from '../../../api/volcano/headers';
 import SelectImageDialog from './SelectImageDialog';
 import authClient from '../../../api/auth/Auth';
 import ImageComponent from '../../ReusedComponents/saved-images/ImageComponent';
-import Notes from './Notes';
 
 const styles = (theme:Theme) => createStyles({
     root: {
@@ -166,11 +165,11 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
                     s3Tags={s3Tags}
                     captureImage={true}
                 />}
-                <Notes
+                {/* <Notes
                     selectedImages={selectedImages}
                     notes={notes}
                     openDialog={() => toggleDialog(true)}
-                />
+                /> */}
             </div>
             {relatedVolcanoes()}
             <SelectImageDialog
