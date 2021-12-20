@@ -46,7 +46,7 @@ interface Props extends WithStyles<typeof styles> {}
 
 const VolcanoMap: React.FC<Props> = ({ classes }) => {
     const volcanoes = React.useContext(VolcanoContext);
-    const volcanoStrings = volcanoes.map(v => v.mountain);
+    const volcanoStrings = volcanoes.map((v) => v.mountain);
     const alertArray = [...new Set(volcanoStrings)].filter(Boolean);
 
     const mapRef = React.useRef<any>(null);

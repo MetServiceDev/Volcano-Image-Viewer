@@ -11,7 +11,7 @@ import VolcanoContext from './VolcanoContext';
 const useStyles = makeStyles(() => ({
     root: {
         display: 'grid',
-    },
+    }
 }));
 
 const VolcanoMatrix: React.FC = () => {
@@ -28,7 +28,7 @@ const VolcanoMatrix: React.FC = () => {
 
     return (
         <div className={classes.root} style={gridLayout}>
-            {volcanoes.map(volcano => {
+            {volcanoes.map((volcano) => {
                 return(
                     <Fragment key={volcano.code}>
                         {volcano.location === VolcanoLocation.VANUATU && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
