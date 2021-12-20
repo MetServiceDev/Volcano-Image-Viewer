@@ -3,12 +3,12 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm install env-cmd
+        - npm install
         - npm ci
     build:
       commands:
-        - echo "I am running 🏃 on $BUILD_ENV" 
-        - npm run build:$BUILD_ENV
+        - echo "I am running 🏃 on prod" 
+        - npm run build
   artifacts:
     baseDirectory: build
     files:
