@@ -50,12 +50,11 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
     const checkLogin = React.useCallback(
         async (): Promise<void> => {
             const activeSession = await authClient.session.exists();
-            console.log(activeSession, authState.isAuthenticated)
             if (!activeSession) {
                 await oktaAuth.signInWithRedirect({ originalUri: '/' });
             }
         },
-        [oktaAuth, authState]
+        [oktaAuth]
     );
 
     React.useEffect(() => { checkLogin() }, [checkLogin, authState]);
