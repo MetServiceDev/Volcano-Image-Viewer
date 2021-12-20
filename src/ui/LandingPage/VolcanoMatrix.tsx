@@ -11,7 +11,7 @@ import VolcanoContext from './VolcanoContext';
 const useStyles = makeStyles(() => ({
     root: {
         display: 'grid',
-    }
+    },
 }));
 
 const VolcanoMatrix: React.FC = () => {
