@@ -2,8 +2,8 @@ version: '3.7'
 
 services:
 
-  sample:
-    container_name: sample
+  app:
+    container_name: via_dev
     build:
       context: .
       dockerfile: Dockerfile

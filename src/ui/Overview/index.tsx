@@ -11,12 +11,12 @@ import { setLogin } from '../../redux/effects/loginEffect';
 import { User } from '../../api/User/headers';
 import { poll } from '../../api/poller';
 import authClient from '../../api/auth/Auth';
-import fetchGasEmissions from '../../api/volcano/fetchGasEmissions';
+import { useEmissionsEffect } from '../../api/volcano/fetchGasEmissions';
 import apiCall from '../../api/APICall';
 
 import VolcanicAlert from './VolcanicAlert';
 
-import { Volcano, OverviewDisplay, VolcanoLocation, EmissionData, Note } from '../../api/volcano/headers';
+import { Volcano, OverviewDisplay, VolcanoLocation, Note } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
 
 import LiveImages from './live-images';
@@ -76,8 +76,13 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const { authState } = useOktaAuth();
     const dispatch = useDispatch();
 
+    let query = useQuery();
+    const volcano = query.get('volcano');
     const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
-    const [gasEmissions, setGasEmissions] = React.useState<EmissionData | undefined>();
+
+    const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
+    const [gasEmissions] = useEmissionsEffect(volcanoObject?.FIT_ID as string);
+    const { name, volcanicAlerts } = volcanoObject;
 
     const [notes, setNotes] = React.useState<Note[]>([]);
 
@@ -90,12 +95,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[authState]);
 
-    let query = useQuery();
-    const volcano = query.get('volcano')
-    const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
-    const { name, volcanicAlerts } = volcanoObject;
     const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL);
-
     const domesticVolcano = volcanoObject.location !== VolcanoLocation.VANUATU && volcanoObject.code !== 'ERB';
 
     const getSession = async(): Promise<boolean> => {
@@ -120,17 +120,12 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
             const activeSession = await getSession();
             if (activeSession) {
                 const token = authClient.getAccessToken() as string;
-                fetchGasEmissions(token).then((res) => {
-                    const emissionData = res.find(i => i.volcano === volcanoObject.FIT_ID);
-                    setGasEmissions(emissionData)
-                });
                 const notes = await apiCall<Note[]>(`volcanoes/notes?volcanoId=${volcanoObject.code}`, 'GET', token);
                 setNotes(notes);
             };
         },
-        [volcanoObject.FIT_ID, volcanoObject.code]
+        [volcanoObject.code]
     );
-
 
     React.useEffect(() => { poller() }, [poller]);
     React.useEffect(() => { fetchEmission() }, [fetchEmission]);
