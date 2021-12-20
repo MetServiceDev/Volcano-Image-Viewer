@@ -57,7 +57,7 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
         [oktaAuth]
     );
 
-    React.useEffect(() => { checkLogin() }, [checkLogin]);
+    React.useEffect(() => { checkLogin() }, [checkLogin, authState]);
 
 
     if(!authState) {
