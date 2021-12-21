@@ -77,12 +77,11 @@ interface Props extends WithStyles<typeof styles> {
     logout: () => Promise<void>;
     theme: boolean;
     toggleTheme: () => void;
-    search: (e:any) => any;
     volcanoes: Volcano[];
     openVolcano: (e: any, val: any) => void
 }
 
-const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, volcanoes, openVolcano }) => {
+const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoes, openVolcano }) => {
     const dispatch = useDispatch();
     const setGridDisplay = (size:number) => dispatch(setGrid(size));
 
@@ -147,7 +146,6 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, 
                         label="Search"
                         size='small'
                         variant="outlined"
-                        onChange={search}
                         InputProps={{
                             ...params.InputProps,
                             startAdornment: (
