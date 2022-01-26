@@ -50,18 +50,17 @@ export interface VAL {
 	hazards?: string;
 };
 
-export interface EmissionMeasures {
-	element: string;
-	data: {
-		time: string;
-		measurement: number;
-		error: Number;
-	}[];
+export interface EmissionMeasuresData {
+	time: string;
+	measurement: number;
+	error: Number;
 };
+
+export type EmissionType = Record<string, EmissionMeasuresData[]>;
 
 export interface EmissionData {
 	volcano: string;
-	data: EmissionMeasures[];
+	data: EmissionType;
 }
 
 export const greenIcon = new L.Icon({

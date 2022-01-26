@@ -6,7 +6,6 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 
-import { EmissionMeasures } from '../../../api/volcano/headers';
 import EmissionTable from './EmissonsTable';
 
 const styles = (theme: Theme) => createStyles({
@@ -38,7 +37,7 @@ interface Props extends WithStyles<typeof styles> {
     csvLink: string;
     open: () => void;
     title: string;
-    emissionData?: EmissionMeasures
+    emissionData?: any;
 }
 
 const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, title, emissionData }) => {

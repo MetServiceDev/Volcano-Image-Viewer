@@ -2,8 +2,7 @@ import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import moment from 'moment';
 
-import TableComponent from "../../ReusedComponents/table";
-import { EmissionMeasures } from '../../../api/volcano/headers';
+// import TableComponent from "../../ReusedComponents/table";
 import { TableCell, TableRow, Theme } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
@@ -16,7 +15,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     element: string;
-    emissionData: EmissionMeasures
+    emissionData: any;
 }
 
 interface Data {
@@ -40,13 +39,14 @@ const EmissionTable: React.FC<Props> = ({ classes, element, emissionData }) => {
     }
 
     return (
-        <TableComponent
-            tableLabel={`${element}-emssion-table`}
-            tableHeaders={['Date', `${element} in air (kg/s)`, 'Error (kg/s)'].map((header) => {
-                return <TableCell align="left">{header}</TableCell>
-            })}
-            tableContent={emissionData.data.map(item => emssionItem(item))}
-        />
+        // <TableComponent
+        //     tableLabel={`${element}-emssion-table`}
+        //     tableHeaders={['Date', `${element} in air (kg/s)`, 'Error (kg/s)'].map((header) => {
+        //         return <TableCell align="left">{header}</TableCell>
+        //     })}
+        //     tableContent={emissionData.data.map(item => emssionItem(item))}
+        // />
+        <h1>hello</h1>
     )
 };
 

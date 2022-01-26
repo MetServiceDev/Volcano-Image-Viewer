@@ -22,7 +22,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     FIT_ID: string;
-    emissionData?: EmissionData;
+    emissionData?: any;
 }
 
 interface SelectedChart {
@@ -64,17 +64,18 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID, emissionData }) => {
                     const title = formatTitle(gas);
                     const dataLink = csvLink(gas)
                     const details = { src, title, dataLink }
-                    const elementEmission = emissionData?.data.find(emission => emission.element === gas);
+                    // const elementEmission = emissionData?.data.find(emission => emission.element === );
                     return (
-                        <EmissionChart
-                            key={gas}
-                            src={src}
-                            open={() => openPopup(details)}
-                            element={gas}
-                            csvLink={dataLink}
-                            title={title}
-                            emissionData={elementEmission}
-                        />
+                        // <EmissionChart
+                        //     key={gas}
+                        //     src={src}
+                        //     open={() => openPopup(details)}
+                        //     element={gas}
+                        //     csvLink={dataLink}
+                        //     title={title}
+                        //     emissionData={elementEmission}
+                        // />
+                        <h1>hello</h1>
                     )
                 })}
                 
