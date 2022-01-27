@@ -12,11 +12,10 @@ import { User } from '../../api/User/headers';
 import { poll } from '../../api/poller';
 import authClient from '../../api/auth/Auth';
 import { useEmissionsEffect } from '../../api/volcano/fetchGasEmissions';
-import apiCall from '../../api/APICall';
+// import apiCall from '../../api/APICall';
 
 import VolcanicAlert from './VolcanicAlert';
-
-import { Volcano, OverviewDisplay, VolcanoLocation, Note } from '../../api/volcano/headers';
+import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
 
 import LiveImages from './live-images';
@@ -84,7 +83,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const [gasEmissions] = useEmissionsEffect(volcanoObject?.FIT_ID as string);
     const { name, volcanicAlerts } = volcanoObject;
 
-    const [notes, setNotes] = React.useState<Note[]>([]);
+    // const [notes, setNotes] = React.useState<Note[]>([]);
 
     React.useEffect(() => {
         if(authState && authState.isAuthenticated){ 
@@ -158,7 +157,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                     switch (currentDisplay) {
                         case OverviewDisplay.THUMBNAIL:
                             return <LiveImages
-                                        notes={notes}
+                                        notes={[]}
                                         volcano={volcanoObject}
                                         volcanoes={volcanoes}
                                     />
