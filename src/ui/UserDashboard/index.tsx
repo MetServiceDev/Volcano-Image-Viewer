@@ -46,6 +46,40 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
+enum ActionType {
+    SELECT_IMAGE = 'select-image',
+    DESELECT_IMAGE = 'deselect-image',
+    EMPTY_ARRAY = 'empty-array'
+};
+
+interface SelectedImagesAction {
+    type: ActionType;
+    image: string;
+};
+
+interface SelectedImagesState {
+    selectedImages: string[];
+};
+
+const reducer = (state: SelectedImagesState, action: SelectedImagesAction) => {
+    switch (action.type) {
+        case ActionType.SELECT_IMAGE:
+            return {
+                selectedImages: [...state.selectedImages, action.image],
+            };
+        case ActionType.DESELECT_IMAGE:
+            return {
+                selectedImages: [...state.selectedImages.filter((image: string) => image !== action.image)]
+            };
+        case ActionType.EMPTY_ARRAY:
+            return {
+                selectedImages: []
+            };
+        default:
+            return state;
+    }
+}
+
 interface SelectedImage {
     src: string;
     title: string;
@@ -64,14 +98,16 @@ interface Props extends WithStyles<typeof styles> {
 const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
     const [loadedImages, setLoaded] = React.useState<boolean>(false);
 
+    const [{ selectedImages }, dispatch] = React.useReducer(reducer, {
+        selectedImages: [],
+    });
+
     const [savedImages, setSavedImages] = React.useState<string[]>([]);
     const token = authClient.getAccessToken() as string;
     const login = useSelector((state:AppState) => state.login) as User || {};
 
     const [selectedImg, setSelected] = useState<SelectedImage>({ src: '', title: '', volcano: '' });
     const [expaned, toggleExpand] = React.useState<boolean>(false);
-
-    const [checkedImages, setCheckedImages] = React.useState<string[]>([]);
 
     const [deleteComplete, setDeleteComplete] = React.useState<boolean>(false);
 
@@ -111,25 +147,22 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
         return volcano as string;
     };
 
-    const addRemoveImage = (e: React.ChangeEvent<HTMLInputElement>, imgLink: string) => {
-        if (e.target.checked) {
-            setCheckedImages([...checkedImages, imgLink])
-        } else {
-            setCheckedImages(checkedImages.filter((img) => img !== imgLink));
-        };
+    const addRemoveImage = (e: React.ChangeEvent<HTMLInputElement>, image: string) => {
+        const type = e.target.checked ? ActionType.SELECT_IMAGE : ActionType.DESELECT_IMAGE;
+        dispatch({ type, image });
     };
 
     const deleteItems = async() => {
         const token = authClient.getAccessToken() as string;
         const body = {
             userId: login.aud,
-            files: checkedImages
+            files: selectedImages
         };
         try {
             await apiCall<null, DeleteBody>('user/images', 'DELETE', token, body);
             setDeleteComplete(true);
             fetchImages();
-            setCheckedImages([]);
+            dispatch({ type: ActionType.EMPTY_ARRAY, image: '' });
             setTimeout(() => setDeleteComplete(false), 3000);
         } catch (err) {};
     };
@@ -171,7 +204,7 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
                             volcanoName={volcano}
                             timestamp={timestamp as Date}
                             selectImage={(e: React.ChangeEvent<HTMLInputElement>) => addRemoveImage(e, imgLink.split('/')[1] as string)}
-                            selected={Boolean(checkedImages.find((img) => img === imgLink.split('/')[1] as string))}
+                            selected={Boolean(selectedImages.find((img: string) => img === imgLink.split('/')[1] as string))}
                             openPopup={() => openPopup(src, title, volcano)}
                         />
                     )
@@ -185,14 +218,14 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
                 volcano={selectedImg.volcano}
             />
             <Collapse
-                in={checkedImages.length > 0 ? true : false}
+                in={selectedImages.length > 0 ? true : false}
             >
                 <Tooltip
-                    title={`delete ${checkedImages.length} selected file${checkedImages.length > 1 ? 's' : '' }`}
+                    title={`delete ${selectedImages.length} selected file${selectedImages.length > 1 ? 's' : '' }`}
                     arrow
                 >
                     <IconButton
-                        disabled={checkedImages.length <= 0 ? true : false}
+                        disabled={selectedImages.length <= 0 ? true : false}
                         onClick={() => toggleConfirmation(true)}
                         className={classes.deleteIcon}
                     >
@@ -208,7 +241,7 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
             <DeleteConfirmationDialog
                 open={showConfirmation}
                 handleClose={() => toggleConfirmation(false)}
-                imgList={checkedImages.map((img) => `${getVolcanoName(img)} ${moment(formatDate(img)).format('HH:mm MMM Do YYYY')} UTC`)}
+                imgList={selectedImages.map((img) => `${getVolcanoName(img)} ${moment(formatDate(img)).format('HH:mm MMM Do YYYY')} UTC`)}
                 confirm={deleteItems}
             />
         </>

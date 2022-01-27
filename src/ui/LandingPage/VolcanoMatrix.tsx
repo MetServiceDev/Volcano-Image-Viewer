@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux';
 import VolcanoCard from './VolcanoCard';
 import SatelliteCard from './SatelliteCard';
 import { AppState } from '../../redux/store';
-import { Volcano, VolcanoLocation } from '../../api/volcano/headers';
+import { VolcanoLocation } from '../../api/volcano/headers';
+import VolcanoContext from './VolcanoContext';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -13,11 +14,8 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-interface Props {
-    volcanoes: Volcano[]
-}
-
-const VolcanoMatrix: React.FC<Props> = ({ volcanoes }) => {
+const VolcanoMatrix: React.FC = () => {
+    const volcanoes = React.useContext(VolcanoContext);
     const classes = useStyles();
     const gridDisplay = useSelector((state: AppState) => state.gridDisplay);
     const { showNZ, showVA, showCNI, showWI, showSAT } = useSelector((state: AppState) => state.filters);
@@ -30,7 +28,7 @@ const VolcanoMatrix: React.FC<Props> = ({ volcanoes }) => {
 
     return (
         <div className={classes.root} style={gridLayout}>
-            {volcanoes.map(volcano => {
+            {volcanoes.map((volcano) => {
                 return(
                     <Fragment key={volcano.code}>
                         {volcano.location === VolcanoLocation.VANUATU && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}

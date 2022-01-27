@@ -40,8 +40,8 @@ const ImagePopup: React.FC<Props> = ({ classes, src, handleClose, open, title, v
         >
             <DialogTitle>
                 <div className={classes.header}>
-                    <Typography variant="h4">{volcano}</Typography>
-                    <Typography variant="h4">{title}</Typography>  
+                    <Typography variant="h6">{volcano}</Typography>
+                    <Typography variant="subtitle1">{title}</Typography>  
                 </div>
             </DialogTitle>
             

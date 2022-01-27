@@ -24,7 +24,6 @@ import { User } from './api/User/headers';
 import { toggleSidebar } from './redux/effects/sidebarEffect';
 import { setGrid } from './redux/effects/gridEffect';
 import { redirectUri } from './metadata/Endpoints';
-import { searchVolcano } from './api/filterSearch';
 
 import { setQuakes } from './redux/effects/quakeEffect';
 import { setS3ImageTags } from './redux/effects/s3LinksEffect';
@@ -82,11 +81,6 @@ const App: React.FC = () => {
     localStorage.setItem('ui-theme', String(!styleTheme));
   }
 
-  const volcanoSearch = (e: any) => {
-    const results = searchVolcano(e.target.value, volcanoes);
-    setVolcanoes(results);
-  }
-
   React.useEffect(() => {
     const volcanoIds = volcanoes.map(v => v.gnsID);
     const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
@@ -109,7 +103,6 @@ const App: React.FC = () => {
                 hasLoaded={hasLoaded}
                 theme={styleTheme}
                 toggleTheme={setTheme}
-                search={(e) => volcanoSearch(e)}
               />
             </Route>
             <Route exact path='/login' component={Login}/>

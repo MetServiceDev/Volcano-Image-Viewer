@@ -38,6 +38,35 @@ const styles = (theme:Theme) => createStyles({
     }
 });
 
+enum ActionType {
+    SELECT_IMAGE = 'select-image',
+    DESELECT_IMAGE = 'deselect-image',
+};
+
+interface SelectedImagesAction {
+    type: ActionType;
+    image: string;
+};
+
+interface SelectedImagesState {
+    selectedImages: string[];
+};
+
+const reducer = (state: SelectedImagesState, action: SelectedImagesAction) => {
+    switch (action.type) {
+        case ActionType.SELECT_IMAGE:
+            return {
+                selectedImages: [...state.selectedImages, action.image],
+            };
+        case ActionType.DESELECT_IMAGE:
+            return {
+                selectedImages: [...state.selectedImages.filter((image: string) => image !== action.image)]
+            }
+        default:
+            return state;
+    }
+}
+
 interface Props extends WithStyles<typeof styles> {
     volcano: Volcano,
     volcanoes: Volcano[];
@@ -49,18 +78,18 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
     const s3Tags = formatS3Tags(allS3Tags, volcano.code);
     const login = useSelector((state:AppState) => state.login) as User || {};
 
+    const [{ selectedImages }, dispatch] = React.useReducer(reducer, {
+        selectedImages: [],
+    });
+
     const [savedImages, setSavedImages] = React.useState<string[]>([]);
     const token = authClient.getAccessToken() as string;
 
-    const [checkedImages, setCheckedImages] = React.useState<string[]>([]);
     const [openDialog, toggleDialog] = React.useState<boolean>(false);
 
-    const addRemoveImage = (e: React.ChangeEvent<HTMLInputElement>, imgLink: string) => {
-        if (e.target.checked) {
-            setCheckedImages([...checkedImages, imgLink])
-        } else {
-            setCheckedImages(checkedImages.filter((img) => img !== imgLink));
-        };
+    const addRemoveImage = (e: React.ChangeEvent<HTMLInputElement>, image: string) => {
+        const type = e.target.checked ? ActionType.SELECT_IMAGE : ActionType.DESELECT_IMAGE;
+        dispatch({ type, image });
     };
 
     const fetchImages = React.useCallback(
@@ -106,7 +135,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
 
     const imageGrid = (
         <div className={classes.imgGrid}>
-            {savedImages.map((imgLink) => {
+            {savedImages.map((imgLink, index) => {
                 const volcano = getVolcanoName(imgLink);
                 const src = `${userSavedImagesCDN}/${imgLink}`;
                 const timestamp = formatDate(imgLink);
@@ -119,7 +148,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
                         volcanoName={volcano}
                         timestamp={timestamp as Date}
                         selectImage={(e: React.ChangeEvent<HTMLInputElement>) => addRemoveImage(e, imgLink.split('/')[1] as string)}
-                        selected={Boolean(checkedImages.find((img) => img === imgLink.split('/')[1] as string))}
+                        selected={Boolean(selectedImages.find((img: string) => img === imgLink.split('/')[1] as string))}
                         openPopup={() => null}
                         imgWidth={'80%'}
                     />
@@ -137,7 +166,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
                     captureImage={true}
                 />}
                 {/* <Notes
-                    selectedImages={checkedImages}
+                    selectedImages={selectedImages}
                     notes={notes}
                     openDialog={() => toggleDialog(true)}
                 /> */}

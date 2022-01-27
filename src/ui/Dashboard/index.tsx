@@ -23,10 +23,9 @@ interface Props {
     hasLoaded: boolean,
     theme: boolean,
     toggleTheme: () => void,
-    search: (e:any) => any
 }
 
-const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, search }) => {
+const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme }) => {
     const { oktaAuth , authState } = useOktaAuth();
     const dispatch = useDispatch();
 
@@ -57,7 +56,7 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
         [oktaAuth]
     );
 
-    React.useEffect(() => { checkLogin() }, [checkLogin]);
+    React.useEffect(() => { checkLogin() }, [checkLogin, authState]);
 
 
     if(!authState) {
@@ -76,8 +75,13 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
     };
 
     const openVolcano = (volcanoName: string) => {
-        setVolcano(volcanoName)
-        setTimeout(() => volcanoRef?.current?.click(), 100);
+        if (volcanoName !== null) {
+            setVolcano(volcanoName)
+            setTimeout(() => {
+                volcanoRef?.current?.click();
+                setVolcano('')
+            }, 100);
+        }
     }
 
     return(
@@ -87,7 +91,6 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
                 logout={logout}
                 theme={theme}
                 toggleTheme={toggleTheme}
-                search={search}
                 volcanoes={volcanoes}
                 openVolcano={(e:any, val:string) => openVolcano(val)}
             />
