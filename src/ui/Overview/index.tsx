@@ -115,20 +115,20 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
         []
     );
 
-    const fetchEmission = React.useCallback(
-        async (): Promise<void> => {
-            const activeSession = await getSession();
-            if (activeSession) {
-                const token = authClient.getAccessToken() as string;
-                const notes = await apiCall<Note[]>(`volcanoes/notes?volcanoId=${volcanoObject.code}`, 'GET', token);
-                setNotes(notes);
-            };
-        },
-        [volcanoObject.code]
-    );
+    // const fetchEmission = React.useCallback(
+    //     async (): Promise<void> => {
+    //         const activeSession = await getSession();
+    //         if (activeSession) {
+    //             const token = authClient.getAccessToken() as string;
+    //             const notes = await apiCall<Note[]>(`volcanoes/notes?volcanoId=${volcanoObject.code}`, 'GET', token);
+    //             setNotes(notes);
+    //         };
+    //     },
+    //     [volcanoObject.code]
+    // );
 
     React.useEffect(() => { poller() }, [poller]);
-    React.useEffect(() => { fetchEmission() }, [fetchEmission]);
+    // React.useEffect(() => { fetchEmission() }, [fetchEmission]);
 
     return (
         <div className={classes.root}>
