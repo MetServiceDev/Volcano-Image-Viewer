@@ -86,8 +86,6 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes }) => {
 
     const marginTop = currentDisplay !== CurrentDisplay.ALERT_MAP ? '70px' : '0px';
 
-
-
     return (
         <LandingPageContext.Provider value={{ lightningAlerts, setAlerts }}>
             <div className={classes.root} style={style}>

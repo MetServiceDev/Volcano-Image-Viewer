@@ -48,8 +48,7 @@ const App: React.FC = () => {
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
   const [quakes, setQuakes] = React.useState<QuakeDict>({});
 
-  const { links, polling } = useFetchLinks();
-  
+  const { links, polling } = useFetchLinks(); 
 
   React.useEffect(() => {
     if (user) {
@@ -70,7 +69,7 @@ const App: React.FC = () => {
   };
 
   React.useEffect(()=> {
-    async function fetchData(): Promise<void>  {
+    async function fetchData(): Promise<void> {
       const volcanoIds = volcanoes.map(v => v.gnsID);
       const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
       const quakes = await fetchQuakeHistory(gnsIDs);
