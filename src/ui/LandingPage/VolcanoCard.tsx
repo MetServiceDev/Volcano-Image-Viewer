@@ -2,15 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 import { Paper, Typography, Theme, Tooltip } from '@material-ui/core';
-import { useSelector } from 'react-redux';
 
 import AlertIcon from '../ReusedComponents/AlertIcon';
 import MapIcon from '@mui/icons-material/Map';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
 import { Volcano } from '../../api/volcano/headers';
-import { AppState } from '../../redux/store';
 import formatS3Tags from '../../api/images/formatS3Tags';
 import { FITS_ENDPOINT } from '../../metadata/Endpoints';
+import { AppContext } from '../../AppContext';
 
 const styles = (theme: Theme) => createStyles({
     div: {
@@ -50,14 +49,14 @@ interface Props extends WithStyles<typeof styles> {
 
 const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
     const alert = volcano.volcanicAlerts;
-
-    const allS3Tags = useSelector((state:AppState) => state.s3ImageTags);
+    const { links } = React.useContext(AppContext);
+    
     const [s3Tags, setTags] = React.useState<string[]>([]);
 
     React.useEffect(() => {
-        setTags(formatS3Tags(allS3Tags, volcano.code));
+        setTags(formatS3Tags(links, volcano.code));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [allS3Tags]);
+    }, [links]);
 
     const mapOutline = (
         <>

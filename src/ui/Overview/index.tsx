@@ -9,14 +9,12 @@ import { useDispatch } from 'react-redux';
 
 import { setLogin } from '../../redux/effects/loginEffect';
 import { User } from '../../api/User/headers';
-import { poll } from '../../api/poller';
-import authClient from '../../api/auth/Auth';
 import { useEmissionsEffect } from '../../api/volcano/fetchGasEmissions';
-// import apiCall from '../../api/APICall';
 
 import VolcanicAlert from './VolcanicAlert';
 import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
+import { AppContext } from '../../AppContext';
 
 import LiveImages from './live-images';
 import GNSCharts from './GNS-Charts';
@@ -77,13 +75,11 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
 
     let query = useQuery();
     const volcano = query.get('volcano');
-    const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+    const { volcanoes } = React.useContext(AppContext);
 
     const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
     const [gasEmissions] = useEmissionsEffect(volcanoObject?.FIT_ID as string);
     const { name, volcanicAlerts } = volcanoObject;
-
-    // const [notes, setNotes] = React.useState<Note[]>([]);
 
     React.useEffect(() => {
         if(authState && authState.isAuthenticated){ 
@@ -96,38 +92,6 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
 
     const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL);
     const domesticVolcano = volcanoObject.location !== VolcanoLocation.VANUATU && volcanoObject.code !== 'ERB';
-
-    const getSession = async(): Promise<boolean> => {
-        const activeSession = await authClient.session.exists();
-        return activeSession;
-    };
-
-    const poller = React.useCallback(
-        async(): Promise<void> => {
-            const activeSession = await getSession();
-            if (activeSession) {
-                const token = authClient.getAccessToken() as string;
-                const volcanoes = await poll(token)
-                setVolcanoes(volcanoes);
-            };
-        },
-        []
-    );
-
-    // const fetchEmission = React.useCallback(
-    //     async (): Promise<void> => {
-    //         const activeSession = await getSession();
-    //         if (activeSession) {
-    //             const token = authClient.getAccessToken() as string;
-    //             const notes = await apiCall<Note[]>(`volcanoes/notes?volcanoId=${volcanoObject.code}`, 'GET', token);
-    //             setNotes(notes);
-    //         };
-    //     },
-    //     [volcanoObject.code]
-    // );
-
-    React.useEffect(() => { poller() }, [poller]);
-    // React.useEffect(() => { fetchEmission() }, [fetchEmission]);
 
     return (
         <div className={classes.root}>
@@ -157,7 +121,6 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                     switch (currentDisplay) {
                         case OverviewDisplay.THUMBNAIL:
                             return <LiveImages
-                                        notes={[]}
                                         volcano={volcanoObject}
                                         volcanoes={volcanoes}
                                     />

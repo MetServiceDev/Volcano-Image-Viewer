@@ -13,10 +13,12 @@ import LoaderUI from '../ReusedComponents/LoadingUI';
 import { CurrentDisplay } from '../../api/display/headers';
 import { AppState } from '../../redux/store';
 import { Volcano } from '../../api/volcano/headers';
-import VolcanoContext from './VolcanoContext';
+import { AppContext } from '../../AppContext';
+import { LandingPageContext } from './Context';
+import useLightningFetch from '../../api/hooks/useLightningFetch';
 
 interface WithLoadingProps {
-    hasLoaded: boolean;
+    polling: boolean;
 }
 
 const loadingComponent = (
@@ -28,8 +30,8 @@ const loadingComponent = (
 const withLoading = <P extends object>(Component: React.ComponentType<P>) =>
     class WithLoading extends React.Component<P & WithLoadingProps> {
       render() {
-        const { hasLoaded, ...props } = this.props;
-        return hasLoaded ? <Component {...props as P} /> : loadingComponent;
+        const { polling, ...props } = this.props;
+        return !polling ? <Component {...props as P} /> : loadingComponent;
       }
 };
 
@@ -68,43 +70,50 @@ const WithLoadingMatrix = withLoading(VolcanoMatrix);
 interface Props {
     sulfurMaps: SulfurMap[],
     volcanoes: Volcano[],
-    hasLoaded: boolean
 }
 
-const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes, hasLoaded }) => {
+const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes }) => {
     const classes = useStyles();
     const expand = useSelector((state: AppState) => state.expandSidebar);
     const currentDisplay = useSelector((state: AppState) => state.currentDisplay);
     const [showRefreshWarning, toggleRefreshWarning] = React.useState(true);
 
+    const { lightningAlerts, setAlerts } = useLightningFetch();
+
+    const { polling } = React.useContext(AppContext);
+
     const style = { width: `${!expand ? '98':'85'}%` };
 
     const marginTop = currentDisplay !== CurrentDisplay.ALERT_MAP ? '70px' : '0px';
 
+
+
     return (
-        <div className={classes.root} style={style}>
-            <div className={classes.headerTags} style={{ marginTop }}>
-                {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts/>}
-                {currentDisplay !== CurrentDisplay.ALERT_MAP &&  showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
-                    action={<CloseIcon className={classes.minimize} onClick={() => toggleRefreshWarning(false)} />}>
-                    This page will poll for new images every 10 minutes
-                </Alert>}
+        <LandingPageContext.Provider value={{ lightningAlerts, setAlerts }}>
+            <div className={classes.root} style={style}>
+                <div className={classes.headerTags} style={{ marginTop }}>
+                    {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts/>}
+                    {currentDisplay !== CurrentDisplay.ALERT_MAP &&  showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
+                        action={<CloseIcon className={classes.minimize} onClick={() => toggleRefreshWarning(false)} />}>
+                        This page will poll for new images every 10 minutes
+                    </Alert>}
+                </div>
+                <>
+                    {(() => {
+                        switch(currentDisplay){
+                            case CurrentDisplay.VOLCANO_MATRIX:
+                                return <WithLoadingMatrix polling={polling}/>
+                            case CurrentDisplay.SULFUR_MAPS:
+                                return <SulfurMaps sulfurMaps={sulfurMaps}/>
+                            case CurrentDisplay.ALERT_MAP:
+                                return <VolcanoMap />
+                            default:
+                                return
+                        }
+                    })()}
+            </>
             </div>
-            <VolcanoContext.Provider value={volcanoes}>
-                {(() => {
-                    switch(currentDisplay){
-                        case CurrentDisplay.VOLCANO_MATRIX:
-                            return <WithLoadingMatrix hasLoaded={hasLoaded}/>
-                        case CurrentDisplay.SULFUR_MAPS:
-                            return <SulfurMaps sulfurMaps={sulfurMaps}/>
-                        case CurrentDisplay.ALERT_MAP:
-                            return <VolcanoMap />
-                        default:
-                            return
-                    }
-                })()}
-            </VolcanoContext.Provider>
-        </div>
+        </LandingPageContext.Provider>
     );
 };
 

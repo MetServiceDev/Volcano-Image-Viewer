@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import { AppState } from '../../redux/store';
 import { apiEndpoint } from '../../metadata/Endpoints';
-import { User } from '../../api/User/headers';
+import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -41,12 +41,12 @@ const SatelliteCard: React.FC<Props> = ({ fontSize }) => {
     const [dateString, setDate] = React.useState<string>('');
 
     const { gridDisplay } = useSelector((state: AppState) => state);
-    const user = useSelector((state:AppState) => state.login) as User;
+    const { user } = React.useContext(AppContext);
 
     React.useEffect(() => {
         if (user) {
             fetch(`${apiEndpoint}/utc`, {
-                headers: { 'Authorization' : user.token }
+                headers: { 'Authorization' : user?.token as string }
             }).then(res => res.text()).then(data => setDate(data)).catch(err => console.log(err))
         }
     }, [user]);

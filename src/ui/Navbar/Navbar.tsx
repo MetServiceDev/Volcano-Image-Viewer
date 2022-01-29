@@ -38,6 +38,7 @@ const styles = (theme: Theme) => createStyles({
         width:'100%',
         display: 'flex',
         backgroundColor: theme.palette.background.paper,
+        marginTop: theme.spacing(1)
     },
     toggleButton: {
     },
