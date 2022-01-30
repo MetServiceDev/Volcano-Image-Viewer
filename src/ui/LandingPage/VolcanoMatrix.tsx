@@ -15,9 +15,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const VolcanoMatrix: React.FC = () => {
-    const { volcanoes } = React.useContext(AppContext);
+    const { volcanoes, gridDisplay } = React.useContext(AppContext);
     const classes = useStyles();
-    const gridDisplay = useSelector((state: AppState) => state.gridDisplay);
     const { showNZ, showVA, showCNI, showWI, showSAT } = useSelector((state: AppState) => state.filters);
 
     const gridLayout = {

@@ -2,9 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Typography, Paper, Theme } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
-import { AppState } from '../../redux/store';
 import { apiEndpoint } from '../../metadata/Endpoints';
 import { AppContext } from '../../AppContext';
 
@@ -39,9 +37,7 @@ interface Props {
 const SatelliteCard: React.FC<Props> = ({ fontSize }) => {
     const classes = useStyles();
     const [dateString, setDate] = React.useState<string>('');
-
-    const { gridDisplay } = useSelector((state: AppState) => state);
-    const { user } = React.useContext(AppContext);
+    const { user, gridDisplay } = React.useContext(AppContext);
 
     React.useEffect(() => {
         if (user) {

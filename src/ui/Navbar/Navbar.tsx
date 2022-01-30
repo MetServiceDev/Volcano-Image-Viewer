@@ -11,12 +11,12 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
 
 import MapToggle from './MapToggle';
-import { setGrid } from '../../redux/effects/gridEffect';
 import { setNZFilter, setVAFilter, setCNIFilter, setWIFilter, setSATFilter } from '../../redux/effects/filterEffects';
 import FilterMenu from './FilterMenu';
 import { AppState } from '../../redux/store';
 import { Volcano } from '../../api/volcano/headers';
 import UserMenu from './UserMenu';
+import { AppContext } from '../../AppContext';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -84,20 +84,19 @@ interface Props extends WithStyles<typeof styles> {
 
 const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoes, openVolcano }) => {
     const dispatch = useDispatch();
-    const setGridDisplay = (size:number) => dispatch(setGrid(size));
+
+    const { gridDisplay, setGrid } = React.useContext(AppContext);
 
     const toggleNZ = (val:boolean) => dispatch(setNZFilter(val));
     const toggleVA = (val:boolean) => dispatch(setVAFilter(val));
     const toggleCNI = (val:boolean) => dispatch(setCNIFilter(val));
     const toggleWI = (val:boolean) => dispatch(setWIFilter(val));
     const toggleSAT = (val:boolean) => dispatch(setSATFilter(val));
-    const gridDisplay = useSelector((state: AppState) => state.gridDisplay);
     const { showNZ, showVA, showCNI, showWI, showSAT } = useSelector((state: AppState) => state.filters);
 
     const saveGridSettings = (e: any) => {
         const size = Number(e.target.value);
-        setGridDisplay(size);
-        localStorage.setItem('gridSize', size.toString());
+        setGrid(size);
     };
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

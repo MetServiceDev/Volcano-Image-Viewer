@@ -72,10 +72,7 @@ const Dashboard: React.FC<Props> = ({ theme, toggleTheme }) => {
                 openVolcano={(e:any, val:string) => openVolcano(val)}
             />
             <Sidebar/>
-            <LandingPage
-                sulfurMaps={SulfurMaps}
-                volcanoes={volcanoes}
-            />
+            <LandingPage sulfurMaps={SulfurMaps} />
             {returnSnackbar()}
         </>
     )

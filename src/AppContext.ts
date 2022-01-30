@@ -9,6 +9,10 @@ interface Context {
     links: string[];
     quakes: QuakeDict;
     user: User | null | undefined;
+    expandSidebar: boolean;
+    toggleSidebar: (state: boolean) => void;
+    gridDisplay: number;
+    setGrid: (state: number) => void;
 };
 
 export const AppContext = createContext<Context>({
@@ -17,4 +21,8 @@ export const AppContext = createContext<Context>({
     links: [],
     quakes: {},
     user: null,
+    expandSidebar: false,
+    toggleSidebar: () => null,
+    gridDisplay: 4,
+    setGrid: () => null,
 });

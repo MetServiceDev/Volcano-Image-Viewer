@@ -12,7 +12,6 @@ import VolcanoMap from './VolcanoMap';
 import LoaderUI from '../ReusedComponents/LoadingUI';
 import { CurrentDisplay } from '../../api/display/headers';
 import { AppState } from '../../redux/store';
-import { Volcano } from '../../api/volcano/headers';
 import { AppContext } from '../../AppContext';
 import { LandingPageContext } from './Context';
 import useLightningFetch from '../../api/hooks/useLightningFetch';
@@ -53,8 +52,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         cursor: 'pointer'
     },
     headerTags: {
-        display:'grid',
-        gridTemplateColumns: '0.75fr 0.25fr',
         margin: theme.spacing(0.5)
     }
 }));
@@ -68,30 +65,32 @@ interface SulfurMap {
 const WithLoadingMatrix = withLoading(VolcanoMatrix);
 
 interface Props {
-    sulfurMaps: SulfurMap[],
-    volcanoes: Volcano[],
+    sulfurMaps: SulfurMap[]
 }
 
-const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes }) => {
+const LandingPage: React.FC<Props> = ({ sulfurMaps }) => {
     const classes = useStyles();
-    const expand = useSelector((state: AppState) => state.expandSidebar);
     const currentDisplay = useSelector((state: AppState) => state.currentDisplay);
     const [showRefreshWarning, toggleRefreshWarning] = React.useState(true);
 
     const { lightningAlerts, setAlerts } = useLightningFetch();
 
-    const { polling } = React.useContext(AppContext);
+    const { polling, expandSidebar } = React.useContext(AppContext);
 
-    const style = { width: `${!expand ? '98':'85'}%` };
+    const style = { width: `${!expandSidebar ? '98':'85'}%` };
 
-    const marginTop = currentDisplay !== CurrentDisplay.ALERT_MAP ? '70px' : '0px';
+    const headerStyle = {
+        display: 'grid',
+        gridTemplateColumns: showRefreshWarning ? '0.75fr 0.25fr' : '1fr',
+        marginTop: currentDisplay !== CurrentDisplay.ALERT_MAP ? '70px' : '0px',
+    }
 
     return (
         <LandingPageContext.Provider value={{ lightningAlerts, setAlerts }}>
             <div className={classes.root} style={style}>
-                <div className={classes.headerTags} style={{ marginTop }}>
+                <div className={classes.headerTags} style={headerStyle}>
                     {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts/>}
-                    {currentDisplay !== CurrentDisplay.ALERT_MAP &&  showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
+                    {currentDisplay !== CurrentDisplay.ALERT_MAP && showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
                         action={<CloseIcon className={classes.minimize} onClick={() => toggleRefreshWarning(false)} />}>
                         This page will poll for new images every 10 minutes
                     </Alert>}

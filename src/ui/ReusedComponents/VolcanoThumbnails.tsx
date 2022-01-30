@@ -37,11 +37,9 @@ const styles = (theme: Theme) => createStyles({
         position:'absolute',
         top:'5%',
         left: '12%',
-        backgroundColor: 'rgba(219, 219, 219, 0.5)',
         borderRadius: '5px',
         padding: '10px',
         fontSize: '16px',
-        color: '#202020'
     },
     updatedDisplay:{
         position:'absolute',
@@ -171,7 +169,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
             <div className={classes.root} onMouseLeave={() => reset()}>
                 {!error && expand && currentImg?.timestamp && <Typography className={classes.indexDisplay}>{currentImg?.timestamp}</Typography>}
                 {!error && notUpdated &&
-                    <Alert severity={'error'} className={classes.updatedDisplay}>
+                    <Alert severity='error' className={classes.updatedDisplay}>
                         Warning, image did not update!
                     </Alert>}
                 {error ? <ErrorMessage
@@ -187,7 +185,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
                             <PhotoCameraIcon fontSize='large'/>
                         </IconButton>
                     </Tooltip>}
-                {imgSaved && <Typography className={classes.savedText}>Image successfully saved</Typography>}
+                {imgSaved && <Alert severity='success' className={classes.savedText}>Image successfully saved</Alert>}
                 <div className={classes.thumbnailGrid}>
                     {!error && expand && returnThumnails()}
                 </div>

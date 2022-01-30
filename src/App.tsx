@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
-import { useDispatch } from 'react-redux';
 
 import './ui/App.css';
 import authClient from './api/auth/Auth';
@@ -20,8 +19,6 @@ import UserDashboard from './ui/UserDashboard';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import { Volcano } from './api/volcano/headers';
 import { poll } from './api/poller';
-import { toggleSidebar } from './redux/effects/sidebarEffect';
-import { setGrid } from './redux/effects/gridEffect';
 import { redirectUri } from './metadata/Endpoints';
 
 import useFetchLinks from './api/hooks/useFetchLinks';
@@ -29,6 +26,7 @@ import fetchQuakeHistory from "./api/quakes/fetchQuakeHistory";
 import { AppContext } from './AppContext';
 import { QuakeDict } from './api/quakes/headers';
 import useAuthState from './api/hooks/useAuthState';
+import useLocalStorage from './api/hooks/useLocalStorage';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -39,24 +37,20 @@ const App: React.FC = () => {
 
   const user = useAuthState();
 
-  const dispatch = useDispatch();
-
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
   const [quakes, setQuakes] = React.useState<QuakeDict>({});
 
   const { links, polling } = useFetchLinks();
+
+  const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', '');
+  const [gridDisplay, setGrid] = useLocalStorage('gridSize', '');
 
   React.useEffect(() => {
     if (user) {
       poll(user.token).then(async(res) => {
         setVolcanoes(res);
       }).catch(err => console.log(err))
-      const expandSidebar = localStorage.getItem('expandSidebar');
-      const gridSize = localStorage.getItem('gridSize');
-      if(expandSidebar) { dispatch(toggleSidebar(JSON.parse(expandSidebar.toLowerCase()))); };
-      if(gridSize) { dispatch(setGrid(Number(gridSize))); };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user]);
 
   const setTheme = () => {
@@ -80,6 +74,10 @@ const App: React.FC = () => {
     polling,
     quakes,
     user,
+    expandSidebar,
+    toggleSidebar,
+    gridDisplay,
+    setGrid
   };
 
   return (
