@@ -2,13 +2,11 @@ import React from 'react';
 import { Grow, Typography, Theme, CircularProgress } from '@material-ui/core';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import { Volcano } from '../../../api/volcano/headers';
 import { fetchImages } from '../../../api/images/fetchImages';
-import { User } from '../../../api/User/headers';
-import { AppState } from '../../../redux/store';
 import formatS3Tags from '../../../api/images/formatS3Tags';
+import { AppContext } from '../../../AppContext';
 
 const styles = (theme:Theme) => createStyles({
     sideItem: {
@@ -27,23 +25,22 @@ const styles = (theme:Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles> {
-    volcano: Volcano,
-    index: number,
+    volcano: Volcano;
+    index: number;
 }
 
 const RelatedVolcano: React.FC<Props> = ({ volcano, classes, index }) => {
 
     const [imgSrc, setSrc] = React.useState<string>('');
     const [loading, isLoading] = React.useState<boolean>(true);
-    const user = useSelector((state:AppState) => state.login) as User;
-    const allS3Tags = useSelector((state:AppState) => state.s3ImageTags);
+    const { links, user } = React.useContext(AppContext);
 
     const [s3Tags, setS3Tags] = React.useState<string[]>([]);
 
     React.useEffect(() => {
-        const s3Tags = formatS3Tags(allS3Tags, volcano.code);
+        const s3Tags = formatS3Tags(links, volcano.code);
         setS3Tags(s3Tags)
-    },[volcano, allS3Tags]);
+    },[volcano, links]);
 
     
     const fetchSrc = async():Promise<string> => {

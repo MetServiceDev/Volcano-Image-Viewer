@@ -6,7 +6,7 @@ import VolcanoCard from './VolcanoCard';
 import SatelliteCard from './SatelliteCard';
 import { AppState } from '../../redux/store';
 import { VolcanoLocation } from '../../api/volcano/headers';
-import VolcanoContext from './VolcanoContext';
+import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -15,9 +15,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const VolcanoMatrix: React.FC = () => {
-    const volcanoes = React.useContext(VolcanoContext);
+    const { volcanoes, gridDisplay } = React.useContext(AppContext);
     const classes = useStyles();
-    const gridDisplay = useSelector((state: AppState) => state.gridDisplay);
     const { showNZ, showVA, showCNI, showWI, showSAT } = useSelector((state: AppState) => state.filters);
 
     const gridLayout = {

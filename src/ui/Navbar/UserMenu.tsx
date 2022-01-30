@@ -3,12 +3,10 @@ import { Menu, MenuItem, Typography, Divider } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GridViewIcon from '@mui/icons-material/GridView';
 import { makeStyles } from '@material-ui/styles';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Theme } from '@material-ui/core/styles';
 
-import { User } from '../../api/User/headers';
-import { AppState } from '../../redux/store';
+import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
     menuItem: {
@@ -36,7 +34,7 @@ interface Props {
 
 const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout }) => {
     const classes = useStyles();
-    const login = useSelector((state:AppState) => state.login) as User || {};
+    const { user } = React.useContext(AppContext);
 
     return (
         <Menu
@@ -49,10 +47,10 @@ const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout }) => {
             }}
         >
             <MenuItem className={classes.menuItem}>
-                <Typography className={classes.header}>Signed in as {login.name}</Typography>
+                <Typography className={classes.header}>Signed in as {user?.name}</Typography>
             </MenuItem>
             <Divider/>
-            <Link to={`/user/${login.aud}`} className={classes.link}>
+            <Link to={`/user/${user?.aud}`} className={classes.link}>
                 <MenuItem className={classes.menuItem}>
                     <Typography>Dashboard</Typography>
                     <GridViewIcon/>
