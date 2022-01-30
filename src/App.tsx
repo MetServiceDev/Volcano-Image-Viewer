@@ -20,7 +20,6 @@ import UserDashboard from './ui/UserDashboard';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import { Volcano } from './api/volcano/headers';
 import { poll } from './api/poller';
-import { User } from './api/User/headers';
 import { toggleSidebar } from './redux/effects/sidebarEffect';
 import { setGrid } from './redux/effects/gridEffect';
 import { redirectUri } from './metadata/Endpoints';
@@ -29,6 +28,7 @@ import useFetchLinks from './api/hooks/useFetchLinks';
 import fetchQuakeHistory from "./api/quakes/fetchQuakeHistory";
 import { AppContext } from './AppContext';
 import { QuakeDict } from './api/quakes/headers';
+import useAuthState from './api/hooks/useAuthState';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -36,19 +36,15 @@ const App: React.FC = () => {
 
   const [styleTheme, toggleTheme] = React.useState<boolean>(themeBool);
   const muiTheme = appTheme(styleTheme);
-  const history = useHistory();
-  const restoreOriginalUri = async (_oktaAuth:any, originalUri:string) => {
-    history.replace(toRelativeUrl(originalUri || '/', redirectUri));
-  };
+
+  const user = useAuthState();
 
   const dispatch = useDispatch();
-
-  const [user, setUser] = React.useState<User | null>();
 
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
   const [quakes, setQuakes] = React.useState<QuakeDict>({});
 
-  const { links, polling } = useFetchLinks(); 
+  const { links, polling } = useFetchLinks();
 
   React.useEffect(() => {
     if (user) {
@@ -83,15 +79,13 @@ const App: React.FC = () => {
     volcanoes,
     polling,
     quakes,
-    user:user as User,
-    setUser
+    user,
   };
 
   return (
     <ThemeProvider theme={muiTheme}>
       <AppContext.Provider value={contextValue}>
         <Paper style={{ height: '250vh' }} elevation={0}>
-          <Security oktaAuth={authClient} restoreOriginalUri={restoreOriginalUri}>
             <Switch>
               <Route exact path='/'>
                 <Dashboard
@@ -108,18 +102,34 @@ const App: React.FC = () => {
               <Route exact path='/login/callback' component={LoginCallback} />
               <Route component={ErrorPage}/>
             </Switch>
-          </Security>
         </Paper>
       </AppContext.Provider>
     </ThemeProvider>
   );
 }
 
-const AppWithRouterAccess = () => (
-  <Router>
-    <App />
-  </Router>
-); 
+const AppWithSecurity = () => {
+  const history = useHistory();
+  const restoreOriginalUri = async (_oktaAuth:any, originalUri:string) => {
+    history.replace(toRelativeUrl(originalUri || '/', redirectUri));
+  };
+  return (
+    <Security
+        oktaAuth={authClient}
+        restoreOriginalUri={restoreOriginalUri}
+      >
+        <App />
+      </Security>
+  )
+}
+
+const AppWithRouterAccess = () => {
+  return (
+    <Router>
+      <AppWithSecurity />  
+    </Router>
+  )
+};
 
 const Wrapper = () => (
   <Provider store={store}>

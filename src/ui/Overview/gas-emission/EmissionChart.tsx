@@ -43,10 +43,10 @@ interface Props extends WithStyles<typeof styles> {
     csvLink: string;
     open: (a?: any) => void;
     title: string;
-    emissionData?: EmissionMeasures[];
+    emissionMeasures?: EmissionMeasures[];
 }
 
-const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, title, emissionData }) => {
+const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, title, emissionMeasures }) => {
     const linkRef = React.useRef<HTMLAnchorElement>(null);
     const [displayTable, toggleTable] = React.useState<boolean>(false);
 
@@ -68,7 +68,7 @@ const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, 
             <div className={classes.header}>
                 <Typography variant='h5'>{title}</Typography>
                 <div>
-                    {emissionData && headerIcon('Show Table', <BarChartIcon/>, () => toggleTable(!displayTable))}
+                    {emissionMeasures && headerIcon('Show Table', <BarChartIcon/>, () => toggleTable(!displayTable))}
                     {headerIcon('Full Screen', <FullscreenIcon/>, () => open({ dayLength, plotType }))}
                     {headerIcon('Download to CSV', <FileDownloadIcon/>, () => linkRef.current?.click())}
                 </div>
@@ -89,11 +89,11 @@ const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, 
                 setDayLength={(e, val) => setDayLength(30 * val as number)}
                 plotType={plotType}
             />
-            {emissionData &&
+            {emissionMeasures &&
                 <Collapse in={displayTable}>
                     <EmissionTable
                         element={element}
-                        emissionData={emissionData}
+                        emissionMeasures={emissionMeasures}
                     />
                 </Collapse>
             }

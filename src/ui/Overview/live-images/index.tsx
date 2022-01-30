@@ -108,6 +108,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
                     return (
                         <>
                             {volc && <RelatedVolcano
+                                key={volc.code}
                                 volcano={volc}
                                 index={index}
                             />}

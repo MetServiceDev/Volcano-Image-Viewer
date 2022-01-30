@@ -2,9 +2,7 @@ import React from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import { Redirect, Link } from 'react-router-dom';
 
-import { User } from '../../api/User/headers';
 import { SulfurMaps } from '../../metadata/SulfurMaps';
-
 import Navbar from '../Navbar/Navbar';
 import Sidebar from '../Sidebar/Sidebar';
 import LandingPage from '../LandingPage/LandingPage';
@@ -15,7 +13,6 @@ import findQuakes from '../../api/quakes/findRecentQuakes';
 import EruptionPopup from './EruptionPopup';
 import { AppContext } from '../../AppContext';
 
-
 interface Props {
     theme: boolean,
     toggleTheme: () => void,
@@ -24,7 +21,7 @@ interface Props {
 const Dashboard: React.FC<Props> = ({ theme, toggleTheme }) => {
     const { oktaAuth , authState } = useOktaAuth();
 
-    const { volcanoes, quakes, setUser } = React.useContext(AppContext);
+    const { volcanoes, quakes, user } = React.useContext(AppContext);
 
     const logout = async (): Promise<void> => await oktaAuth.signOut({postLogoutRedirectUri: redirectUri });
     
@@ -33,14 +30,10 @@ const Dashboard: React.FC<Props> = ({ theme, toggleTheme }) => {
     const volcanoRef = React.useRef<HTMLAnchorElement>(null);
 
     React.useEffect(() => {
-        if(authState && authState.isAuthenticated){ 
-            const { email, aud, name } = authState?.idToken?.claims as any;
-            const token = authState?.accessToken?.accessToken || '';
-            setUser({ email, aud, name, token } as User);
+        if (user) {
             setRecentQuakes(findQuakes(quakes));
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[authState]);
+    },[user, quakes]);
 
 
     if(!authState) {

@@ -4,22 +4,17 @@ import { Typography, Tooltip, Theme, IconButton } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
-import { useOktaAuth } from '@okta/okta-react';
-import { useDispatch } from 'react-redux';
 
-import { setLogin } from '../../redux/effects/loginEffect';
-import { User } from '../../api/User/headers';
 import { useEmissionsEffect } from '../../api/volcano/fetchGasEmissions';
-
 import VolcanicAlert from './VolcanicAlert';
 import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
-import { AppContext } from '../../AppContext';
 
 import LiveImages from './live-images';
 import GNSCharts from './GNS-Charts';
 import QuakePanel from './quake-panel';
 import GasEmission from './gas-emission';
+import { AppContext } from '../../AppContext';
 
 const styles = (theme:Theme) => createStyles({
     root: {
@@ -70,9 +65,6 @@ function useQuery() {
 interface Props extends WithStyles<typeof styles> {}
 
 const VolcanoOverview: React.FC<Props> = ({ classes }) => {
-    const { authState } = useOktaAuth();
-    const dispatch = useDispatch();
-
     let query = useQuery();
     const volcano = query.get('volcano');
     const { volcanoes } = React.useContext(AppContext);
@@ -80,68 +72,59 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
     const [gasEmissions] = useEmissionsEffect(volcanoObject?.FIT_ID as string);
     const { name, volcanicAlerts } = volcanoObject;
-
-    React.useEffect(() => {
-        if(authState && authState.isAuthenticated){ 
-            const { email, aud, name } = authState?.idToken?.claims as any;
-            const token = authState?.accessToken?.accessToken || '';
-            dispatch(setLogin({ email, aud, name, token } as User));
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[authState]);
-
+    
     const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL);
     const domesticVolcano = volcanoObject.location !== VolcanoLocation.VANUATU && volcanoObject.code !== 'ERB';
 
     return (
         <div className={classes.root}>
-            <Sidebar
-                openLiveView={() => setCurrentDisplay(OverviewDisplay.THUMBNAIL)}
-                openGraphs={() => setCurrentDisplay(OverviewDisplay.DRUM_GRAPH)}
-                openQuakes={() => setCurrentDisplay(OverviewDisplay.QUAKES)}
-                openEmissions={() => setCurrentDisplay(OverviewDisplay.GAS_EMISSION)}
-                currentDisplay={currentDisplay}
-                volcano={volcanoObject}
-            />
-            <div className={classes.navbar}>
-                <div style={{display: 'flex', alignItems: 'center'}}>
-                    <Link className={classes.link} to='/'>
-                        <Tooltip title="Return to overview" arrow>
-                            <IconButton className={classes.homeIcon} aria-label="return home">
-                                <HomeIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    </Link>
-                    <Typography variant='h6'>{name}</Typography>
+                <Sidebar
+                    openLiveView={() => setCurrentDisplay(OverviewDisplay.THUMBNAIL)}
+                    openGraphs={() => setCurrentDisplay(OverviewDisplay.DRUM_GRAPH)}
+                    openQuakes={() => setCurrentDisplay(OverviewDisplay.QUAKES)}
+                    openEmissions={() => setCurrentDisplay(OverviewDisplay.GAS_EMISSION)}
+                    currentDisplay={currentDisplay}
+                    volcano={volcanoObject}
+                />
+                <div className={classes.navbar}>
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        <Link className={classes.link} to='/'>
+                            <Tooltip title="Return to overview" arrow>
+                                <IconButton className={classes.homeIcon} aria-label="return home">
+                                    <HomeIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Link>
+                        <Typography variant='h6'>{name}</Typography>
+                    </div>
+                    {volcanicAlerts && <VolcanicAlert data={volcanicAlerts}/>}
                 </div>
-                {volcanicAlerts && <VolcanicAlert data={volcanicAlerts}/>}
+                <div className={classes.mainPanel}>
+                    {(() => {
+                        switch (currentDisplay) {
+                            case OverviewDisplay.THUMBNAIL:
+                                return <LiveImages
+                                            volcano={volcanoObject}
+                                            volcanoes={volcanoes}
+                                        />
+                            case OverviewDisplay.DRUM_GRAPH:
+                                return <GNSCharts
+                                            domesticVolcano={domesticVolcano}
+                                            src={volcanoObject.drumLink as string}
+                                        />
+                            case OverviewDisplay.QUAKES:
+                                return <QuakePanel
+                                            volcano={volcanoObject}
+                                        />
+                            case OverviewDisplay.GAS_EMISSION:
+                                return <GasEmission
+                                            FIT_ID={volcanoObject?.FIT_ID as string}
+                                            emissionData={gasEmissions}
+                                        />
+                        }
+                    })()}
+                </div>
             </div>
-            <div className={classes.mainPanel}>
-                {(() => {
-                    switch (currentDisplay) {
-                        case OverviewDisplay.THUMBNAIL:
-                            return <LiveImages
-                                        volcano={volcanoObject}
-                                        volcanoes={volcanoes}
-                                    />
-                        case OverviewDisplay.DRUM_GRAPH:
-                            return <GNSCharts
-                                        domesticVolcano={domesticVolcano}
-                                        src={volcanoObject.drumLink as string}
-                                    />
-                        case OverviewDisplay.QUAKES:
-                            return <QuakePanel
-                                        volcano={volcanoObject}
-                                    />
-                        case OverviewDisplay.GAS_EMISSION:
-                            return <GasEmission
-                                        FIT_ID={volcanoObject?.FIT_ID as string}
-                                        emissionData={gasEmissions}
-                                    />
-                    }
-                })()}
-            </div>
-        </div>
     );
 };
 

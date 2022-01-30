@@ -8,8 +8,7 @@ interface Context {
     polling: boolean;
     links: string[];
     quakes: QuakeDict;
-    user?: User;
-    setUser: any;
+    user: User | null | undefined;
 };
 
 export const AppContext = createContext<Context>({
@@ -17,5 +16,5 @@ export const AppContext = createContext<Context>({
     polling: true,
     links: [],
     quakes: {},
-    setUser: () => null,
+    user: null,
 });
