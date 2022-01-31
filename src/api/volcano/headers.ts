@@ -66,8 +66,6 @@ export interface EmissionMeasures {
 	error: Number;
 };
 
-export type EmissionType = Record<string, EmissionMeasuresData[]>;
-
 export interface EmissionData {
 	volcano: string;
 	emissions: Record<string, EmissionMeasures[]>;

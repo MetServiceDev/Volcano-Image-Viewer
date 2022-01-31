@@ -2,8 +2,9 @@ import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import moment from 'moment';
 
-// import TableComponent from "../../ReusedComponents/table";
+import TableComponent from "../../ReusedComponents/table";
 import { TableCell, TableRow, Theme } from '@material-ui/core';
+import { EmissionMeasures } from '../../../api/volcano/headers';
 
 const styles = (theme: Theme) => createStyles({
     tableRow: {
