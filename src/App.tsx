@@ -42,8 +42,8 @@ const App: React.FC = () => {
 
   const { links, polling } = useFetchLinks();
 
-  const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', '');
-  const [gridDisplay, setGrid] = useLocalStorage('gridSize', '');
+  const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', true);
+  const [gridDisplay, setGrid] = useLocalStorage('gridSize', 4);
 
   React.useEffect(() => {
     if (user) {
