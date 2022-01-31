@@ -60,8 +60,7 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID, emissionData }) => {
     const renderGraphs = () => {
         return (
             <div className={classes.wrapper}>
-                {[EmissionElements.SO2, EmissionElements.CO2, EmissionElements.H2S].map(gas => {
-                    
+                {Object.values(EmissionElements).map(gas => {
                     const src = imgSrc(gas);
                     const title = formatTitle(gas);
                     const dataLink = csvLink(gas);
