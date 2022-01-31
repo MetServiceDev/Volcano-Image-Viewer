@@ -23,7 +23,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     FIT_ID: string;
-    emissionData?: EmissionData;
+    emissionData?: any;
 }
 
 interface SelectedChart {
