@@ -1,11 +1,11 @@
 import React from 'react';
-import { DialogTitle, Dialog, Theme, Button, Typography } from '@material-ui/core';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
+import { DialogTitle, Dialog, Theme, Divider, Button } from '@material-ui/core';
+
 
 const styles = (theme: Theme) => createStyles({
     root: {
         backgroundColor: theme.palette.background.default,
-        maxWidth: '80%'
     },
     img: {
         width: '100%',
@@ -18,18 +18,20 @@ const styles = (theme: Theme) => createStyles({
     header: {
         display: 'flex',
         justifyContent: 'space-between',
+    },
+    imgGrid: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr 1fr'  
     }
 });
 
 interface Props extends WithStyles<typeof styles> {
-    src: string;
     handleClose: () => void;
     open: boolean;
-    title: string;
-    download: () => void;
+    ImageGrid: JSX.Element;
 }
 
-const PopupChart: React.FC<Props> = ({ classes, src, handleClose, open, title, download }) => (
+const SelectImageDialog: React.FC<Props> = ({ classes, handleClose, open, ImageGrid }) => (
     <Dialog
         onClose={handleClose}
         open={open}
@@ -38,20 +40,16 @@ const PopupChart: React.FC<Props> = ({ classes, src, handleClose, open, title, d
         maxWidth={'md'}
     >
         <DialogTitle>
-            <div className={classes.header}>
-                <Typography variant="h4">{title}</Typography>
-                <Button className={classes.button} onClick={download}>
-                    Export to CSV
-                </Button>
-            </div>
+            Select Images
         </DialogTitle>
-        
-        <img
-            src={src}
-            alt={title}
-            className={classes.img}
-        />
+        <Divider/>
+        {ImageGrid}
+        <Button
+            onClick={handleClose}
+        >
+            Sumbit
+        </Button>
     </Dialog>
 );
 
-export default withStyles(styles)(PopupChart);
+export default withStyles(styles)(SelectImageDialog);

@@ -5,6 +5,7 @@ import { Redirect, Link } from 'react-router-dom';
 
 import { setLogin } from '../../redux/effects/loginEffect';
 import { User } from '../../api/User/headers';
+import authClient from '../../api/auth/Auth';
 import { SulfurMaps } from '../../metadata/SulfurMaps';
 
 import Navbar from '../Navbar/Navbar';
@@ -22,10 +23,9 @@ interface Props {
     hasLoaded: boolean,
     theme: boolean,
     toggleTheme: () => void,
-    search: (e:any) => any
 }
 
-const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, search }) => {
+const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme }) => {
     const { oktaAuth , authState } = useOktaAuth();
     const dispatch = useDispatch();
 
@@ -46,6 +46,18 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[authState]);
 
+    const checkLogin = React.useCallback(
+        async (): Promise<void> => {
+            const activeSession = await authClient.session.exists();
+            if (!activeSession) {
+                await oktaAuth.signInWithRedirect({ originalUri: '/' });
+            }
+        },
+        [oktaAuth]
+    );
+
+    React.useEffect(() => { checkLogin() }, [checkLogin, authState]);
+
 
     if(!authState) {
         return <div>Loading...</div>
@@ -63,8 +75,13 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
     };
 
     const openVolcano = (volcanoName: string) => {
-        setVolcano(volcanoName)
-        setTimeout(() => volcanoRef?.current?.click(), 100);
+        if (volcanoName !== null) {
+            setVolcano(volcanoName)
+            setTimeout(() => {
+                volcanoRef?.current?.click();
+                setVolcano('')
+            }, 100);
+        }
     }
 
     return(
@@ -74,7 +91,6 @@ const Dashboard: React.FC<Props> = ({ volcanoes, hasLoaded, theme, toggleTheme, 
                 logout={logout}
                 theme={theme}
                 toggleTheme={toggleTheme}
-                search={search}
                 volcanoes={volcanoes}
                 openVolcano={(e:any, val:string) => openVolcano(val)}
             />

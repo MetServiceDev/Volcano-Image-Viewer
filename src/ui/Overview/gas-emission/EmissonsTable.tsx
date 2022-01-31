@@ -15,22 +15,22 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     element: string;
-    emissionData: any;
+    emissionData: EmissionMeasures[];
 }
 
-interface Data {
-    time: string;
-	measurement: number;
-	error: Number;
-}
+// interface Data {
+//     time: string;
+// 	measurement: number;
+// 	error: Number;
+// }
 
 const EmissionTable: React.FC<Props> = ({ classes, element, emissionData }) => {
 
-    const emssionItem = (data: Data) => {
+    const emssionItem = (data: EmissionMeasures) => {
         return (
             <TableRow key={data.time} className={classes.tableRow}>
-              <TableCell component="th" scope="row">
-                {moment(data.time).format('MMM DD')}
+              <TableCell component="th" scope="row" title={moment(data.time).format('Do MMMM YYYY')}>
+                {moment(data.time).format('Do MMM YY')}
               </TableCell>
               <TableCell align="left">{data.measurement}</TableCell>
               <TableCell align="left">{data.error}</TableCell>
@@ -39,14 +39,13 @@ const EmissionTable: React.FC<Props> = ({ classes, element, emissionData }) => {
     }
 
     return (
-        // <TableComponent
-        //     tableLabel={`${element}-emssion-table`}
-        //     tableHeaders={['Date', `${element} in air (kg/s)`, 'Error (kg/s)'].map((header) => {
-        //         return <TableCell align="left">{header}</TableCell>
-        //     })}
-        //     tableContent={emissionData.data.map(item => emssionItem(item))}
-        // />
-        <h1>hello</h1>
+        <TableComponent
+            tableLabel={`${element}-emssion-table`}
+            tableHeaders={['Date', `${element} in air (kg/s)`, 'Error (kg/s)'].map((header) => {
+                return <TableCell align="left">{header}</TableCell>
+            })}
+            tableContent={emissionData.map((item) => emssionItem(item))}
+        />
     )
 };
 

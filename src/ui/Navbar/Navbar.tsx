@@ -5,10 +5,10 @@ import { InputAdornment, Switch, Select, IconButton, Tooltip, MenuItem } from '@
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useDispatch, useSelector } from 'react-redux';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
 
 import MapToggle from './MapToggle';
 import { setGrid } from '../../redux/effects/gridEffect';
@@ -16,6 +16,7 @@ import { setNZFilter, setVAFilter, setCNIFilter, setWIFilter, setSATFilter } fro
 import FilterMenu from './FilterMenu';
 import { AppState } from '../../redux/store';
 import { Volcano } from '../../api/volcano/headers';
+import UserMenu from './UserMenu';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -72,16 +73,15 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface Props extends WithStyles {
+interface Props extends WithStyles<typeof styles> {
     logout: () => Promise<void>;
     theme: boolean;
     toggleTheme: () => void;
-    search: (e:any) => any;
     volcanoes: Volcano[];
     openVolcano: (e: any, val: any) => void
 }
 
-const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, volcanoes, openVolcano }) => {
+const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoes, openVolcano }) => {
     const dispatch = useDispatch();
     const setGridDisplay = (size:number) => dispatch(setGrid(size));
 
@@ -107,7 +107,15 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, 
 
     const handleClose = () => setAnchorEl(null);
 
-    const volcanoLabels = volcanoes.map(volcano => volcano.name)
+    const volcanoLabels = volcanoes.map(volcano => volcano.name);
+
+    const [userAnchorEl, setUserAnchorEl] = React.useState<null | HTMLElement>(null);
+    const openUser = Boolean(userAnchorEl);
+    const handleUserClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setUserAnchorEl(event.currentTarget);
+    };
+
+    const handleUserClose = () => setUserAnchorEl(null);
 
     return (
         <div className={classes.root}>
@@ -138,7 +146,6 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, 
                         label="Search"
                         size='small'
                         variant="outlined"
-                        onChange={search}
                         InputProps={{
                             ...params.InputProps,
                             startAdornment: (
@@ -185,14 +192,19 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, search, 
                         />
                     </>
                 </Tooltip>
-                <Tooltip title='logout' arrow>
-                    <IconButton>
-                        <ExitToAppIcon 
+                <Tooltip title='user menu' arrow>
+                    <IconButton onClick={handleUserClick}>
+                        <AccountCircleIcon 
                             className={classes.userIcon}
-                            onClick={logout}
                         />
                     </IconButton>
                 </Tooltip>
+                <UserMenu
+                    anchorEl={userAnchorEl}
+                    open={openUser}
+                    handleClose={handleUserClose}
+                    logout={logout}
+                />
             </div>
         </div>
     );

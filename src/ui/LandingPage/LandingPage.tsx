@@ -13,6 +13,7 @@ import LoaderUI from '../ReusedComponents/LoadingUI';
 import { CurrentDisplay } from '../../api/display/headers';
 import { AppState } from '../../redux/store';
 import { Volcano } from '../../api/volcano/headers';
+import VolcanoContext from './VolcanoContext';
 
 interface WithLoadingProps {
     hasLoaded: boolean;
@@ -89,18 +90,20 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps, volcanoes, hasLoaded }) => {
                     This page will poll for new images every 10 minutes
                 </Alert>}
             </div>
-            {(() => {
-                switch(currentDisplay){
-                    case CurrentDisplay.VOLCANO_MATRIX:
-                        return <WithLoadingMatrix volcanoes={volcanoes} hasLoaded={hasLoaded}/>
-                    case CurrentDisplay.SULFUR_MAPS:
-                        return <SulfurMaps sulfurMaps={sulfurMaps}/>
-                    case CurrentDisplay.ALERT_MAP:
-                        return <VolcanoMap volcanoes={volcanoes}/>
-                    default:
-                        return
-                }
-            })()}
+            <VolcanoContext.Provider value={volcanoes}>
+                {(() => {
+                    switch(currentDisplay){
+                        case CurrentDisplay.VOLCANO_MATRIX:
+                            return <WithLoadingMatrix hasLoaded={hasLoaded}/>
+                        case CurrentDisplay.SULFUR_MAPS:
+                            return <SulfurMaps sulfurMaps={sulfurMaps}/>
+                        case CurrentDisplay.ALERT_MAP:
+                            return <VolcanoMap />
+                        default:
+                            return
+                    }
+                })()}
+            </VolcanoContext.Provider>
         </div>
     );
 };
