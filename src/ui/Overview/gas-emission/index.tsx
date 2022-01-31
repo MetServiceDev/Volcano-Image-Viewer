@@ -64,7 +64,7 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID, emissionData }) => {
                     const src = imgSrc(gas);
                     const title = formatTitle(gas);
                     const dataLink = csvLink(gas);
-                    const elementEmission = emissionData?.emissions[gas] as EmissionMeasures[];
+                    const emissionMeasures = emissionData?.emissions[gas] as EmissionMeasures[];
                     return (
                         <EmissionChart
                             key={gas}
@@ -80,7 +80,7 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID, emissionData }) => {
                             element={gas}
                             csvLink={dataLink}
                             title={title}
-                            emissionData={elementEmission}
+                            emissionMeasures={emissionMeasures}
                         />
                     )
                 })}

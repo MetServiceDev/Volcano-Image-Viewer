@@ -3,12 +3,10 @@ import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
 import { Typography, CircularProgress } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { setLightningAlerts } from '../../redux/effects/lightningEffect';
 import fetchLightning from '../../api/lightning/FetchLightning';
-import { AppState } from '../../redux/store';
-import authClient from '../../api/auth/Auth';
+
+import { LandingPageContext } from './Context';
+import { AppContext } from '../../AppContext';
 
 const useStyles =  makeStyles(() => ({
     root: {
@@ -36,47 +34,21 @@ const useStyles =  makeStyles(() => ({
 
 const LightningAlerts: React.FC = () => {
     const classes = useStyles();
-    const dispatch = useDispatch();
-    const [alerts, setAlerts] = React.useState({severity:'success', msg: ''});
-    const [loaded, setLoaded] = React.useState(false);
-    const currentAlerts = useSelector((state: AppState) => state.lightningAlerts);
 
-    const fetchData = async() => {
-        setLoaded(false);
+    const { lightningAlerts, setAlerts } = React.useContext(LandingPageContext);
+    const { user } = React.useContext(AppContext);
+
+    const manualPoll = async(): Promise<void> => {
         try {
-            const activeSession = await authClient.session.exists();
-            if (activeSession) {
-                const token = authClient.getAccessToken() as string;
-                const data = await fetchLightning(token);
-                setAlerts(data);
-                dispatch(setLightningAlerts(data))
-                setLoaded(true);
-            }
-        } catch (err){
-            console.log(err);
+            setAlerts(null);
+            const data = await fetchLightning(user?.token as string);
+            setAlerts(data);
+        } catch (err) {
             setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'});
-            setLoaded(true);
-        };
-    };
+        }   
+    }
 
-    React.useEffect(()=> { 
-        setInterval(() => {
-            fetchData();
-        }, 60000*10);
-    // eslint-disable-next-line
-    },[]);
-
-    React.useEffect(() => {
-        if(!currentAlerts.severity){
-            fetchData();
-        }else{
-            setLoaded(true); 
-            setAlerts(currentAlerts)
-        }
-    // eslint-disable-next-line
-    },[currentAlerts]);
-
-    if(!loaded){
+    if(!lightningAlerts){
         return (
             <div className={classes.root}>
                 <CircularProgress size={24} className={classes.loader}/>
@@ -87,15 +59,15 @@ const LightningAlerts: React.FC = () => {
 
     return (
        <div>
-           {loaded && 
+           {lightningAlerts && 
             <div className={classes.root}>
                 <Alert
                     className={classes.alert}
-                    severity={alerts.severity as any}
-                    action={<ReplayIcon onClick={fetchData}
+                    severity={lightningAlerts.severity as any}
+                    action={<ReplayIcon onClick={manualPoll}
                     className={classes.reload}/>}
                 >
-                    {alerts.msg}
+                    {lightningAlerts.msg}
                 </Alert>
             </div>}
        </div>

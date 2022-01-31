@@ -3,11 +3,9 @@ import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 import { Typography, Button, Theme } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
-import { useSelector } from 'react-redux';
 
 import { apiEndpoint } from '../../metadata/Endpoints';
-import { AppState } from '../../redux/store';
-import { User } from '../../api/User/headers';
+import { AppContext } from '../../AppContext';
 
 const styles = (theme: Theme) => createStyles({
     root:{},
@@ -78,7 +76,7 @@ const metadata = [ ImageSetting.ASH, ImageSetting.DUST, ImageSetting.TRUE_COLOR 
 interface Props extends WithStyles<typeof styles> {}
 
 const AshMapOverview: React.FC<Props> = ({ classes }) => {
-    const user = useSelector((state: AppState) => state.login) as User;
+    const { user } = React.useContext(AppContext);
 
     const [currentDisplay, setCurrentDisplay] = React.useState(metadata[0]);
     const [dateString, setDate] = React.useState('');

@@ -4,15 +4,13 @@ import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Typography, LinearProgress, Zoom, Theme, IconButton, Tooltip } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
-import { useSelector } from 'react-redux';
 
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
 import { Volcano, Thumbnail } from '../../api/volcano/headers';
 import { fetchImages } from '../../api/images/fetchImages';
 import apiCall from '../../api/APICall';
 import authClient from '../../api/auth/Auth';
-import { AppState } from '../../redux/store';
-import { User } from '../../api/User/headers';
+import { AppContext } from '../../AppContext';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -39,11 +37,9 @@ const styles = (theme: Theme) => createStyles({
         position:'absolute',
         top:'5%',
         left: '12%',
-        backgroundColor: 'rgba(219, 219, 219, 0.5)',
         borderRadius: '5px',
         padding: '10px',
         fontSize: '16px',
-        color: '#202020'
     },
     updatedDisplay:{
         position:'absolute',
@@ -100,7 +96,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<ErrorType>(false);
 
-    const login = useSelector((state:AppState) => state.login) as User;
+    const { user } = React.useContext(AppContext);
 
     const [imgSaved, setImgSaved] = React.useState<boolean>(false);
 
@@ -122,7 +118,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
             fetchThumbnails();
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [volcano, s3Tags]);
+    }, [s3Tags]);
 
     const loadingUI = (
         <div className={classes.loadingDiv}>
@@ -164,7 +160,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
         const saveImage = async(): Promise<void> => {
             const token = authClient.getAccessToken() as string;
             const fileKey = s3Tags[currentIndex];
-            await apiCall<null>('user/images', 'POST', token, { userId: login.aud, fileKey });
+            await apiCall<null>('user/images', 'POST', token, { userId: user?.aud as string, fileKey });
             setImgSaved(true);
             setTimeout(() => setImgSaved(false), 2000);
         };
@@ -173,7 +169,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
             <div className={classes.root} onMouseLeave={() => reset()}>
                 {!error && expand && currentImg?.timestamp && <Typography className={classes.indexDisplay}>{currentImg?.timestamp}</Typography>}
                 {!error && notUpdated &&
-                    <Alert severity={'error'} className={classes.updatedDisplay}>
+                    <Alert severity='error' className={classes.updatedDisplay}>
                         Warning, image did not update!
                     </Alert>}
                 {error ? <ErrorMessage
@@ -189,7 +185,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
                             <PhotoCameraIcon fontSize='large'/>
                         </IconButton>
                     </Tooltip>}
-                {imgSaved && <Typography className={classes.savedText}>Image successfully saved</Typography>}
+                {imgSaved && <Alert severity='success' className={classes.savedText}>Image successfully saved</Alert>}
                 <div className={classes.thumbnailGrid}>
                     {!error && expand && returnThumnails()}
                 </div>

@@ -37,6 +37,8 @@ export interface Quake {
     properties: QuakeProperties;
 };
 
+export type QuakeDict = NodeJS.Dict<Quake[]>
+
 export interface QuakeWithLocation {
     history: Quake[];
     volcanoID: string;

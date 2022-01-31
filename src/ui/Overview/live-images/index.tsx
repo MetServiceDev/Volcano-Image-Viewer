@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Theme } from '@material-ui/core';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import moment from 'moment';
@@ -7,16 +6,13 @@ import moment from 'moment';
 import { userSavedImagesCDN } from '../../../metadata/Endpoints';
 import { formatDate } from '../../../api/volcano/formatThumbnail';
 import apiCall from '../../../api/APICall';
-import { User } from '../../../api/User/headers';
 import VolcanoThumbnails from '../../ReusedComponents/VolcanoThumbnails';
 import { Volcano } from '../../../api/volcano/headers';
 import RelatedVolcano from './RelatedVolcano';
-import { AppState } from '../../../redux/store';
 import formatS3Tags from '../../../api/images/formatS3Tags';
-import { Note } from '../../../api/volcano/headers';
 import SelectImageDialog from './SelectImageDialog';
-import authClient from '../../../api/auth/Auth';
 import ImageComponent from '../../ReusedComponents/saved-images/ImageComponent';
+import { AppContext } from '../../../AppContext';
 
 const styles = (theme:Theme) => createStyles({
     root: {
@@ -70,20 +66,18 @@ const reducer = (state: SelectedImagesState, action: SelectedImagesAction) => {
 interface Props extends WithStyles<typeof styles> {
     volcano: Volcano,
     volcanoes: Volcano[];
-    notes: Note[];
 }
 
-const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => {
-    const allS3Tags = useSelector((state:AppState) => state.s3ImageTags);
-    const s3Tags = formatS3Tags(allS3Tags, volcano.code);
-    const login = useSelector((state:AppState) => state.login) as User || {};
+const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
+    const { links } = React.useContext(AppContext);
+    const s3Tags = formatS3Tags(links, volcano.code);
+    const { user } = React.useContext(AppContext);
 
     const [{ selectedImages }, dispatch] = React.useReducer(reducer, {
         selectedImages: [],
     });
 
     const [savedImages, setSavedImages] = React.useState<string[]>([]);
-    const token = authClient.getAccessToken() as string;
 
     const [openDialog, toggleDialog] = React.useState<boolean>(false);
 
@@ -94,17 +88,17 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
 
     const fetchImages = React.useCallback(
         async(): Promise<void> => {
-            const savedImages = await apiCall<string[]>(`user?userId=${login.aud}`, 'GET', token);
+            const savedImages = await apiCall<string[]>(`user?userId=${user?.aud}`, 'GET', user?.token as string);
             setSavedImages(savedImages);
         },
-        [token, login.aud]
+        [user]
     );
 
     React.useEffect(() => {
-        if(token) {
+        if(user) {
             fetchImages();
         }
-    }, [fetchImages, token]);
+    }, [fetchImages, user]);
 
     const relatedVolcanoes = () => {
         return (
@@ -114,6 +108,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
                     return (
                         <>
                             {volc && <RelatedVolcano
+                                key={volc.code}
                                 volcano={volc}
                                 index={index}
                             />}
@@ -165,11 +160,6 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes, notes }) => 
                     s3Tags={s3Tags}
                     captureImage={true}
                 />}
-                {/* <Notes
-                    selectedImages={selectedImages}
-                    notes={notes}
-                    openDialog={() => toggleDialog(true)}
-                /> */}
             </div>
             {relatedVolcanoes()}
             <SelectImageDialog

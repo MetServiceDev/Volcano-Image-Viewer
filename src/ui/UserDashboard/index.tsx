@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Theme, Tooltip, IconButton, Collapse, Snackbar, Typography } from '@material-ui/core';
 import Alert from '@mui/material/Alert';
@@ -9,15 +8,13 @@ import InboxIcon from '@mui/icons-material/Inbox';
 
 import apiCall from '../../api/APICall';
 import authClient from '../../api/auth/Auth';
-import { User } from '../../api/User/headers';
-import { AppState } from '../../redux/store';
 import { userSavedImagesCDN } from '../../metadata/Endpoints';
-import { Volcano } from '../../api/volcano/headers';
 import { formatDate } from '../../api/volcano/formatThumbnail';
 import Navbar from './Navbar';
 import ImagePopup from './ImagePopup';
 import ImageComponent from '../ReusedComponents/saved-images/ImageComponent';
 import DeleteConfirmationDialog from './DeleteConformationDialog';
+import { AppContext } from '../../AppContext';
 
 const styles = (theme: Theme) => createStyles({
     checkbox: {
@@ -91,12 +88,12 @@ interface DeleteBody {
     userId: string;
 }
 
-interface Props extends WithStyles<typeof styles> {
-    volcanoes: Volcano[]
-}
+interface Props extends WithStyles<typeof styles> {}
 
-const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
+const UserDashboard: React.FC<Props> = ({ classes }) => {
     const [loadedImages, setLoaded] = React.useState<boolean>(false);
+
+    const { volcanoes, user } = React.useContext(AppContext);
 
     const [{ selectedImages }, dispatch] = React.useReducer(reducer, {
         selectedImages: [],
@@ -104,9 +101,8 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
 
     const [savedImages, setSavedImages] = React.useState<string[]>([]);
     const token = authClient.getAccessToken() as string;
-    const login = useSelector((state:AppState) => state.login) as User || {};
 
-    const [selectedImg, setSelected] = useState<SelectedImage>({ src: '', title: '', volcano: '' });
+    const [selectedImg, setSelected] = React.useState<SelectedImage>({ src: '', title: '', volcano: '' });
     const [expaned, toggleExpand] = React.useState<boolean>(false);
 
     const [deleteComplete, setDeleteComplete] = React.useState<boolean>(false);
@@ -121,7 +117,7 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
     const fetchImages = React.useCallback(
         async(): Promise<void> => {
             try {
-                const savedImages = await apiCall<string[]>(`user?userId=${login.aud}`, 'GET', token);
+                const savedImages = await apiCall<string[]>(`user?userId=${user?.aud}`, 'GET', token);
                 setLoaded(true);
                 setSavedImages(savedImages);
             } catch(err) {
@@ -129,7 +125,7 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
                 setSavedImages([]);
             }
         },
-        [token, login.aud]
+        [token, user?.aud]
     );
 
     React.useEffect(() => {
@@ -155,7 +151,7 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
     const deleteItems = async() => {
         const token = authClient.getAccessToken() as string;
         const body = {
-            userId: login.aud,
+            userId: user?.aud as string,
             files: selectedImages
         };
         try {
@@ -180,7 +176,7 @@ const UserDashboard: React.FC<Props> = ({ classes, volcanoes }) => {
     return (
         <>
             <Navbar
-                username={login.name}
+                username={user?.name as string}
             />
             {savedImages.length === 0 && (
                 <div className={classes.emptyImages}>

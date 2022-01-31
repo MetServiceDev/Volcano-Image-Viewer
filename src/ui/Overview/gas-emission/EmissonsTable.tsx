@@ -16,7 +16,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     element: string;
-    emissionData: EmissionMeasures[];
+    emissionMeasures: EmissionMeasures[];
 }
 
 // interface Data {
@@ -25,7 +25,7 @@ interface Props extends WithStyles<typeof styles> {
 // 	error: Number;
 // }
 
-const EmissionTable: React.FC<Props> = ({ classes, element, emissionData }) => {
+const EmissionTable: React.FC<Props> = ({ classes, element, emissionMeasures }) => {
 
     const emssionItem = (data: EmissionMeasures) => {
         return (
@@ -45,7 +45,7 @@ const EmissionTable: React.FC<Props> = ({ classes, element, emissionData }) => {
             tableHeaders={['Date', `${element} in air (kg/s)`, 'Error (kg/s)'].map((header) => {
                 return <TableCell align="left">{header}</TableCell>
             })}
-            tableContent={emissionData.map((item) => emssionItem(item))}
+            tableContent={emissionMeasures.map((item) => emssionItem(item))}
         />
     )
 };

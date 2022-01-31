@@ -3,14 +3,12 @@ import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaf
 import { withStyles } from '@material-ui/styles';
 import { createStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, WithStyles, Theme, Typography } from '@material-ui/core';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
 
 import { Volcano, VAL } from '../../api/volcano/headers';
 import { Quake } from '../../api/quakes/headers';
 import { quakeLevel, getIcon } from '../../api/quakes/setMarkers';
 import fetchVAL from '../../api/volcano/fetchVAL';
-import { AppState } from '../../redux/store';
-import VolcanoContext from './VolcanoContext';
+import { AppContext } from '../../AppContext';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -45,14 +43,13 @@ const styles = (theme: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles> {}
 
 const VolcanoMap: React.FC<Props> = ({ classes }) => {
-    const volcanoes = React.useContext(VolcanoContext);
+    const { quakes, volcanoes } = React.useContext(AppContext);
     const volcanoStrings = volcanoes.map((v) => v.mountain);
     const alertArray = [...new Set(volcanoStrings)].filter(Boolean);
 
     const mapRef = React.useRef<any>(null);
 
     const [volcanoAlertLevels, setVAL] = React.useState<VAL[]>([]);
-    const quakeHistory = useSelector((state:AppState) => state.quakes);
 
     React.useEffect(() => {
         fetchVAL().then(data => setVAL(data))
@@ -122,7 +119,7 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
     }
 
     const map = () => {
-        const allQuakes: Quake[] = quakeHistory.map(i => i.history).flat();
+        const allQuakes = Object.values(quakes).map(i => i).flat() as Quake[];
         return (
             <MapContainer center={[-33.431441,175.059385]} zoom={5} whenCreated={ mapInstance => { mapRef.current = mapInstance }}>
                 <TileLayer
