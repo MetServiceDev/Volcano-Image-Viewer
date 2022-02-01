@@ -43,7 +43,7 @@ const App: React.FC = () => {
   const { links, polling } = useFetchLinks();
 
   const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', '');
-  const [gridDisplay, setGrid] = useLocalStorage('gridSize', '');
+  const [gridDisplay, setGrid] = useLocalStorage('gridSize', 4);
 
   React.useEffect(() => {
     if (user) {
@@ -77,7 +77,8 @@ const App: React.FC = () => {
     expandSidebar,
     toggleSidebar,
     gridDisplay,
-    setGrid
+    setGrid,
+    theme:styleTheme
   };
 
   return (

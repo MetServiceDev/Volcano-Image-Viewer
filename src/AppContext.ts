@@ -13,6 +13,7 @@ interface Context {
     toggleSidebar: (state: boolean) => void;
     gridDisplay: number;
     setGrid: (state: number) => void;
+    theme: boolean
 };
 
 export const AppContext = createContext<Context>({
@@ -25,4 +26,5 @@ export const AppContext = createContext<Context>({
     toggleSidebar: () => null,
     gridDisplay: 4,
     setGrid: () => null,
+    theme: false
 });

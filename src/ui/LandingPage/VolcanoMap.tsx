@@ -9,6 +9,8 @@ import { Quake } from '../../api/quakes/headers';
 import { quakeLevel, getIcon } from '../../api/quakes/setMarkers';
 import fetchVAL from '../../api/volcano/fetchVAL';
 import { AppContext } from '../../AppContext';
+import formatS3Tags from '../../api/images/formatS3Tags';
+import { imageBucket } from '../../metadata/Endpoints';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -37,13 +39,17 @@ const styles = (theme: Theme) => createStyles({
     },
     tableHeader: {
         fontWeight: 'bold'
-    }
+    },
+    popup: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr'
+    },
 });
 
 interface Props extends WithStyles<typeof styles> {}
 
 const VolcanoMap: React.FC<Props> = ({ classes }) => {
-    const { quakes, volcanoes } = React.useContext(AppContext);
+    const { quakes, volcanoes, theme, links } = React.useContext(AppContext);
     const volcanoStrings = volcanoes.map((v) => v.mountain);
     const alertArray = [...new Set(volcanoStrings)].filter(Boolean);
 
@@ -54,6 +60,11 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
     React.useEffect(() => {
         fetchVAL().then(data => setVAL(data))
     },[]);
+
+    const getThumbnail = (code: string): string => {
+        const tags = formatS3Tags(links, code);
+        return tags[11];
+    };
 
     const volcanicAlertLevel = (volcano: Volcano) => volcanoAlertLevels.find((v:VAL) => {
         return volcano.gnsID === v.volcanoID
@@ -103,17 +114,25 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
 
     const volcanoPopup = (volcano: Volcano) => {
         const alertStats = volcanicAlertLevel(volcano);
+        const latestImage = getThumbnail(volcano.code);
         return (
-            <Popup>
-                <Typography variant="body1">
-                    <b>{volcano.mountain}</b> - Volcanic level {alertStats.level}
-                </Typography>
-                <Typography variant="body2">
-                    <b>Activity:</b> {alertStats.msg}
-                </Typography>
-                {alertStats.hazards && <Typography variant="body2">
-                    <b>Hazards:</b> {alertStats.hazards}
-                </Typography>}
+            <Popup className={classes.popup}>
+                <img
+                    src={`${imageBucket}/${latestImage}`}
+                    alt={latestImage}
+                    width="100%"
+                />
+                <div>
+                    <Typography variant="body1">
+                        <b>{volcano.mountain}</b> - Volcanic level {alertStats.level}
+                    </Typography>
+                    <Typography variant="body2">
+                        <b>Activity:</b> {alertStats.msg}
+                    </Typography>
+                    {alertStats.hazards && <Typography variant="body2">
+                        <b>Hazards:</b> {alertStats.hazards}
+                    </Typography>}
+                </div>
             </Popup>
         )
     }
@@ -123,7 +142,7 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
         return (
             <MapContainer center={[-33.431441,175.059385]} zoom={5} whenCreated={ mapInstance => { mapRef.current = mapInstance }}>
                 <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    url={!theme ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"}
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
                 {alertArray.map(volcano => {
