@@ -2,6 +2,8 @@ import React from 'react';
 import { Menu, MenuItem, Typography, Divider } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GridViewIcon from '@mui/icons-material/GridView';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import { Theme } from '@material-ui/core/styles';
@@ -56,6 +58,11 @@ const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout }) => {
                     <GridViewIcon/>
                 </MenuItem>
             </Link>
+            <MenuItem className={classes.menuItem}>
+                <Typography>Settings</Typography>
+                <SettingsIcon/>
+            </MenuItem>
+            <Divider/>
             <MenuItem className={classes.menuItem} onClick={logout}>
                 <Typography>Logout</Typography>
                 <ExitToAppIcon/>
