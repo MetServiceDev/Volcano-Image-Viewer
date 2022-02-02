@@ -31,8 +31,8 @@ const useLightningFetch = () => {
         async function fetchData() {
             try {
                 setAlerts(null)
-                const data = await fetchLightning(token);
-                setAlerts(data);
+                const lightningStrikes = await fetchLightning(token);
+                setAlerts(lightningStrikes);
             } catch (err) {
                 setAlerts(null);
             }   

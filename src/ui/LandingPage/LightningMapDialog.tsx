@@ -65,13 +65,13 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
             <Divider/>
             <MapContainer center={center?.coordinates} zoom={5}>
                 <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
                 {Object.entries(strikeLocations || {}).map(([key, value]: any) => {
                     return (
-                        <>
-                            <Marker position={value.coordinates} key={key}>
+                        <div key={key}>
+                            <Marker position={value.coordinates}>
                                 {strikePopup(value)}
                             </Marker>
                             <CircleMarker
@@ -82,13 +82,12 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
                                 color="#ff0000"
                             />
                             <CircleMarker
-                                key={key}
                                 center={value.coordinates}
                                 radius={100}
                                 fillColor="#ff7f1c"
                                 color="#ff7f1c"
                             />
-                        </>
+                        </div>
                         
                     )
                 })}

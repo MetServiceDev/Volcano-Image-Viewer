@@ -1,22 +1,18 @@
 export interface LightningState {
     severity: string;
     msg: string;
-    strikeLocations: StrikeLocation;
+    strikeLocations?: StrikeLocation;
 }
 
 export interface LightningStrikesData {
-    [volcanoName: string]: {
-        twentyKStrikes: number;
-        hundredKStrikes: number;
-        coordinates: [number, number];
-    }
+    [volcanoName: string]: StrikeLocation
 };
 
 export interface StrikeLocation {
     twentyKStrikes: number;
     hundredKStrikes: number;
     coordinates: [number, number];
-    name: string;
+    name?: string;
 }
 
 export type LightningObservation = NodeJS.Dict<LightningStrikesData>;

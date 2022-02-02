@@ -1,4 +1,5 @@
-import { LightningStrikes, LightningObservation } from './headers';
+import { LightningStrikes, LightningObservation, LightningState } from './headers';
+// import testData from './testData.json';
 
 const getRegions = (observation: LightningObservation) => Object.keys(observation).map((val) => val);
 
@@ -23,7 +24,7 @@ const getStrikeLocations = (strikes: LightningStrikes) => {
     }, {})
 };
 
-const formatLightningData = (strikes: LightningStrikes) => {
+const formatLightningData = (strikes: LightningStrikes): LightningState => {
     const strikeLocations = getStrikeLocations(strikes);
     if (Object.keys(strikes.alertStrikes || {}).length === 0 && Object.keys(strikes.warningStrikes || {}).length === 0) {
         return {
@@ -47,7 +48,8 @@ const formatLightningData = (strikes: LightningStrikes) => {
         const maxHundreadStrikes = Math.max(...hundreadKStrikes)
         return {
             msg: `${regions}: Lightning data shows ${maxTwentyStrikes} strike${maxTwentyStrikes > 1 ? 's' : ''} within 20km and ${maxHundreadStrikes} strike${maxHundreadStrikes > 1 ? 's' : ''} within 100km of ${volcanoes.join(', ').trim()}, Please check latest imagery.`,
-            severity: 'warning'
+            severity: 'warning',
+            strikeLocations
         }
     }
     else if (Object.keys(strikes.alertStrikes || {}).length > 0 && Object.keys(strikes.warningStrikes || {}).length === 0) {
@@ -55,14 +57,15 @@ const formatLightningData = (strikes: LightningStrikes) => {
         const volcanoes = getVolcanoes(strikes.alertStrikes)
         return {
             msg: `${regions}: Lightning data indicates possible eruption happening at ${volcanoes.join(', ').trim()} --- Please check latest imagery!`,
-            severity: 'warning'
+            severity: 'warning',
+            strikeLocations
         }
     }
     const alertRegions = getRegions(strikes.alertStrikes || {});
     const warningRegions = getRegions(strikes.warningStrikes || {});
     const twentyKStrikes: number[] = [];
     Object.values(strikes.warningStrikes).forEach((data: any) => {
-        Object.entries(data).forEach(([name, values]: any) => {
+        Object.values(data).forEach((values: any) => {
             twentyKStrikes.push(values.twentyKStrikes)
         });
     });

@@ -76,7 +76,11 @@ const LightningAlerts: React.FC = () => {
     };
 
     const replyIcon = (
-        <Tooltip title="refresh lightning alerts" arrow>
+        <Tooltip
+            title="refresh lightning alerts"
+            key="refreshIcon"
+            arrow
+        >
             <IconButton
                 onClick={manualPoll}
                 className={classes.reload}
@@ -87,7 +91,11 @@ const LightningAlerts: React.FC = () => {
     );
 
     const mapIcon = (
-        <Tooltip title="open map overview" arrow>
+        <Tooltip
+            title="open map overview"
+            key="mapIcon"
+            arrow
+        >
             <IconButton
                 className={classes.reload}
                 onClick={() => toggleMap(true)}
