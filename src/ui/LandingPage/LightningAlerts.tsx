@@ -38,6 +38,18 @@ const LightningAlerts: React.FC = () => {
     const { lightningAlerts, setAlerts } = React.useContext(LandingPageContext);
     const { user } = React.useContext(AppContext);
 
+    const [lightningBulletin, setBulletin] = React.useState<string>('');
+    React.useEffect(() => {
+        Object.entries(lightningAlerts || {}).map(([key, regions]: any) => {
+            Object.entries(regions || {}).map(([key, value]) => {
+                console.log(key, value)
+            })
+
+        })
+    }, [lightningAlerts])
+
+    
+
     const manualPoll = async(): Promise<void> => {
         try {
             setAlerts(null);
