@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { LightningData } from '../../api/lightning/headers';
+import { LightningStrikes } from '../../api/lightning/headers';
 import fetchLightning from '../../api/lightning/FetchLightning';
 import authClient from '../auth/Auth';
 
 const useLightningFetch = () => {
-    const [lightningAlerts, setAlerts] = useState<LightningData | null>();
+    const [lightningAlerts, setAlerts] = useState<LightningStrikes | null>();
     const [token, setToken] = useState('');
 
     const POLL_INTERVAL = 60000 * 10;
@@ -34,7 +34,7 @@ const useLightningFetch = () => {
                 const data = await fetchLightning(token);
                 setAlerts(data);
             } catch (err) {
-                setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'});
+                setAlerts(null);
             }   
         }
         if (token) {

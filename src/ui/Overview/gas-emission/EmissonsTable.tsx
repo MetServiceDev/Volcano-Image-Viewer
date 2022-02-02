@@ -3,8 +3,8 @@ import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import moment from 'moment';
 
 import TableComponent from "../../ReusedComponents/table";
-import { EmissionMeasures } from '../../../api/volcano/headers';
 import { TableCell, TableRow, Theme } from '@material-ui/core';
+import { EmissionMeasures } from '../../../api/volcano/headers';
 
 const styles = (theme: Theme) => createStyles({
     tableRow: {

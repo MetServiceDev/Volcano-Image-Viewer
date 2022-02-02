@@ -1,12 +1,16 @@
 import React from 'react';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
-import { Typography, CircularProgress } from '@material-ui/core';
+import { Typography, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
+import MapIcon from '@mui/icons-material/Map';
+
 import fetchLightning from '../../api/lightning/FetchLightning';
+import formatLightningData from '../../api/lightning/formatLightningData';
 
 import { LandingPageContext } from './Context';
 import { AppContext } from '../../AppContext';
+import LightningMapDialog from './LightningMapDialog';
 
 const useStyles =  makeStyles(() => ({
     root: {
@@ -15,7 +19,9 @@ const useStyles =  makeStyles(() => ({
     },
     alert: {
         boxShadow: '1px 1px 2px #404040',
-        cursor: 'auto'
+        cursor: 'auto',
+        display: 'flex',
+        alignItems: 'center'
     },
     reload: {
         cursor: 'pointer'
@@ -38,13 +44,25 @@ const LightningAlerts: React.FC = () => {
     const { lightningAlerts, setAlerts } = React.useContext(LandingPageContext);
     const { user } = React.useContext(AppContext);
 
+    const [lightningState, setLightningState] = React.useState<any>({});
+    const [showMap, toggleMap] = React.useState<boolean>(false);
+
+    React.useEffect(() => {
+        if (lightningAlerts) {
+            const formattedData = formatLightningData(lightningAlerts);
+            setLightningState(formattedData);
+        }
+    }, [lightningAlerts])
+
     const manualPoll = async(): Promise<void> => {
         try {
             setAlerts(null);
             const data = await fetchLightning(user?.token as string);
-            setAlerts(data);
+            const formattedData = formatLightningData(data);
+            setAlerts(lightningAlerts);
+            setLightningState(formattedData);
         } catch (err) {
-            setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'});
+            setLightningState({severity: 'error', msg: 'Error: Failed to fetch lightning data'});
         }   
     }
 
@@ -57,19 +75,45 @@ const LightningAlerts: React.FC = () => {
         );
     };
 
+    const replyIcon = (
+        <Tooltip title="refresh lightning alerts" arrow>
+            <IconButton
+                onClick={manualPoll}
+                className={classes.reload}
+            >
+                <ReplayIcon />
+            </IconButton>
+        </Tooltip>
+    );
+
+    const mapIcon = (
+        <Tooltip title="open map overview" arrow>
+            <IconButton
+                className={classes.reload}
+                onClick={() => toggleMap(true)}
+            >
+                <MapIcon />
+            </IconButton>
+        </Tooltip>
+    )
+
     return (
        <div>
            {lightningAlerts && 
             <div className={classes.root}>
                 <Alert
                     className={classes.alert}
-                    severity={lightningAlerts.severity as any}
-                    action={<ReplayIcon onClick={manualPoll}
-                    className={classes.reload}/>}
+                    severity={lightningState.severity as any}
+                    action={[lightningState.severity !== 'success' ? mapIcon : null, replyIcon].filter(Boolean)}
                 >
-                    {lightningAlerts.msg}
+                    {lightningState.msg}
                 </Alert>
             </div>}
+            <LightningMapDialog
+                open={showMap}
+                handleClose={() => toggleMap(false)}
+                strikeLocations={lightningState.strikeLocations}
+            />
        </div>
     );
 };

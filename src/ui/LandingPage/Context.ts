@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { LightningData } from '../../api/lightning/headers';
+import { LightningStrikes } from '../../api/lightning/headers';
 
 interface Context {
-    lightningAlerts: LightningData | null | undefined;
+    lightningAlerts: LightningStrikes | null | undefined;
     setAlerts: any;
 };
 
