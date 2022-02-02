@@ -5,7 +5,7 @@ import { Theme } from '@material-ui/core';
 import EmissionChart from './EmissionChart';
 import { EmissionElements } from '../../../api/quakes/headers';
 import PopupChart from './PopupChart';
-import { EmissionData, EmissionMeasures } from '../../../api/volcano/headers';
+import { EmissionMeasures } from '../../../api/volcano/headers';
 import { FITS_ENDPOINT } from '../../../metadata/Endpoints';
 
 const styles = (theme: Theme) => createStyles({

@@ -1,14 +1,10 @@
 import apiCall from '../APICall';
-import { APIResponse, LightningData } from './headers';
+import { LightningStrikes } from './headers';
 
-interface Response {
-    code: number;
-    body: any;
-};
 
-const fetchLightning = async(token: string): Promise<any> => {
+const fetchLightning = async(token: string): Promise<LightningStrikes> => {
     try{
-        const lightningResponse = await apiCall<any>('lightning', 'GET', token);
+        const lightningResponse = await apiCall<LightningStrikes>('lightning', 'GET', token);
         return lightningResponse;
         
     } catch(err) {
