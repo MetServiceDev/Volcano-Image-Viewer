@@ -5,11 +5,11 @@ import { Typography, CircularProgress, IconButton, Tooltip } from '@material-ui/
 import ReplayIcon from '@material-ui/icons/Replay';
 import MapIcon from '@mui/icons-material/Map';
 
-import fetchLightning from '../../api/lightning/FetchLightning';
-import formatLightningData from '../../api/lightning/formatLightningData';
+import fetchLightning from '../../../api/lightning/FetchLightning';
+import formatLightningData from '../../../api/lightning/formatLightningData';
 
-import { LandingPageContext } from './Context';
-import { AppContext } from '../../AppContext';
+import { LandingPageContext } from '../Context';
+import { AppContext } from '../../../AppContext';
 import LightningMapDialog from './LightningMapDialog';
 
 const useStyles =  makeStyles(() => ({
@@ -121,6 +121,7 @@ const LightningAlerts: React.FC = () => {
                 open={showMap}
                 handleClose={() => toggleMap(false)}
                 strikeLocations={lightningState.strikeLocations}
+                timestamp={lightningAlerts.timestamp}
             />
        </div>
     );

@@ -2,7 +2,9 @@ import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
 import { DialogTitle, Dialog, Theme, Typography, Divider } from '@material-ui/core';
+import moment from 'moment';
 
+import { AppContext } from '../../../AppContext';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -16,6 +18,11 @@ const styles = (theme: Theme) => createStyles({
         textTransform: 'none',
         color: theme.palette.primary.main,
     },
+    title: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
     header: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -23,6 +30,9 @@ const styles = (theme: Theme) => createStyles({
     imgGrid: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1fr'  
+    },
+    dateTag: {
+        marginRight: theme.spacing(1)
     }
 });
 
@@ -30,10 +40,12 @@ interface Props extends WithStyles<typeof styles> {
     handleClose: () => void;
     open: boolean;
     strikeLocations: any;
+    timestamp: Date;
 }
 
-const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strikeLocations }) => {
+const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strikeLocations, timestamp }) => {
     const center = Object.values(strikeLocations || {})[0] as any;
+    const { theme } = React.useContext(AppContext);
 
     const strikePopup = (data: any) => {
         return (
@@ -59,13 +71,21 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
             fullWidth={true}
             maxWidth={'md'}
         >
-            <DialogTitle>
-                Recent Lightning Strikes
-            </DialogTitle>
+            <div className={classes.title}>
+                <DialogTitle>
+                    Recent Lightning Strikes
+                </DialogTitle>
+                <Typography
+                    variant="subtitle2"
+                    className={classes.dateTag}
+                >
+                    Updated at {moment(timestamp).utc().format('hh:mm MMM Do')} UTC
+                </Typography>
+            </div>
             <Divider/>
             <MapContainer center={center?.coordinates} zoom={5}>
                 <TileLayer
-                    url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+                    url={!theme ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"}
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
                 {Object.entries(strikeLocations || {}).map(([key, value]: any) => {

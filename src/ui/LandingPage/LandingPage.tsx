@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 import VolcanoMatrix from './VolcanoMatrix';
 import SulfurMaps from './SulfurMaps';
-import LightningAlerts from './LightningAlerts';
+import LightningAlerts from './lightning/LightningAlerts';
 import VolcanoMap from './VolcanoMap';
 import LoaderUI from '../ReusedComponents/LoadingUI';
 import { CurrentDisplay } from '../../api/display/headers';

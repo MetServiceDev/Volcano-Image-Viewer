@@ -32,9 +32,10 @@ interface Props {
     open: boolean,
     handleClose: () => void,
     logout: () => Promise<void>;
+    openSettings: () => void;
 }
 
-const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout }) => {
+const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout, openSettings }) => {
     const classes = useStyles();
     const { user } = React.useContext(AppContext);
 
@@ -58,7 +59,7 @@ const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout }) => {
                     <GridViewIcon/>
                 </MenuItem>
             </Link>
-            <MenuItem className={classes.menuItem}>
+            <MenuItem className={classes.menuItem} onClick={openSettings}>
                 <Typography>Settings</Typography>
                 <SettingsIcon/>
             </MenuItem>

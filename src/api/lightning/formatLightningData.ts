@@ -10,7 +10,11 @@ const getVolcanoes = (observation: LightningObservation) => {
 };
 
 const getStrikeLocations = (strikes: LightningStrikes) => {
-    return Object.values(strikes).map((observation: LightningObservation) => {
+    const strikeData = {
+        warningStrikes: strikes.warningStrikes,
+        alertStrikes: strikes.alertStrikes,
+    };
+    return Object.values(strikeData).map((observation: LightningObservation) => {
         return Object.values(observation).map((data: any) => {
             return Object.entries(data).map(([key, value]: any) => {
                 return {

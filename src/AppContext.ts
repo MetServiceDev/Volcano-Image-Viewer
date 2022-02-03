@@ -13,7 +13,16 @@ interface Context {
     toggleSidebar: (state: boolean) => void;
     gridDisplay: number;
     setGrid: (state: number) => void;
-    theme: boolean
+    theme: boolean;
+    filters: {
+        showVA: boolean;
+        showNZ: boolean;
+        showCNI: boolean;
+        showWI: boolean;
+        showSAT: boolean;
+        showARC: boolean;
+    };
+    dispatchFilter: any;
 };
 
 export const AppContext = createContext<Context>({
@@ -26,5 +35,14 @@ export const AppContext = createContext<Context>({
     toggleSidebar: () => null,
     gridDisplay: 4,
     setGrid: () => null,
-    theme: false
+    theme: false,
+    filters: {
+        showVA: true,
+        showNZ: true,
+        showCNI: true,
+        showWI: true,
+        showSAT: true,
+        showARC: true,
+    },
+    dispatchFilter: () => null,
 });

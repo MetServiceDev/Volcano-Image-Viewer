@@ -20,4 +20,5 @@ export type LightningObservation = NodeJS.Dict<LightningStrikesData>;
 export interface LightningStrikes {
     warningStrikes: LightningObservation;
     alertStrikes: LightningObservation;
+    timestamp: Date;
 };

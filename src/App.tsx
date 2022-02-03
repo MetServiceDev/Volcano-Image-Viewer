@@ -27,6 +27,9 @@ import { AppContext } from './AppContext';
 import { QuakeDict } from './api/quakes/headers';
 import useAuthState from './api/hooks/useAuthState';
 import useLocalStorage from './api/hooks/useLocalStorage';
+import { filtersReducer } from './api/volcano/headers';
+
+
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -44,6 +47,16 @@ const App: React.FC = () => {
 
   const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', '');
   const [gridDisplay, setGrid] = useLocalStorage('gridSize', 4);
+
+  const filtersState = {
+    showVA: true,
+    showNZ: true,
+    showCNI: true,
+    showWI: true,
+    showSAT: true,
+    showARC: true,
+  };
+  const [filters, dispatchFilter] = React.useReducer(filtersReducer, filtersState);
 
   React.useEffect(() => {
     if (user) {
@@ -79,7 +92,9 @@ const App: React.FC = () => {
     toggleSidebar,
     gridDisplay,
     setGrid,
-    theme:styleTheme
+    theme:styleTheme,
+    filters,
+    dispatchFilter
   };
 
   return (

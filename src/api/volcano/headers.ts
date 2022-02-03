@@ -93,3 +93,62 @@ export const redIcon = new L.Icon({
     popupAnchor: [1, -30],
     iconAnchor: [10, 30]
 });
+
+export enum FilterActionType {
+	VA = 'VANUATU',
+	NZ = 'NZ',
+	CNI = 'CNI',
+	WI = 'WI',
+	SAT = 'SAT',
+	ARC = 'ARC'
+}
+
+export interface FilterAction {
+	type: FilterActionType;
+	payload: any;
+};
+
+
+export interface FilterState {
+	showVA: boolean;
+	showNZ: boolean;
+	showCNI: boolean;
+	showWI: boolean;
+	showSAT: boolean;
+	showARC: boolean;
+}
+  
+export const filtersReducer = (state: FilterState, action: FilterAction) => {
+	switch(action.type) {
+		case FilterActionType.VA:
+			return {
+				...state,
+				showVA: action.payload
+			};
+		case FilterActionType.NZ:
+			return {
+				...state,
+				showNZ: action.payload
+			};
+		case FilterActionType.CNI:
+			return {
+				...state,
+				showCNI: action.payload
+			}
+		case FilterActionType.WI:
+			return {
+				...state,
+				showWI: action.payload
+			};
+		case FilterActionType.SAT:
+			return {
+				...state,
+				showSAT: action.payload
+			};
+		case FilterActionType.ARC:
+			return {
+				...state,
+				showARC: action.payload
+			};
+	}
+};
