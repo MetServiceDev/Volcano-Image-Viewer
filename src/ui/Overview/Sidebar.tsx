@@ -6,6 +6,7 @@ import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import classnames from 'classnames'
 
 import { OverviewDisplay, Volcano } from '../../api/volcano/headers';
 
@@ -26,7 +27,10 @@ const styles = (theme: Theme) => createStyles({
     },
     innerWrapper: {
         marginTop: theme.spacing(8)
-    }
+    },
+    selected: {
+        color: theme.palette.primary.main
+    },
 });
 
 interface Props extends WithStyles<typeof styles> {
@@ -41,10 +45,9 @@ interface Props extends WithStyles<typeof styles> {
 const Sidebar: React.FC<Props> = ({ classes, volcano, openLiveView, openGraphs, openQuakes, openEmissions, currentDisplay }) => {
 
     const sbIcon = (icon: JSX.Element, click: () => void, msg: string, option: OverviewDisplay) => {
-        const color = currentDisplay === option ? '#ffbb00' : '';
         return (
             <Tooltip title={msg} arrow className={classes.icon}>
-                <IconButton onClick={click} style={{ color }}>
+                <IconButton onClick={click} className={classnames(currentDisplay === option ? classes.selected : null)}>
                     {icon}
                 </IconButton>
             </Tooltip>

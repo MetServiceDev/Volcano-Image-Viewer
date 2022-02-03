@@ -31,7 +31,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const SettingsDialog: React.FC<Props> = ({ classes, handleClose, open, theme, toggleTheme }) => {
-    const [currentDisplay, setDisplay] = React.useState<SettingsOptions>(SettingsOptions.Appearance);
+    const [currentDisplay, setDisplay] = React.useState<SettingsOptions>(SettingsOptions.Display);
 
     return(
         <Dialog
@@ -53,7 +53,7 @@ const SettingsDialog: React.FC<Props> = ({ classes, handleClose, open, theme, to
                 <div className={classes.innerContent}>
                     {(() => {
                         switch(currentDisplay){
-                            case SettingsOptions.Appearance:
+                            case SettingsOptions.Display:
                                 return <Appearance
                                             theme={theme}
                                             toggleTheme={toggleTheme}

@@ -9,6 +9,7 @@ import { Quake, quakeMarker, VolcanoLevels, IntensityFreq } from '../../../api/q
 import { Volcano } from '../../../api/volcano/headers';
 import { gnsRestEndpoint } from '../../../metadata/Endpoints';
 import HistoryTable from './HistoryTable';
+import colorPalette from '../../../ColorPalette';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -115,8 +116,8 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
     const magnitudeLevels: LineData<number[]> = {
         label: 'Magnitude (ML)',
         data: quakes.map(quake => quake.properties.magnitude),
-        backgroundColor: 'rgba(255, 187, 0, 0.5)',
-        borderColor: '#ffbb00',
+        backgroundColor: colorPalette.dark,
+        borderColor: colorPalette.main,
         pointRadius: 8,
         yAxisID: 'A',
     };

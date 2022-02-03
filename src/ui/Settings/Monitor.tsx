@@ -25,6 +25,12 @@ const styles = (theme: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles> {
 }
 
+enum PollIntervals {
+    FIVE = 5,
+    TEN = 10,
+    FIFTHTEEN = 15,
+    TWENTY = 20
+};
 
 const MonitorSettings: React.FC<Props> = ({ classes }) => {
     return (
@@ -37,7 +43,7 @@ const MonitorSettings: React.FC<Props> = ({ classes }) => {
                     variant='outlined'
                     label="Poll Interval"
                 >
-                    {[5, 10, 15, 20].map(n =>
+                    {Object.values(PollIntervals).map(n =>
                         <MenuItem
                             key={`settings-poll-option-${n}`} 
                             value={n} 

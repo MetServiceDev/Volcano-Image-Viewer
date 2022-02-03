@@ -1,4 +1,4 @@
 export enum SettingsOptions {
-    Appearance = 'Appearance',
+    Display = 'Display',
     Monitor = 'Monitor'
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
-import { Typography, CircularProgress, IconButton, Tooltip } from '@material-ui/core';
+import { Typography, CircularProgress, IconButton, Tooltip, Theme } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
 import MapIcon from '@mui/icons-material/Map';
 
@@ -12,7 +12,7 @@ import { LandingPageContext } from '../Context';
 import { AppContext } from '../../../AppContext';
 import LightningMapDialog from './LightningMapDialog';
 
-const useStyles =  makeStyles(() => ({
+const useStyles =  makeStyles((theme: Theme) => ({
     root: {
         width:'100%',
         marginLeft:'2px',
@@ -29,7 +29,7 @@ const useStyles =  makeStyles(() => ({
     loader: {
         verticalAlign:'middle',
         marginLeft:'10px',
-        color: '#ffbb00'
+        color: theme.palette.primary.main
     },
     text: {
         verticalAlign: 'middle',

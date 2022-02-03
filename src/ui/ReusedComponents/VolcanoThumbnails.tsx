@@ -65,7 +65,7 @@ const styles = (theme: Theme) => createStyles({
         width: '100%',
         bottom:'0%',
         position: 'absolute',
-        backgroundColor:'rgba(255, 187, 0, 0.5)',
+        backgroundColor: theme.palette.primary.dark,
     },
     loadingDiv: {
         height:'24vh',
