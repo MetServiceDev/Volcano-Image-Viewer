@@ -4,11 +4,13 @@ import { DialogTitle, Dialog, Theme, Divider, DialogContent } from '@material-ui
 import SettingsSidebar from './sidebar';
 import { SettingsOptions } from '../../api/settings/headers';
 import Appearance from './Appearance';
+import MonitorSettings from './Monitor'
 
 const styles = (theme: Theme) => createStyles({
     root: {
         backgroundColor: theme.palette.background.default,
-        height: '70vh'
+        height: '70vh',
+        maxWidth: '780px'
     },
     content: {
         display: 'flex',
@@ -17,7 +19,7 @@ const styles = (theme: Theme) => createStyles({
     },
     innerContent: {
         width: '100%',
-        padding: theme.spacing(2)
+        padding: theme.spacing(1)
     }
 });
 
@@ -56,6 +58,8 @@ const SettingsDialog: React.FC<Props> = ({ classes, handleClose, open, theme, to
                                             theme={theme}
                                             toggleTheme={toggleTheme}
                                         />
+                            case SettingsOptions.Monitor:
+                                return <MonitorSettings/>
                         }
                     })()}
                 </div>

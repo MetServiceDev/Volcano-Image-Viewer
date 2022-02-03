@@ -67,7 +67,7 @@ const Appearance: React.FC<Props> = ({ classes, theme, toggleTheme }) => {
                             value={n} 
                             style={{cursor:'pointer'}}
                         >
-                            {`View ${n} per row`}
+                            {`${n} per row`}
                         </MenuItem>)}
                 </Select>
             </MenuItem>

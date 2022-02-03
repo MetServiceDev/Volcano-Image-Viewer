@@ -23,6 +23,7 @@ interface Context {
         showARC: boolean;
     };
     dispatchFilter: any;
+    counter: number;
 };
 
 export const AppContext = createContext<Context>({
@@ -45,4 +46,5 @@ export const AppContext = createContext<Context>({
         showARC: true,
     },
     dispatchFilter: () => null,
+    counter: 10,
 });

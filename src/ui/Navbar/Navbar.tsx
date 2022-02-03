@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
-import { InputAdornment, IconButton, Tooltip } from '@material-ui/core';
+import { InputAdornment, IconButton, Typography } from '@material-ui/core';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -90,9 +90,8 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoe
             </div>
             <div>
                 <div className={classes.rightSide}>
-                    <Tooltip title={`Signed in as ${user?.name}`} arrow>
-                        <AccountCircleIcon/>
-                    </Tooltip>
+                    <Typography variant="subtitle2">{user?.name}</Typography>
+                    <AccountCircleIcon/>
                     <IconButton
                         onClick={handleUserClick}
                         size='small'

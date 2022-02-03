@@ -43,7 +43,7 @@ const App: React.FC = () => {
   const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
   const [quakes, setQuakes] = React.useState<QuakeDict>({});
 
-  const { links, polling } = useFetchLinks();
+  const { links, polling, counter } = useFetchLinks();
 
   const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', '');
   const [gridDisplay, setGrid] = useLocalStorage('gridSize', 4);
@@ -94,7 +94,8 @@ const App: React.FC = () => {
     setGrid,
     theme:styleTheme,
     filters,
-    dispatchFilter
+    dispatchFilter,
+    counter
   };
 
   return (

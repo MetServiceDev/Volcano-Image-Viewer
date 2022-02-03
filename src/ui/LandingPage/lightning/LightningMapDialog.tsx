@@ -83,7 +83,7 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
                 </Typography>
             </div>
             <Divider/>
-            <MapContainer center={center?.coordinates} zoom={5}>
+            <MapContainer center={center?.coordinates} zoom={8}>
                 <TileLayer
                     url={!theme ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"}
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -103,7 +103,7 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
                             />
                             <CircleMarker
                                 center={value.coordinates}
-                                radius={100}
+                                radius={60}
                                 fillColor="#ff7f1c"
                                 color="#ff7f1c"
                             />

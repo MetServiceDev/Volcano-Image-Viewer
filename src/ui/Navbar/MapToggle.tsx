@@ -5,6 +5,7 @@ import MapIcon from '@material-ui/icons/Map';
 import { Theme, Paper } from '@material-ui/core';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import { styled } from '@mui/material/styles';
 
 import { useDispatch  } from 'react-redux';
@@ -31,7 +32,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
     },
-    button:{},
 }));
 
 const MapToggle = () => {
@@ -49,7 +49,7 @@ const MapToggle = () => {
             onClick={() => setCurrentDisplay(display)}
             aria-label="left aligned"
             value={value}
-            className={classes.button}
+            size='small'
         >
             {icon}
         </ToggleButton>
@@ -65,7 +65,7 @@ const MapToggle = () => {
                 aria-label="text alignment"
             >
                 {toggleButton(CurrentDisplay.VOLCANO_MATRIX, <WindowIcon/>, 'left')}
-                {toggleButton(CurrentDisplay.SULFUR_MAPS, 'So2', 'center')}
+                {toggleButton(CurrentDisplay.SULFUR_MAPS, <ScatterPlotIcon/>, 'center')}
                 {toggleButton(CurrentDisplay.ALERT_MAP, <MapIcon/>, 'right')}
             </StyledToggleButtonGroup>
         </Paper>

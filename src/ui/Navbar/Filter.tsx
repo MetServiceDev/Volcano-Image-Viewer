@@ -1,13 +1,12 @@
 import React from 'react';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
+import { FormControlLabel , Switch } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(() => ({
     menuItem: {
         display: 'flex',
         justifyContent: 'space-between',
-        width: '50%'
+        width: '70%'
     },
     switch: {
     },
@@ -22,15 +21,16 @@ interface Props {
 const Filter: React.FC<Props> = ({ check, toggle, text }) => {
     const classes = useStyles();
     return (
-        <div className={classes.menuItem}>
-            <Typography>{text}</Typography>
-            <Switch
-              className={classes.switch}
-              checked={check}
-              onChange={toggle}
-              color="primary"
-            />
-        </div>
+        <FormControlLabel
+            control={
+                <Switch
+                    className={classes.switch}
+                    checked={check}
+                    onChange={toggle}
+                    color="primary"
+                />}
+            label={text}
+        />
     );
 };
 

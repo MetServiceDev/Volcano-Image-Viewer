@@ -75,7 +75,7 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps }) => {
 
     const { lightningAlerts, setAlerts } = useLightningFetch();
 
-    const { polling, expandSidebar } = React.useContext(AppContext);
+    const { polling, expandSidebar, counter } = React.useContext(AppContext);
 
     const style = { width: `${!expandSidebar ? '98':'85'}%` };
 
@@ -92,7 +92,7 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps }) => {
                     {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts/>}
                     {currentDisplay !== CurrentDisplay.ALERT_MAP && showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
                         action={<CloseIcon className={classes.minimize} onClick={() => toggleRefreshWarning(false)} />}>
-                        This page will poll for new images every 10 minutes
+                        Next poll: {counter} minutes
                     </Alert>}
                 </div>
                 <>

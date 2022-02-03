@@ -6,12 +6,27 @@ import authClient from '../auth/Auth';
 interface Poller {
     links: string[];
     polling: boolean;
+    counter: number;
 }
 
 const useFetchLinks = (): Poller => {
     const [links, setlinks] = useState<string[]>([]);
     const [polling, setPolling] = useState<boolean>(true);
-    const [token, setToken] = useState('');
+    const [token, setToken] = useState<string>('');
+
+    const [counter, setCounter] = useState<number>(10);
+
+    useEffect(() => {
+        setInterval(() => {
+            setCounter((state) => {
+                if (state === 1) {
+                    return 10;
+                } else {
+                    return state -1;
+                };
+            });
+        }, 60000);
+    }, []);
 
     const POLL_INTERVAL = 60000 * 10;
 
@@ -45,7 +60,7 @@ const useFetchLinks = (): Poller => {
         }
     }, [token]);
     
-    return { links, polling } as Poller;
+    return { links, polling, counter } as Poller;
 };
 
 export default useFetchLinks;
