@@ -7,6 +7,7 @@ interface Poller {
     links: string[];
     polling: boolean;
     counter: number;
+    fetchLinks: () => void;
 }
 
 const useFetchLinks = (): Poller => {
@@ -43,24 +44,25 @@ const useFetchLinks = (): Poller => {
         });     
     };
 
+    async function fetchLinks() {
+        setPolling(true);
+        const links = await apiCall<string[]>('s3-links', 'GET', token);
+        setlinks(links);
+        setPolling(false);
+    };
+
     useEffect(() => {
         pollSession()
         setInterval(() => pollSession(), POLL_INTERVAL);
     }, [POLL_INTERVAL]);
 
     useEffect(() => {
-        async function fetchLinks() {
-            setPolling(true);
-            const links = await apiCall<string[]>('s3-links', 'GET', token);
-            setlinks(links);
-            setPolling(false);
-        };
         if (token) {
             fetchLinks();
         }
     }, [token]);
     
-    return { links, polling, counter } as Poller;
+    return { links, polling, counter, fetchLinks } as Poller;
 };
 
 export default useFetchLinks;

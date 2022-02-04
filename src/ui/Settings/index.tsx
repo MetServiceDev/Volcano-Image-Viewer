@@ -4,7 +4,8 @@ import { DialogTitle, Dialog, Theme, Divider, DialogContent } from '@material-ui
 import SettingsSidebar from './sidebar';
 import { SettingsOptions } from '../../api/settings/headers';
 import Appearance from './Appearance';
-import MonitorSettings from './Monitor'
+import MonitorSettings from './Monitor';
+import ImageScanLog from './ImageScanLog';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -60,6 +61,8 @@ const SettingsDialog: React.FC<Props> = ({ classes, handleClose, open, theme, to
                                         />
                             case SettingsOptions.Monitor:
                                 return <MonitorSettings/>
+                            case SettingsOptions.Image_scanner:
+                                return <ImageScanLog/>
                         }
                     })()}
                 </div>

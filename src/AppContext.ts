@@ -24,6 +24,7 @@ interface Context {
     };
     dispatchFilter: any;
     counter: number;
+    fetchLinks: () => void;
 };
 
 export const AppContext = createContext<Context>({
@@ -47,4 +48,5 @@ export const AppContext = createContext<Context>({
     },
     dispatchFilter: () => null,
     counter: 10,
+    fetchLinks: () => null
 });
