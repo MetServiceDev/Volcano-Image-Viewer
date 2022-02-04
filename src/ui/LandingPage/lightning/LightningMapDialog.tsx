@@ -51,13 +51,13 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
         return (
             <Popup>
                 <Typography variant="body1">
-                    <b>Volcano:</b> {data.name}
+                    <b>{data.name}</b> - {data.type}
                 </Typography>
                 <Typography variant="body2">
-                    <b>Strikes within 20km:</b> {data.twentyKStrikes}
+                    <b>{data.twentyKStrikes}</b> strikes within 20km
                 </Typography>
                 <Typography variant="body2">
-                    <b>Strikes within 100km:</b> {data.hundredKStrikes}
+                    <b>{data.hundredKStrikes}</b> strikes within 100km
                 </Typography>
             </Popup>
         )

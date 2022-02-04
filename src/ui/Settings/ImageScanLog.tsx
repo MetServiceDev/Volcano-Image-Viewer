@@ -99,7 +99,7 @@ const ImageScanLog: React.FC<Props> = ({ classes }) => {
             <div>
                 <Alert severity={recentStatus.status}>
                     <AlertTitle>
-                        <strong>{recentStatus.status}</strong>: Lastest execution@<strong>{moment(recentStatus.timestamp).utc().format('hh:mm DD/MM')}</strong>
+                        <strong>{recentStatus.status}</strong>: Latest execution@<strong>{moment(recentStatus.timestamp).format('HH:mm DD/MM')}</strong>
                     </AlertTitle>
                     {recentStatus.newImages ? successComponent :
                         <Typography variant="body1" className={classes.header}>

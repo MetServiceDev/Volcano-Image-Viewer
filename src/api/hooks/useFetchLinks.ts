@@ -44,7 +44,7 @@ const useFetchLinks = (): Poller => {
         });     
     };
 
-    async function fetchLinks() {
+    const fetchLinks = async () => {
         setPolling(true);
         const links = await apiCall<string[]>('s3-links', 'GET', token);
         setlinks(links);
@@ -60,6 +60,7 @@ const useFetchLinks = (): Poller => {
         if (token) {
             fetchLinks();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
     
     return { links, polling, counter, fetchLinks } as Poller;
