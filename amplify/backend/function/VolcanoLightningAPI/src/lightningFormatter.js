@@ -30,7 +30,7 @@ var VAACRegion;
 ;
 ;
 ;
-const extractFromDom = (domArray) => {
+const extractFromDom = (domArray, alertLevel) => {
     const array = [];
     for (let i = 0; i < domArray.length; i++) {
         const element = domArray[i];
@@ -55,7 +55,15 @@ const extractFromDom = (domArray) => {
                 coordinates: [lat, lon],
                 type: 'Point',
             },
-            properties: { name, region, type, twentyKStrikes, hundredKStrikes, timestamp: new Date() },
+            properties: {
+                name,
+                region,
+                type,
+                twentyKStrikes,
+                hundredKStrikes,
+                timestamp: new Date(),
+                alertLevel: alertLevel === 'inner' ? 'warning' : 'error',
+            },
             type: 'Feature',
         };
     });
@@ -70,7 +78,7 @@ const fetchLightningStrikes = () => __awaiter(void 0, void 0, void 0, function* 
     const dom = new jsdom_1.JSDOM(call.data);
     const features = ['inner', 'alert'].map((className) => {
         const domObject = dom.window.document.getElementsByClassName(className);
-        return (0, exports.extractFromDom)(domObject);
+        return (0, exports.extractFromDom)(domObject, className);
     }).flat();
     return { type: 'FeatureCollection', features };
 });

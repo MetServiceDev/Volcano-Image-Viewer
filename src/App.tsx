@@ -53,7 +53,6 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     if (user) {
-      console.log(user.token)
       poll(user.token).then(async(res) => {
         setVolcanoes(res);
       }).catch(err => console.log(err))

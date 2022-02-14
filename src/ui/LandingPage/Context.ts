@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { LightningStrikes } from '../../api/lightning/headers';
+import { GeoJSON } from '../../api/lightning/headers';
 
 interface Context {
-    lightningAlerts: LightningStrikes | null | undefined;
+    lightningAlerts: GeoJSON | null | undefined;
     setAlerts: any;
 };
 

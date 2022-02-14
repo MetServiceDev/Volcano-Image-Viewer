@@ -1,15 +1,16 @@
 import React from 'react';
 import Alert from '@material-ui/lab/Alert';
+import { Color } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/styles';
 import { Typography, CircularProgress, IconButton, Tooltip, Theme } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
 import MapIcon from '@mui/icons-material/Map';
+import { API } from 'aws-amplify'
 
-import fetchLightning from '../../../api/lightning/FetchLightning';
+import { GeoJSON, LightningState } from '../../../api/lightning/headers';
 import formatLightningData from '../../../api/lightning/formatLightningData';
 
 import { LandingPageContext } from '../Context';
-import { AppContext } from '../../../AppContext';
 import LightningMapDialog from './LightningMapDialog';
 
 const useStyles =  makeStyles((theme: Theme) => ({
@@ -42,9 +43,8 @@ const LightningAlerts: React.FC = () => {
     const classes = useStyles();
 
     const { lightningAlerts, setAlerts } = React.useContext(LandingPageContext);
-    const { user } = React.useContext(AppContext);
 
-    const [lightningState, setLightningState] = React.useState<any>({});
+    const [lightningState, setLightningState] = React.useState<LightningState>();
     const [showMap, toggleMap] = React.useState<boolean>(false);
 
     React.useEffect(() => {
@@ -57,7 +57,7 @@ const LightningAlerts: React.FC = () => {
     const manualPoll = async(): Promise<void> => {
         try {
             setAlerts(null);
-            const data = await fetchLightning(user?.token as string);
+            const data: GeoJSON = await API.get('volcanoamplifyapi', '/lightning', {})
             const formattedData = formatLightningData(data);
             setAlerts(lightningAlerts);
             setLightningState(formattedData);
@@ -111,17 +111,17 @@ const LightningAlerts: React.FC = () => {
             <div className={classes.root}>
                 <Alert
                     className={classes.alert}
-                    severity={lightningState.severity as any}
-                    action={[lightningState.severity !== 'success' ? mapIcon : null, replyIcon].filter(Boolean)}
+                    severity={lightningState?.severity as Color}
+                    action={[lightningState?.severity !== 'success' ? mapIcon : null, replyIcon].filter(Boolean)}
                 >
-                    {lightningState.msg}
+                    {lightningState?.msg}
                 </Alert>
             </div>}
             <LightningMapDialog
                 open={showMap}
                 handleClose={() => toggleMap(false)}
-                strikeLocations={lightningState.strikeLocations}
-                timestamp={lightningAlerts.timestamp}
+                strikeLocations={lightningState?.strikeLocations}
+                timestamp={lightningState?.strikeLocations?.[0].properties.timestamp || new Date()}
             />
        </div>
     );

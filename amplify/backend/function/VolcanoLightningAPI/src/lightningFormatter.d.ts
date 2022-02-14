@@ -17,7 +17,7 @@ interface GeoJSON {
     type: string;
     features: Feature[];
 }
-export declare const extractFromDom: (domArray: HTMLCollectionOf<Element>) => Feature[];
+export declare const extractFromDom: (domArray: HTMLCollectionOf<Element>, alertLevel: string) => Feature[];
 /**
  * Promise based function to return recent lightning strikes around VAAC Regions
  * @returns {GeoJSON}

@@ -25,6 +25,7 @@ interface Feature {
         twentyKStrikes: number;
         hundredKStrikes: number;
         timestamp: Date;
+        alertLevel: string;
     };
     type: string;
 };
@@ -35,7 +36,7 @@ interface GeoJSON {
 };
 
 
-export const extractFromDom = (domArray: HTMLCollectionOf<Element>): Feature[] => {
+export const extractFromDom = (domArray: HTMLCollectionOf<Element>, alertLevel: string): Feature[] => {
     const array: Element[] = [];
     for (let i = 0; i < domArray.length; i++) {
         const element = domArray[i];
@@ -59,7 +60,15 @@ export const extractFromDom = (domArray: HTMLCollectionOf<Element>): Feature[] =
                 coordinates: [lat, lon],
                 type: 'Point',
             },
-            properties: { name, region, type, twentyKStrikes, hundredKStrikes, timestamp: new Date() },
+            properties: {
+                name,
+                region,
+                type,
+                twentyKStrikes,
+                hundredKStrikes,
+                timestamp: new Date(),
+                alertLevel: alertLevel === 'inner' ? 'warning' : 'error',
+            },
             type: 'Feature',
         };
     });
@@ -74,7 +83,7 @@ export const fetchLightningStrikes = async(): Promise<GeoJSON> => {
     const dom = new JSDOM(call.data);
     const features = ['inner', 'alert'].map((className) => {
         const domObject = dom.window.document.getElementsByClassName(className);
-        return extractFromDom(domObject);
+        return extractFromDom(domObject, className);
     }).flat() as Feature[];
     return { type: 'FeatureCollection', features } as GeoJSON;
 };

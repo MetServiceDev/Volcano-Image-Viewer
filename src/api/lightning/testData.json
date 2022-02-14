@@ -1,56 +1,62 @@
 {
-    "warningStrikes": {
-        "Greece": {
-            "Methana": {
-                "twentyKStrikes": 1,
-                "hundredKStrikes": 22,
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Kabul",
+                "region": "Asia",
+                "type": "city",
+                "twentyKStrikes": 16,
+                "hundredKStrikes": 2,
+                "timestamp": "2020-05-01T00:00:00.000Z",
+                "alertLevel": "warning"
+            },
+            "geometry": {
+                "type": "Point",
                 "coordinates": [
-                    37.615,
-                    23.336
+                    61.17,
+                    34.31
                 ]
             }
         },
-        "Africa-C": {
-            "Nyiragongo": {
-                "twentyKStrikes": 1,
-                "hundredKStrikes": 44,
-                "coordinates": [
-                    -1.52,
-                    29.25
-                ]
-            }
-        },
-        "Solomon Is-SW Pacific": {
-            "Unnamed": {
-                "twentyKStrikes": 1,
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Kabul",
+                "region": "Asia",
+                "type": "city",
+                "twentyKStrikes": 5,
                 "hundredKStrikes": 1,
+                "timestamp": "2020-05-01T00:00:00.000Z",
+                "alertLevel": "error"
+            },
+            "geometry": {
+                "type": "Point",
                 "coordinates": [
-                    -8.92,
-                    158.03
+                    61.17,
+                    34.31
                 ]
             }
         },
-        "Java": {
-            "Dieng Volc Complex": {
-                "twentyKStrikes": 1,
-                "hundredKStrikes": 4,
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Kabul",
+                "region": "Asia",
+                "type": "city",
+                "twentyKStrikes": 7,
+                "hundredKStrikes": 0,
+                "timestamp": "2020-05-01T00:00:00.000Z",
+                "alertLevel": "error"
+            },
+            "geometry": {
+                "type": "Point",
                 "coordinates": [
-                    -7.2,
-                    109.92
+                    61.17,
+                    34.31
                 ]
             }
         }
-    },
-    "alertStrikes": {
-        "Java": {
-            "Sumbing": {
-                "twentyKStrikes": 4,
-                "hundredKStrikes": 1,
-                "coordinates": [
-                    -7.384,
-                    110.07
-                ]
-            }
-        }
-    }
+    ]
 }
