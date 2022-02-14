@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { userSavedImagesCDN } from '../../../metadata/Endpoints';
 import { formatDate } from '../../../api/volcano/formatThumbnail';
-import apiCall from '../../../api/APICall';
+import apiCall, { HTTPMethod } from '../../../api/APICall';
 import VolcanoThumbnails from '../../ReusedComponents/VolcanoThumbnails';
 import { Volcano } from '../../../api/volcano/headers';
 import RelatedVolcano from './RelatedVolcano';
@@ -88,7 +88,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
 
     const fetchImages = React.useCallback(
         async(): Promise<void> => {
-            const savedImages = await apiCall<string[]>(`user?userId=${user?.aud}`, 'GET', user?.token as string);
+            const savedImages = await apiCall<string[]>(`user?userId=${user?.aud}`, HTTPMethod.GET, user?.token as string);
             setSavedImages(savedImages);
         },
         [user]

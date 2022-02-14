@@ -1,5 +1,4 @@
 import { LightningStrikes, LightningObservation, LightningState } from './headers';
-// import testData from './testData.json';
 
 const getRegions = (observation: LightningObservation) => Object.keys(observation).map((val) => val);
 

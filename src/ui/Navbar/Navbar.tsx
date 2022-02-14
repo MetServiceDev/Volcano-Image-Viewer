@@ -38,6 +38,9 @@ const styles = (theme: Theme) => createStyles({
         marginRight: theme.spacing(2),
         display: 'flex',
         alignItems: 'center'
+    },
+    usernameDisplay: {
+        marginRight: theme.spacing(1)
     }
 });
 
@@ -50,7 +53,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoes, openVolcano }) => {
-    const volcanoLabels = volcanoes.map(volcano => volcano.name);
+    const volcanoLabels = volcanoes?.map(volcano => volcano.name);
     const { user } = React.useContext(AppContext);
 
     const [userAnchorEl, setUserAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -90,7 +93,12 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoe
             </div>
             <div>
                 <div className={classes.rightSide}>
-                    <Typography variant="subtitle2">{user?.name}</Typography>
+                    <Typography
+                        variant="subtitle2"
+                        className={classes.usernameDisplay}
+                    >
+                        {user?.name}
+                    </Typography>
                     <AccountCircleIcon/>
                     <IconButton
                         onClick={handleUserClick}

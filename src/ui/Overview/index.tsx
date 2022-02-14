@@ -67,10 +67,10 @@ interface Props extends WithStyles<typeof styles> {}
 const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     let query = useQuery();
     const volcano = query.get('volcano');
-    const { volcanoes } = React.useContext(AppContext);
+    const { volcanoes, user } = React.useContext(AppContext);
 
-    const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
-    const [gasEmissions] = useEmissionsEffect(volcanoObject?.FIT_ID as string);
+    const volcanoObject = volcanoes?.find(v => v.name === volcano) as Volcano || {};
+    const gasEmissions = useEmissionsEffect(volcanoObject?.FIT_ID as string, user?.token);
     const { name, volcanicAlerts } = volcanoObject;
     
     const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL);

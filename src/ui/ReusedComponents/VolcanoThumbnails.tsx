@@ -8,7 +8,7 @@ import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
 import { Volcano, Thumbnail } from '../../api/volcano/headers';
 import { fetchImages } from '../../api/images/fetchImages';
-import apiCall from '../../api/APICall';
+import apiCall, { HTTPMethod } from '../../api/APICall';
 import authClient from '../../api/auth/Auth';
 import { AppContext } from '../../AppContext';
 
@@ -160,7 +160,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
         const saveImage = async(): Promise<void> => {
             const token = authClient.getAccessToken() as string;
             const fileKey = s3Tags[currentIndex];
-            await apiCall<null>('user/images', 'POST', token, { userId: user?.aud as string, fileKey });
+            await apiCall('user/images', HTTPMethod.POST, token, { userId: user?.aud as string, fileKey });
             setImgSaved(true);
             setTimeout(() => setImgSaved(false), 2000);
         };

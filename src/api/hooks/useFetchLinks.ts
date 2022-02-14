@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import apiCall from "../APICall";
+import apiCall, { HTTPMethod }  from "../APICall";
 import authClient from '../auth/Auth';
 
 interface Poller {
@@ -46,7 +46,7 @@ const useFetchLinks = (): Poller => {
 
     const fetchLinks = async () => {
         setPolling(true);
-        const links = await apiCall<string[]>('s3-links', 'GET', token);
+        const links = await apiCall<string[]>('s3-links', HTTPMethod.GET, token);
         setlinks(links);
         setPolling(false);
     };

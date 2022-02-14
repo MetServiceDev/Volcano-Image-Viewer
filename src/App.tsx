@@ -17,9 +17,8 @@ import Login from './ui/LoginForm/Login';
 import AshMapOverview from './ui/Overview/AshMap';
 import UserDashboard from './ui/UserDashboard';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
-import { Volcano } from './api/volcano/headers';
-import { poll } from './api/poller';
 import { redirectUri } from './metadata/Endpoints';
+import { HTTPMethod } from './api/APICall';
 
 import useFetchLinks from './api/hooks/useFetchLinks';
 import fetchQuakeHistory from "./api/quakes/fetchQuakeHistory";
@@ -28,6 +27,8 @@ import { QuakeDict } from './api/quakes/headers';
 import useAuthState from './api/hooks/useAuthState';
 import useLocalStorage from './api/hooks/useLocalStorage';
 import useFilter from './api/hooks/useFilter';
+import useAPICall from './api/hooks/useAPICall';
+import { Volcano } from './api/volcano/headers';
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -38,7 +39,12 @@ const App: React.FC = () => {
 
   const user = useAuthState();
 
-  const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+  const volcanoes = useAPICall<Volcano[]>({
+    route: 'volcanoes',
+    method: HTTPMethod.GET,
+    token: user?.token
+  });
+
   const [quakes, setQuakes] = React.useState<QuakeDict>({});
 
   const { links, polling, counter, fetchLinks } = useFetchLinks();
@@ -48,15 +54,6 @@ const App: React.FC = () => {
 
   const { filters, dispatchFilter }  = useFilter()
 
-  React.useEffect(() => {
-    if (user) {
-      console.log(user.token)
-      poll(user.token).then(async(res) => {
-        setVolcanoes(res);
-      }).catch(err => console.log(err))
-    }
-  },[user]);
-
   const setTheme = () => {
     toggleTheme(!styleTheme);
     localStorage.setItem('ui-theme', String(!styleTheme));
@@ -64,7 +61,7 @@ const App: React.FC = () => {
 
   React.useEffect(()=> {
     async function fetchData(): Promise<void> {
-      const volcanoIds = volcanoes.map(v => v.gnsID);
+      const volcanoIds = volcanoes?.map(v => v.gnsID);
       const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
       const quakes = await fetchQuakeHistory(gnsIDs);
       setQuakes(quakes);
