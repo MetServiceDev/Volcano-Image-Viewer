@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { API } from 'aws-amplify'
+
 import { LightningStrikes } from '../../api/lightning/headers';
 import fetchLightning from '../../api/lightning/FetchLightning';
 import authClient from '../auth/Auth';
@@ -23,6 +25,8 @@ const useLightningFetch = () => {
     };
 
     useEffect(() => {
+        API.get('volcanoamplifyapi', '/lightning', {})
+            .then((data) => console.log(data))
         pollSession()
         setInterval(() => pollSession(), POLL_INTERVAL);
     }, [POLL_INTERVAL]);

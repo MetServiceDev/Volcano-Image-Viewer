@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/lightning": {
+      "name": "/lightning",
+      "lambdaFunction": "VolcanoLightningAPI",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
