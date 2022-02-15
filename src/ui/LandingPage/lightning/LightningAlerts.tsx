@@ -17,6 +17,7 @@ const useStyles =  makeStyles((theme: Theme) => ({
     root: {
         width:'100%',
         marginLeft:'2px',
+        alignItems: 'center',
     },
     alert: {
         boxShadow: '1px 1px 2px #404040',

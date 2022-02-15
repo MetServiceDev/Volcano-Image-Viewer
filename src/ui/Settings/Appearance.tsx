@@ -31,12 +31,6 @@ interface Props extends WithStyles<typeof styles> {
     toggleTheme: () => void;
 }
 
-enum RowCount {
-    TWO = 2,
-    FOUR = 4,
-    SIX = 6,
-};
-
 const Appearance: React.FC<Props> = ({ classes, theme, toggleTheme }) => {
     const { gridDisplay, setGrid, filters, dispatchFilter } = React.useContext(AppContext);
 
@@ -67,7 +61,7 @@ const Appearance: React.FC<Props> = ({ classes, theme, toggleTheme }) => {
                     onChange={(e) => setGrid(Number(e.target.value))}
                     variant='outlined'
                 >
-                    {Object.values(RowCount).map(n =>
+                    {[2, 4, 6].map(n =>
                         <MenuItem
                             key={n} 
                             value={n} 

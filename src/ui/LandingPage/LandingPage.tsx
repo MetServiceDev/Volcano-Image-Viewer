@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme: Theme) => ({
         marginLeft:'10px',
         fontSize:'12px',
         boxShadow: '1px 1px 2px #404040',
+        display: 'flex',
+        alignItems: 'center',
     },
     minimize: {
         position: 'relative',
