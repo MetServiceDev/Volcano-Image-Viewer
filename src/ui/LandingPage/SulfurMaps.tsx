@@ -1,27 +1,22 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
-import { Theme, Paper, Typography } from '@material-ui/core';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import { Theme, Paper, Typography, Divider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        cursor: 'pointer',
+        display: 'flex',
+        wrap: 'nowrap'
     },
     header: {
         borderBottom: '1px solid #404040',
-        padding: theme.spacing(0.5)
-    },
-    nameText: {
-        display:'inline',
-        verticalAlign: 'middle',
-        padding:'10px'
+        padding: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        
     },
     div: {
-        margin:'10px',
-        position:'relative',
+        margin: theme.spacing(1),
         '&:hover':{
             boxShadow:'4px 4px 8px #404040'
         },
@@ -29,12 +24,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     link: {
         textDecoration:'none'
-    },
-    icon: {
-        fontSize:'28px',
-        position:'absolute',
-        right:'1%',
-        top:'1%'
     },
 }));
 
@@ -52,21 +41,38 @@ const SulfurMaps: React.FC<Props> = ({ sulfurMaps }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            {sulfurMaps.map((so2: any, index: number) => {
+            {sulfurMaps.map((so2: any, index: number) => (
+                <Link
+                    className={classes.link}
+                    to={{pathname: so2.link}}
+                    target='_blank'
+                    key={index}
+                >
+                    <Paper className={classes.div} elevation={3}>
+                        <div className={classes.header}>
+                            <Typography variant='h6'>
+                                {so2.name}
+                            </Typography>       
+                        </div>
+                        <Divider/>
+                        <img
+                            src={so2.img}
+                            alt={so2.name}
+                            width='100%'
+                        />
+                    </Paper>
+                </Link>
+            ))}
+            {/* {[1,2,3,4,5,6,7].map((index) => {
+                const imgLink = 'https://satepsanone.nesdis.noaa.gov/pub/OMI/OMISO2/images/newzealandc_prev'
                 return (
-                    <Link className={classes.link} to={{pathname: so2.link}} target='_blank' key={index}>
-                        <Paper className={classes.div} elevation={3}>
-                            <div className={classes.header}>
-                                <Typography variant='h4'>
-                                    {so2.name}
-                                </Typography>
-                                <OpenInNewIcon className={classes.icon}/>            
-                            </div>
-                            <img src={so2.img} alt={so2.name} width='100%'/>
-                        </Paper>
-                    </Link>
-                );
-            })}
+                    <img
+                        src={`${imgLink}${index === 1 ? '' : index}.gif`}
+                        alt='img'
+                        width='10%'
+                    />
+                )
+            })} */}
         </div>
     )
 };

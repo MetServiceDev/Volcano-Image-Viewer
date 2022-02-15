@@ -122,7 +122,6 @@ const LightningAlerts: React.FC = () => {
                 open={showMap}
                 handleClose={() => toggleMap(false)}
                 strikeLocations={lightningState?.strikeLocations}
-                timestamp={lightningState?.strikeLocations?.[0].properties.timestamp || new Date()}
             />
        </div>
     );

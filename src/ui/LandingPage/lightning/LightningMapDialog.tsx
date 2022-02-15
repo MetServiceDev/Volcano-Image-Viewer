@@ -41,10 +41,9 @@ interface Props extends WithStyles<typeof styles> {
     handleClose: () => void;
     open: boolean;
     strikeLocations?: Feature[];
-    timestamp: Date;
 }
 
-const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strikeLocations, timestamp }) => {
+const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strikeLocations }) => {
     const center = strikeLocations?.[0].geometry.coordinates || [0, 0];
     const { theme } = React.useContext(AppContext);
 
@@ -61,6 +60,9 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
                 <Typography variant="body2">
                     <b>{properties.hundredKStrikes}</b> strikes within 100km
                 </Typography>
+                <Typography variant="body2">
+                    {moment(properties.timestamp).utc().format('MMMM Do YYYY, h:mm:ss a')} UTC
+                </Typography>
             </Popup>
         )
     };
@@ -76,13 +78,7 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
             <div className={classes.title}>
                 <DialogTitle>
                     Recent Lightning Strikes
-                </DialogTitle>
-                <Typography
-                    variant="subtitle2"
-                    className={classes.dateTag}
-                >
-                    Updated at {moment(timestamp).utc().format('hh:mm MMM Do')} UTC
-                </Typography>
+                </DialogTitle>          
             </div>
             <Divider/>
             <MapContainer center={center} zoom={8}>
