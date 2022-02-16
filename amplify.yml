@@ -1,4 +1,12 @@
 version: 1
+backend:
+  phases:
+    prebuild:
+      commands:
+        - npm i -g @aws-amplify/cli@7.6.9
+    build:
+      commands:
+        - amplifyPush --simple
 frontend:
   phases:
     preBuild:
