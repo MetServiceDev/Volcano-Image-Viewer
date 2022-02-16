@@ -10,8 +10,7 @@
       "skipoverridemutationinputtypes": true,
       "transformerversion": 2,
       "suppressschemamigrationprompt": true,
-      "securityenhancementnotification": false,
-      "showfieldauthnotification": false
+      "securityenhancementnotification": false
     },
     "frontend-ios": {
       "enablexcodeintegration": true
@@ -20,8 +19,7 @@
       "enablecaseinsensitivity": true,
       "useinclusiveterminology": true,
       "breakcirculardependency": true,
-      "forcealiasattributes": false,
-      "useenabledmfas": true
+      "forcealiasattributes": false
     },
     "codegen": {
       "useappsyncmodelgenplugin": true,
