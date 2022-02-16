@@ -4,6 +4,7 @@ backend:
     prebuild:
       commands:
         - npm i -g @aws-amplify/cli@7.6.19
+        - nvm use $VERSION_NODE_14
     build:
       commands:
         - amplifyPush --simple
@@ -23,4 +24,4 @@ frontend:
       - '**/*'
   cache:
     paths:
-      - node_modules/**/*
+      - node_modules/**/*git
