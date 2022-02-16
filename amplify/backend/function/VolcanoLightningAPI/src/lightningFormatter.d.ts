@@ -10,6 +10,7 @@ interface Feature {
         twentyKStrikes: number;
         hundredKStrikes: number;
         timestamp: Date;
+        alertLevel: string;
     };
     type: string;
 }

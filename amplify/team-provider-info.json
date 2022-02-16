@@ -15,7 +15,7 @@
       "function": {
         "VolcanoLightningAPI": {
           "deploymentBucketName": "amplify-amplify230614fffc3b4-staging-65311-deployment",
-          "s3Key": "amplify-builds/VolcanoLightningAPI-4f476672774d364d564e-build.zip"
+          "s3Key": "amplify-builds/VolcanoLightningAPI-634379494672575a6969-build.zip"
         }
       }
     }
