@@ -83,7 +83,7 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
             <Divider/>
             <MapContainer center={center} zoom={8}>
                 <TileLayer
-                    url={!theme ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"}
+                    url={!theme ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" : "https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"}
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
                 {strikeLocations?.map((location) => {
