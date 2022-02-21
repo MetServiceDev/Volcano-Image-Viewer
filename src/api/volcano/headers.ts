@@ -51,6 +51,7 @@ export interface Thumbnail {
     timestamp?: string,
     size?: number,
 	hasntUpdated?: boolean
+	uploadedAt?: string;
 };
 
 export interface VAL {
