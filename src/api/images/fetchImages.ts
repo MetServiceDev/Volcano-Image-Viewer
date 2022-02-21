@@ -4,7 +4,7 @@ import { imageBucket } from '../../metadata/Endpoints';
 
 async function downloadImages(imageTags: string[]): Promise<Thumbnail[]> {
     try {
-        const images = await Promise.all(imageTags.map((i) => downloadImage(i)));
+        const images = await Promise.all(imageTags.map((i, idx) => downloadImage(i, idx)));
         return images;
     } catch (err) {
         throw err;
