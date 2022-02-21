@@ -25,3 +25,8 @@ frontend:
   cache:
     paths:
       - node_modules/**/*git
+  customHeaders:
+    - pattern: '**/*'
+      headers:
+        - key: 'Cache-Control'
+          value: 'max-age=0'
