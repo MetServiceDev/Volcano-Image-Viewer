@@ -25,15 +25,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 const setAlertStatus = (data: VAL) => {
     const { activity, msg, level } = data;
     const activityMessage = activity ? activity : msg;
-    switch(level){
-        case '0':
-        case '1':
+    switch(Number(level)){
+        case 0:
+        case 1:
             return { severity: 'success', msg: activityMessage, icon:<ReportProblemOutlinedIcon/> }
-        case '2':
-        case '3':
+        case 2:
+        case 3:
             return { severity: 'warning', msg: activityMessage }
-        case '4':
-        case '5':
+        case 4:
+        case 5:
             return { severity: 'error', msg: activityMessage }
         default:
             return { severity: 'success', msg: activityMessage, icon:<ReportProblemOutlinedIcon/> }
