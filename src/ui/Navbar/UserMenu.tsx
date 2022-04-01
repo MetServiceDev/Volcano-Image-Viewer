@@ -3,6 +3,7 @@ import { Menu, MenuItem, Typography, Divider, ListItemText, ListItemIcon } from 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import SettingsIcon from '@mui/icons-material/Settings';
+import MonitorIcon from '@mui/icons-material/Monitor';
 
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
@@ -12,7 +13,10 @@ import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
     menuItem: {
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     header: {
         fontWeight: 'bold',
@@ -30,9 +34,10 @@ interface Props {
     handleClose: () => void,
     logout: () => Promise<void>;
     openSettings: () => void;
+    openMonitor: () => void;
 }
 
-const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout, openSettings }) => {
+const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout, openSettings, openMonitor }) => {
     const classes = useStyles();
     const { user } = React.useContext(AppContext);
 
@@ -60,6 +65,14 @@ const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout, openSe
                     </ListItemIcon>
                 </MenuItem>
             </Link>
+            <MenuItem className={classes.menuItem} onClick={openMonitor}>
+                <ListItemText>
+                    Monitor
+                </ListItemText>
+                <ListItemIcon>
+                    <MonitorIcon/>
+                </ListItemIcon>
+            </MenuItem>
             <MenuItem className={classes.menuItem} onClick={openSettings}>
                 <ListItemText>
                     Settings

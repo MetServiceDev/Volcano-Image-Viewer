@@ -23,18 +23,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const setAlertStatus = (data: VAL) => {
-    switch(data.level){
+    const { activity, msg, level } = data;
+    const activityMessage = activity ? activity : msg;
+    switch(level){
         case '0':
         case '1':
-            return { severity: 'success', msg: data.msg, icon:<ReportProblemOutlinedIcon/> }
+            return { severity: 'success', msg: activityMessage, icon:<ReportProblemOutlinedIcon/> }
         case '2':
         case '3':
-            return { severity: 'warning', msg: data.msg }
+            return { severity: 'warning', msg: activityMessage }
         case '4':
         case '5':
-            return { severity: 'error', msg: data.msg }
+            return { severity: 'error', msg: activityMessage }
         default:
-            return { severity: 'success', msg: data.msg, icon:<ReportProblemOutlinedIcon/> }
+            return { severity: 'success', msg: activityMessage, icon:<ReportProblemOutlinedIcon/> }
     };
 };
 

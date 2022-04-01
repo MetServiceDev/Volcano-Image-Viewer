@@ -66,9 +66,9 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
         return tags[11];
     };
 
-    const volcanicAlertLevel = (volcano: Volcano) => volcanoAlertLevels.find((v:VAL) => {
-        return volcano.gnsID === v.volcanoID
-    }) || volcano.volcanicAlerts as VAL;
+    const volcanicAlertLevel = (volcano: Volcano) => volcanoAlertLevels.find((v) => {
+        return volcano.gnsID === v?.volcanoID
+    }) || { ...volcano.volcanicAlerts, volcanoID: volcano.gnsID } as VAL
 
     const alertTable = () => {
         return alertArray.map(volcano => {
@@ -84,7 +84,7 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
                 }}>
                     <TableCell align="left">{volcano}</TableCell>
                     <TableCell align="left">{alertStats?.level}</TableCell>
-                    <TableCell align="left">{alertStats?.msg}</TableCell>
+                    <TableCell align="left">{alertStats?.activity || alertStats?.msg}</TableCell>
                 </TableRow>
             );
         });
@@ -117,20 +117,20 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
         const latestImage = getThumbnail(volcano.code);
         return (
             <Popup className={classes.popup}>
+                <Typography variant="body1">
+                    <b>{volcano.mountain}</b> - Volcanic level {alertStats?.level}
+                </Typography>
                 <img
                     src={`${imageBucket}/${latestImage}`}
                     alt={latestImage}
                     width="100%"
                 />
                 <div>
-                    <Typography variant="body1">
-                        <b>{volcano.mountain}</b> - Volcanic level {alertStats.level}
-                    </Typography>
-                    <Typography variant="body2">
-                        <b>Activity:</b> {alertStats.msg}
-                    </Typography>
-                    {alertStats.hazards && <Typography variant="body2">
-                        <b>Hazards:</b> {alertStats.hazards}
+                    {alertStats?.activity && <Typography variant="body2">
+                        <b>Activity:</b> {alertStats?.activity}
+                    </Typography>}
+                    {alertStats?.hazards && <Typography variant="body2">
+                        <b>Hazards:</b> {alertStats?.hazards}
                     </Typography>}
                 </div>
             </Popup>

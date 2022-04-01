@@ -97,7 +97,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                         </Link>
                         <Typography variant='h6'>{name}</Typography>
                     </div>
-                    {volcanicAlerts && <VolcanicAlert data={volcanicAlerts}/>}
+                    {volcanicAlerts && <VolcanicAlert data={ volcanicAlerts }/>}
                 </div>
                 <div className={classes.mainPanel}>
                     {(() => {

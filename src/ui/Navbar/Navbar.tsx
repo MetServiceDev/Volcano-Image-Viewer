@@ -11,6 +11,7 @@ import MapToggle from './MapToggle';
 import { Volcano } from '../../api/volcano/headers';
 import UserMenu from './UserMenu';
 import SettingsDialog from '../Settings';
+import MonitorDialog from '../Monitor';
 import { AppContext } from '../../AppContext';
 
 const styles = (theme: Theme) => createStyles({
@@ -65,6 +66,7 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoe
     const handleUserClose = () => setUserAnchorEl(null);
 
     const [openSettings, toggleSettings] = React.useState<boolean>(false);
+    const [openMonitor, toggleMonitor] = React.useState<boolean>(false);
 
     return (
         <div className={classes.root}>
@@ -113,6 +115,7 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoe
                     handleClose={handleUserClose}
                     logout={logout}
                     openSettings={() => toggleSettings(true)}
+                    openMonitor={() => toggleMonitor(true)}
                 />
             </div>
             <SettingsDialog
@@ -120,6 +123,10 @@ const Navbar: React.FC<Props> = ({ classes, logout, theme, toggleTheme, volcanoe
                 theme={theme}
                 toggleTheme={toggleTheme}
                 handleClose={() => toggleSettings(false)}
+            />
+            <MonitorDialog
+                open={openMonitor}
+                handleClose={() => toggleMonitor(false)}
             />
         </div>
     );

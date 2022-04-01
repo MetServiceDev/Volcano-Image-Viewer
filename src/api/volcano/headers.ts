@@ -1,5 +1,14 @@
 import * as L from 'leaflet';
 
+export interface VAL {
+	level: string;
+	activity: string;
+	hazards: string;
+	acc: string;
+	volcanoID?: string;
+	msg?: string;
+}
+
 export interface Volcano {
 	code: string;
 	coordinates: {
@@ -12,10 +21,7 @@ export interface Volcano {
 	mountain?: string;
 	name: string;
 	s3Link: string;
-	volcanicAlerts?: {
-		level: string;
-		msg: string;
-	};
+	volcanicAlerts?: VAL;
 	relatedVolcanoes?: string[];
 	gnsID?: string;
 	FIT_ID?: string;
@@ -52,13 +58,6 @@ export interface Thumbnail {
     size?: number,
 	hasntUpdated?: boolean
 	uploadedAt?: string;
-};
-
-export interface VAL {
-	msg: string;
-	level: string;
-	volcanoID?: string;
-	hazards?: string;
 };
 
 export interface EmissionMeasures {

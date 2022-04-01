@@ -1,10 +1,8 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { DialogTitle, Dialog, Theme, Divider, DialogContent } from '@material-ui/core';
-import SettingsSidebar from './sidebar';
 import { SettingsOptions } from '../../api/settings/headers';
-import Appearance from './Appearance';
-import MonitorSettings from './Monitor';
+import ImageScanLog from './ImageScanLog';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -26,11 +24,9 @@ const styles = (theme: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles> {
     handleClose: () => void;
     open: boolean;
-    theme: boolean;
-    toggleTheme: () => void;
 }
 
-const SettingsDialog: React.FC<Props> = ({ classes, handleClose, open, theme, toggleTheme }) => {
+const MonitorDialog: React.FC<Props> = ({ classes, handleClose, open }) => {
     const [currentDisplay, setDisplay] = React.useState<SettingsOptions>(SettingsOptions.Display);
 
     return(
@@ -42,24 +38,15 @@ const SettingsDialog: React.FC<Props> = ({ classes, handleClose, open, theme, to
             maxWidth={'md'}
         >
             <DialogTitle>
-                Settings
+                Monitor
             </DialogTitle>
             <Divider/>
             <DialogContent className={classes.content}>
-                <SettingsSidebar
-                    currentDisplay={currentDisplay}
-                    setDisplay={setDisplay}
-                />
                 <div className={classes.innerContent}>
                     {(() => {
                         switch(currentDisplay){
                             case SettingsOptions.Display:
-                                return <Appearance
-                                            theme={theme}
-                                            toggleTheme={toggleTheme}
-                                        />
-                            case SettingsOptions.Monitor:
-                                return <MonitorSettings/>
+                                return <ImageScanLog />
                         }
                     })()}
                 </div>
@@ -68,4 +55,4 @@ const SettingsDialog: React.FC<Props> = ({ classes, handleClose, open, theme, to
     );
 }
 
-export default withStyles(styles)(SettingsDialog);
+export default withStyles(styles)(MonitorDialog);

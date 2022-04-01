@@ -8,9 +8,10 @@ const fetchVAL = async(): Promise<VAL[]> => {
     const data = res.features as GNSVAL[];
     return data.map(val => {
         return {
-            msg: val.properties.activity,
+            activity: val.properties.activity,
             level: String(val.properties.level),
             volcanoID: val.properties.volcanoID,
+            acc: val.properties.acc,
             hazards: val.properties.hazards
         }
     }) as VAL[];

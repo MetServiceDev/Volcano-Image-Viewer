@@ -80,7 +80,7 @@ const SettingsSidebar: React.FC<Props> = ({ classes, currentDisplay, setDisplay 
             </MenuList>
             <div className={classes.bottomSec}>
                     <Typography variant="subtitle2">
-                        v2.0.2
+                        v{process.env.REACT_APP_VERSION}
                     </Typography>
                 <Button
                     className={classes.logoutBut}

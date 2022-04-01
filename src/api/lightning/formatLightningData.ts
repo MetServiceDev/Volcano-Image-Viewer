@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { LightningStrikes, LightningObservation, LightningState } from './headers';
-=======
 import { LightningState, GeoJSON } from './headers';
->>>>>>> feature-amplify-backend
 
 const formatLightningData = (lightningData: GeoJSON): LightningState => {
     const { features } = lightningData;
@@ -25,6 +21,7 @@ const formatLightningData = (lightningData: GeoJSON): LightningState => {
             msg: `${regions}: Lightning data shows ${maxTwentyStrikes} strike${maxTwentyStrikes > 1 ? 's' : ''} within 20km and ${maxHundreadStrikes} 
 strike${maxHundreadStrikes > 1 ? 's' : ''} within 100km of ${volcanoes}, Please check latest imagery.`,
             severity: 'warning',
+            strikeLocations: warningStrikes
         }
     } else if (alertStrikes.length > 0 && warningStrikes.length === 0) {
         return {
