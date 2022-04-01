@@ -67,7 +67,7 @@ const StatusPanel: React.FC<Props> = ({ classes, status, title }) => {
                             variant="body1"
                             className={classes.header}
                         >
-                            Fetched {status?.newImages?.length} new images {toggleIcon}
+                            Fetched {status?.newImages?.length} new images {status?.newImages?.length > 0 && toggleIcon}
                         </Typography>
                         <div>
                             {showImages && status?.newImages?.map((image: string) =>

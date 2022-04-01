@@ -121,6 +121,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
 
     const getVolcanoName = (imgLink: string) => {
         let volcCode = `${imgLink.split('.')[4]}.${imgLink.split('.')[5]}`;
+        console.log(volcCode);
         if (!imgLink.split('.')[4]) {
             volcCode = imgLink.split('-')[0].split('/')[1];
         }
