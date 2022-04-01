@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
+import Amplify from 'aws-amplify';
 
 import './ui/App.css';
 import authClient from './api/auth/Auth';
@@ -29,6 +30,8 @@ import useLocalStorage from './api/hooks/useLocalStorage';
 import useFilter from './api/hooks/useFilter';
 import useAPICall from './api/hooks/useAPICall';
 import { Volcano } from './api/volcano/headers';
+import config from './aws-exports';
+Amplify.configure(config);
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');

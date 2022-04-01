@@ -5,6 +5,7 @@ import { DialogTitle, Dialog, Theme, Typography, Divider } from '@material-ui/co
 import moment from 'moment';
 
 import { AppContext } from '../../../AppContext';
+import { Feature } from '../../../api/lightning/headers';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -39,25 +40,28 @@ const styles = (theme: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles> {
     handleClose: () => void;
     open: boolean;
-    strikeLocations: any;
-    timestamp: Date;
+    strikeLocations?: Feature[];
 }
 
-const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strikeLocations, timestamp }) => {
-    const center = Object.values(strikeLocations || {})[0] as any;
+const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strikeLocations }) => {
+    const center = strikeLocations?.[0].geometry.coordinates || [0, 0];
     const { theme } = React.useContext(AppContext);
 
-    const strikePopup = (data: any) => {
+    const strikePopup = (data: Feature) => {
+        const { properties } = data;
         return (
             <Popup>
                 <Typography variant="body1">
-                    <b>{data.name}</b> - {data.type}
+                    <b>{properties.name}</b> - {properties.type}
                 </Typography>
                 <Typography variant="body2">
-                    <b>{data.twentyKStrikes}</b> strikes within 20km
+                    <b>{properties.twentyKStrikes}</b> strikes within 20km
                 </Typography>
                 <Typography variant="body2">
-                    <b>{data.hundredKStrikes}</b> strikes within 100km
+                    <b>{properties.hundredKStrikes}</b> strikes within 100km
+                </Typography>
+                <Typography variant="body2">
+                    {moment(properties.timestamp).utc().format('MMMM Do YYYY, h:mm:ss a')} UTC
                 </Typography>
             </Popup>
         )
@@ -74,35 +78,29 @@ const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strik
             <div className={classes.title}>
                 <DialogTitle>
                     Recent Lightning Strikes
-                </DialogTitle>
-                <Typography
-                    variant="subtitle2"
-                    className={classes.dateTag}
-                >
-                    Updated at {moment(timestamp).utc().format('hh:mm MMM Do')} UTC
-                </Typography>
+                </DialogTitle>          
             </div>
             <Divider/>
-            <MapContainer center={center?.coordinates} zoom={8}>
+            <MapContainer center={center} zoom={8}>
                 <TileLayer
-                    url={!theme ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"}
+                    url={!theme ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" : "https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"}
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
-                {Object.entries(strikeLocations || {}).map(([key, value]: any) => {
+                {strikeLocations?.map((location) => {
+                    const { coordinates } = location.geometry;
                     return (
-                        <div key={key}>
-                            <Marker position={value.coordinates}>
-                                {strikePopup(value)}
+                        <div key={location.properties.name}>
+                            <Marker position={coordinates}>
+                                {strikePopup(location)}
                             </Marker>
                             <CircleMarker
-                                key={key}
-                                center={value.coordinates}
+                                center={coordinates}
                                 radius={20}
                                 fillColor="#ff0000"
                                 color="#ff0000"
                             />
                             <CircleMarker
-                                center={value.coordinates}
+                                center={coordinates}
                                 radius={60}
                                 fillColor="#ff7f1c"
                                 color="#ff7f1c"

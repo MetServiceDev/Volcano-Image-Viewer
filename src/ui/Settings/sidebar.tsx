@@ -70,6 +70,7 @@ const SettingsSidebar: React.FC<Props> = ({ classes, currentDisplay, setDisplay 
                         key={option}
                         className={classnames(classes.listText, option === currentDisplay && classes.selectedText)}
                         onClick={() => setDisplay(option)}
+                        selected={currentDisplay === option}
                     >
                         <ListItemText>
                             {option}

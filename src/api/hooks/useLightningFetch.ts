@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { LightningStrikes } from '../../api/lightning/headers';
-import fetchLightning from '../../api/lightning/FetchLightning';
+import { API } from 'aws-amplify'
+
+import { GeoJSON } from '../../api/lightning/headers';
 import authClient from '../auth/Auth';
 
 const useLightningFetch = () => {
-    const [lightningAlerts, setAlerts] = useState<LightningStrikes | null>();
+    const [lightningAlerts, setAlerts] = useState<GeoJSON | null>();
     const [token, setToken] = useState('');
 
     const POLL_INTERVAL = 60000 * 10;
@@ -31,7 +32,7 @@ const useLightningFetch = () => {
         async function fetchData() {
             try {
                 setAlerts(null)
-                const lightningStrikes = await fetchLightning(token);
+                const lightningStrikes: GeoJSON = await API.get('volcanoamplifyapi', '/lightning', {});
                 setAlerts(lightningStrikes);
             } catch (err) {
                 setAlerts(null);

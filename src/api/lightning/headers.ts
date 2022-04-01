@@ -1,24 +1,27 @@
+export interface Feature {
+    geometry: {
+        coordinates: [number, number];
+        type: string;
+    };
+    properties: {
+        name: string;
+        region: string;
+        type: string;
+        twentyKStrikes: number;
+        hundredKStrikes: number;
+        timestamp: Date;
+        alertLevel: string;
+    };
+    type: string;
+};
+
+export interface GeoJSON {
+    type: string;
+    features: Feature[]
+};
+
 export interface LightningState {
     severity: string;
     msg: string;
-    strikeLocations?: StrikeLocation;
+    strikeLocations?: Feature[];
 }
-
-export interface LightningStrikesData {
-    [volcanoName: string]: StrikeLocation
-};
-
-export interface StrikeLocation {
-    twentyKStrikes: number;
-    hundredKStrikes: number;
-    coordinates: [number, number];
-    name?: string;
-}
-
-export type LightningObservation = NodeJS.Dict<LightningStrikesData>;
-
-export interface LightningStrikes {
-    warningStrikes: LightningObservation;
-    alertStrikes: LightningObservation;
-    timestamp: Date;
-};

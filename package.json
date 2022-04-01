@@ -19,6 +19,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "aws-amplify": "^4.3.14",
     "axios": "^0.24.0",
     "chart.js": "^3.6.0",
     "classnames": "^2.3.1",
@@ -47,7 +48,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "docker-compose up -d --build"
+    "dev": "docker-compose up -d --build",
+    "amplify:VolcanoLightningAPI": "cd amplify/backend/function/VolcanoLightningAPI/src && tsc"
   },
   "eslintConfig": {
     "extends": [

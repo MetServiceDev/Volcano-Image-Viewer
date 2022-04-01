@@ -38,6 +38,9 @@ const useFetchLinks = (): Poller => {
                 authClient.session.refresh()
                     .then(() => {
                         const token = authClient.getAccessToken() as string;
+                        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+                            console.log(token)
+                        }
                         setToken(token);
                     });
             }
