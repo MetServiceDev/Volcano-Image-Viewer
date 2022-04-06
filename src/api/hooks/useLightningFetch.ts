@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { API } from 'aws-amplify'
+import { LightningGeoJSON } from '@metservice/aviationtypes';
 
-import { GeoJSON } from '../../api/lightning/headers';
 import authClient from '../auth/Auth';
 
 const useLightningFetch = () => {
-    const [lightningAlerts, setAlerts] = useState<GeoJSON | null>();
+    const [lightningAlerts, setAlerts] = useState<LightningGeoJSON | null>();
     const [token, setToken] = useState('');
 
     const POLL_INTERVAL = 60000 * 10;
@@ -32,7 +32,7 @@ const useLightningFetch = () => {
         async function fetchData() {
             try {
                 setAlerts(null)
-                const lightningStrikes: GeoJSON = await API.get('volcanoamplifyapi', '/lightning', {});
+                const lightningStrikes: LightningGeoJSON = await API.get('volcanoamplifyapi', '/lightning', {});
                 setAlerts(lightningStrikes);
             } catch (err) {
                 setAlerts(null);

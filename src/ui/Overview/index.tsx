@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 
 import { useEmissionsEffect } from '../../api/volcano/fetchGasEmissions';
 import VolcanicAlert from './VolcanicAlert';
-import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
+import { Volcano, VolcanoLocation } from '@metservice/aviationtypes';
+import { OverviewDisplay } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
 
 import LiveImages from './live-images';

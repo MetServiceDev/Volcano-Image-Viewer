@@ -2,12 +2,12 @@ import React from 'react';
 import { Theme } from '@material-ui/core';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import moment from 'moment';
+import { Volcano } from '@metservice/aviationtypes';
 
 import { userSavedImagesCDN } from '../../../metadata/Endpoints';
 import { formatDate } from '../../../api/volcano/formatThumbnail';
 import apiCall, { HTTPMethod } from '../../../api/APICall';
 import VolcanoThumbnails from '../../ReusedComponents/VolcanoThumbnails';
-import { Volcano } from '../../../api/volcano/headers';
 import RelatedVolcano from './RelatedVolcano';
 import formatS3Tags from '../../../api/images/formatS3Tags';
 import SelectImageDialog from './SelectImageDialog';
@@ -27,7 +27,6 @@ const styles = (theme:Theme) => createStyles({
         width: '10%',
         marginRight: theme.spacing(4)
     },
-    
     imgGrid: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr'  
@@ -121,12 +120,10 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
 
     const getVolcanoName = (imgLink: string) => {
         let volcCode = `${imgLink.split('.')[4]}.${imgLink.split('.')[5]}`;
-        console.log(volcCode);
         if (!imgLink.split('.')[4]) {
             volcCode = imgLink.split('-')[0].split('/')[1];
-        }
-        const volcano = volcanoes.find(vol => vol.code === volcCode)?.name
-        return volcano as string;
+        };
+        return volcanoes.find(({ code }) => code === volcCode)?.name as string;
     };
 
     const imageGrid = (
@@ -146,7 +143,7 @@ const LiveImages: React.FC<Props> = ({ classes, volcano, volcanoes }) => {
                         selectImage={(e: React.ChangeEvent<HTMLInputElement>) => addRemoveImage(e, imgLink.split('/')[1] as string)}
                         selected={Boolean(selectedImages.find((img: string) => img === imgLink.split('/')[1] as string))}
                         openPopup={() => null}
-                        imgWidth={'80%'}
+                        imgWidth="80%"
                     />
                 )
             })}

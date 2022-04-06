@@ -1,6 +1,5 @@
+import { QuakeDict } from '@metservice/aviationtypes';
 import { gnsRestEndpoint } from '../../metadata/Endpoints';
-import { QuakeDict } from './headers';
-
 
 const fetchQuakeHistory = async(ids: string[]): Promise<QuakeDict> => {
     const history = await Promise.all(ids.map(async(id) => {

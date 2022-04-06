@@ -1,10 +1,10 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import moment from 'moment';
+import { TableCell, TableRow, Theme } from '@material-ui/core';
+import { Observation } from '@metservice/aviationtypes';
 
 import TableComponent from "../../ReusedComponents/table";
-import { TableCell, TableRow, Theme } from '@material-ui/core';
-import { EmissionMeasures } from '../../../api/volcano/headers';
 
 const styles = (theme: Theme) => createStyles({
     tableRow: {
@@ -16,7 +16,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     element: string;
-    emissionMeasures: EmissionMeasures[];
+    emissionMeasures: Observation[];
 }
 
 // interface Data {
@@ -27,7 +27,7 @@ interface Props extends WithStyles<typeof styles> {
 
 const EmissionTable: React.FC<Props> = ({ classes, element, emissionMeasures }) => {
 
-    const emssionItem = (data: EmissionMeasures) => {
+    const emssionItem = (data: Observation) => {
         return (
             <TableRow key={data.time} className={classes.tableRow}>
               <TableCell component="th" scope="row" title={moment(data.time).format('Do MMMM YYYY')}>

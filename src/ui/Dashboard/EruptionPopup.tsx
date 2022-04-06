@@ -4,8 +4,7 @@ import { Snackbar, Theme, IconButton } from '@material-ui/core';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
-
-import { Volcano } from '../../api/volcano/headers';
+import { Volcano } from '@metservice/aviationtypes';
 
 const styles = (theme: Theme) => createStyles({
     root: {

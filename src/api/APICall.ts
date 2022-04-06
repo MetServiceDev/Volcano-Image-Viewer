@@ -13,7 +13,7 @@ interface Config {
     headers:any;
 };
 
-const apiCall = async <T=void, P={}>(route: string, method: HTTPMethod, token: string, body?: P): Promise<T> => {
+const apiCall = async <T=void, B={}>(route: string, method: HTTPMethod, token: string, body?: B): Promise<T> => {
     if (!token) {
         throw new Error('401: Token required')
     }

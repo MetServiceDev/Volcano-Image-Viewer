@@ -1,6 +1,6 @@
-import { LightningState, GeoJSON } from './headers';
+import { LightningState, LightningGeoJSON } from '@metservice/aviationtypes';
 
-const formatLightningData = (lightningData: GeoJSON): LightningState => {
+const formatLightningData = (lightningData: LightningGeoJSON): LightningState => {
     const { features } = lightningData;
     const warningStrikes = features.filter((feature) => feature.properties.alertLevel === 'warning');
     const alertStrikes = features.filter((feature) => feature.properties.alertLevel === 'error');

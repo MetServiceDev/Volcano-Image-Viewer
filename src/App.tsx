@@ -24,12 +24,12 @@ import { HTTPMethod } from './api/APICall';
 import useFetchLinks from './api/hooks/useFetchLinks';
 import fetchQuakeHistory from "./api/quakes/fetchQuakeHistory";
 import { AppContext } from './AppContext';
-import { QuakeDict } from './api/quakes/headers';
+// import { QuakeDict } from './api/quakes/headers';
 import useAuthState from './api/hooks/useAuthState';
 import useLocalStorage from './api/hooks/useLocalStorage';
 import useFilter from './api/hooks/useFilter';
 import useAPICall from './api/hooks/useAPICall';
-import { Volcano } from './api/volcano/headers';
+import { Volcano, QuakeDict } from '@metservice/aviationtypes';
 import config from './aws-exports';
 Amplify.configure(config);
 

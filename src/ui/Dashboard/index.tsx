@@ -6,8 +6,8 @@ import { SulfurMaps } from '../../metadata/SulfurMaps';
 import Navbar from '../Navbar/Navbar';
 import Sidebar from '../Sidebar/Sidebar';
 import LandingPage from '../LandingPage/LandingPage';
-import { Volcano } from '../../api/volcano/headers';
-import { RecentQuake } from '../../api/quakes/headers';
+import { Volcano, RecentQuake } from '@metservice/aviationtypes';
+
 import { redirectUri } from '../../metadata/Endpoints';
 import findQuakes from '../../api/quakes/findRecentQuakes';
 import EruptionPopup from './EruptionPopup';

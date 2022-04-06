@@ -6,9 +6,9 @@ import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/s
 import { Autocomplete } from '@material-ui/lab';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Volcano } from '@metservice/aviationtypes';
 
 import MapToggle from './MapToggle';
-import { Volcano } from '../../api/volcano/headers';
 import UserMenu from './UserMenu';
 import SettingsDialog from '../Settings';
 import MonitorDialog from '../Monitor';

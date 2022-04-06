@@ -3711,6 +3711,11 @@
     "prop-types" "^15.7.2"
     "react-is" "^16.8.0 || ^17.0.0"
 
+"@metservice/aviationtypes@^1.0.0":
+  "integrity" "sha512-7DMt2XXV+VcdZBhXsPuIqut6rn5AjrGH4Q5xld0OBup3qws3UQ5xf5wvkxaBScAFeqZhEtetwHPiOm5QtEIyPw=="
+  "resolved" "https://registry.npmjs.org/@metservice/aviationtypes/-/aviationtypes-1.0.0.tgz"
+  "version" "1.0.0"
+
 "@mui/core@5.0.0-alpha.54":
   "integrity" "sha512-8TxdHqDdSb6wjhsnpE5n7qtkFKDG3PUSlVY0gR3VcdsHXscUY13l3VbMQW1brI4D/R9zx5VYmxIHWaHFgw4RtA=="
   "resolved" "https://registry.npmjs.org/@mui/core/-/core-5.0.0-alpha.54.tgz"

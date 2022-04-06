@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { GeoJSON } from '../../api/lightning/headers';
+import { LightningGeoJSON } from '@metservice/aviationtypes';
 
 interface Context {
-    lightningAlerts: GeoJSON | null | undefined;
+    lightningAlerts: LightningGeoJSON | null | undefined;
     setAlerts: any;
 };
 

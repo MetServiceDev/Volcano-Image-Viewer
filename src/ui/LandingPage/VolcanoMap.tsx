@@ -4,8 +4,7 @@ import { withStyles } from '@material-ui/styles';
 import { createStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, WithStyles, Theme, Typography } from '@material-ui/core';
 import moment from 'moment';
 
-import { Volcano, VAL } from '../../api/volcano/headers';
-import { Quake } from '../../api/quakes/headers';
+import { QuakeFeature, Volcano, VolcanicAlert } from '@metservice/aviationtypes';
 import { quakeLevel, getIcon } from '../../api/quakes/setMarkers';
 import fetchVAL from '../../api/volcano/fetchVAL';
 import { AppContext } from '../../AppContext';
@@ -55,7 +54,7 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
 
     const mapRef = React.useRef<any>(null);
 
-    const [volcanoAlertLevels, setVAL] = React.useState<VAL[]>([]);
+    const [volcanoAlertLevels, setVAL] = React.useState<VolcanicAlert[]>([]);
 
     React.useEffect(() => {
         fetchVAL().then(data => setVAL(data))
@@ -68,7 +67,7 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
 
     const volcanicAlertLevel = (volcano: Volcano) => volcanoAlertLevels.find((v) => {
         return volcano.gnsID === v?.volcanoID
-    }) || { ...volcano.volcanicAlerts, volcanoID: volcano.gnsID } as VAL
+    }) || { ...volcano.volcanicAlerts, volcanoID: volcano.gnsID } as VolcanicAlert
 
     const alertTable = () => {
         return alertArray.map(volcano => {
@@ -90,7 +89,7 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
         });
     };
 
-    const quakePopup = (quake: Quake) => {
+    const quakePopup = (quake: QuakeFeature) => {
         return (
             <Popup>
                 <Typography variant="body1">
@@ -138,7 +137,7 @@ const VolcanoMap: React.FC<Props> = ({ classes }) => {
     }
 
     const map = () => {
-        const allQuakes = Object.values(quakes).map(i => i).flat() as Quake[];
+        const allQuakes = Object.values(quakes).map(i => i).flat() as QuakeFeature[];
         return (
             <MapContainer center={[-33.431441,175.059385]} zoom={5} whenCreated={ mapInstance => { mapRef.current = mapInstance }}>
                 <TileLayer

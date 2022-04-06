@@ -5,7 +5,7 @@ import { DialogTitle, Dialog, Theme, Typography, Divider } from '@material-ui/co
 import moment from 'moment';
 
 import { AppContext } from '../../../AppContext';
-import { Feature } from '../../../api/lightning/headers';
+import { LightningFeature } from '@metservice/aviationtypes';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -40,14 +40,14 @@ const styles = (theme: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles> {
     handleClose: () => void;
     open: boolean;
-    strikeLocations?: Feature[];
+    strikeLocations?: LightningFeature[];
 }
 
 const LightningMapDialog: React.FC<Props> = ({ classes, handleClose, open, strikeLocations }) => {
     const center = strikeLocations?.[0].geometry.coordinates || [0, 0];
     const { theme } = React.useContext(AppContext);
 
-    const strikePopup = (data: Feature) => {
+    const strikePopup = (data: LightningFeature) => {
         const { properties } = data;
         return (
             <Popup>

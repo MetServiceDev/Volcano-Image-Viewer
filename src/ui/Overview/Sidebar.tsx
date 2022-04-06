@@ -1,14 +1,14 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Theme, IconButton, Tooltip } from '@material-ui/core';
-
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import classnames from 'classnames'
+import { Volcano } from '@metservice/aviationtypes';
 
-import { OverviewDisplay, Volcano } from '../../api/volcano/headers';
+import { OverviewDisplay } from '../../api/volcano/headers';
 
 const styles = (theme: Theme) => createStyles({
     root: {

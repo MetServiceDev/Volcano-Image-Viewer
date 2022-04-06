@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 
-import { VAL } from '../../api/volcano/headers';
+import { VolcanicAlert } from '@metservice/aviationtypes';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-const setAlertStatus = (data: VAL) => {
+const setAlertStatus = (data: VolcanicAlert) => {
     const { activity, msg, level } = data;
     const activityMessage = activity ? activity : msg;
     switch(Number(level)){
@@ -41,10 +41,10 @@ const setAlertStatus = (data: VAL) => {
 };
 
 interface Props {
-    data: VAL;
+    data: VolcanicAlert;
 };
 
-const VolcanicAlert: React.FC<Props> = ({ data }) => {
+const VolcanicAlertComponent: React.FC<Props> = ({ data }) => {
     const classes = useStyles();
     const alert = setAlertStatus(data);
 
@@ -60,4 +60,4 @@ const VolcanicAlert: React.FC<Props> = ({ data }) => {
     );
 };
 
-export default VolcanicAlert;
+export default VolcanicAlertComponent;

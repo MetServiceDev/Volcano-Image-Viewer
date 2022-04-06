@@ -1,21 +1,22 @@
-import { quakeMarker, VolcanoLevels } from './headers';
+import { quakeMarker } from './headers';
+import { QuakeIntesity } from '@metservice/aviationtypes';
 import { greenIcon, yellowIcon, redIcon } from '../volcano/headers';
 
-export const quakeLevel = (intensity: VolcanoLevels) => {
+export const quakeLevel = (intensity: QuakeIntesity) => {
     switch (intensity) {
-        case VolcanoLevels.UNNOTICABLE.toLowerCase():
+        case QuakeIntesity.UNNOTICABLE.toLowerCase():
             return quakeMarker.unnoticable;
-        case VolcanoLevels.WEAK.toLowerCase():
+        case QuakeIntesity.WEAK.toLowerCase():
             return quakeMarker.weak;
-        case VolcanoLevels.LIGHT.toLowerCase():
+        case QuakeIntesity.LIGHT.toLowerCase():
             return quakeMarker.light;
-        case VolcanoLevels.MODERATE.toLowerCase():
+        case QuakeIntesity.MODERATE.toLowerCase():
             return quakeMarker.moderate;
-        case VolcanoLevels.STRONG.toLowerCase():
+        case QuakeIntesity.STRONG.toLowerCase():
             return quakeMarker.strong;
-        case VolcanoLevels.SEVERE.toLowerCase():
+        case QuakeIntesity.SEVERE.toLowerCase():
             return quakeMarker.severe;
-        case VolcanoLevels.EXTREME.toLowerCase():  
+        case QuakeIntesity.EXTREME.toLowerCase():  
             return quakeMarker.extreme;
         default:
             return quakeMarker.unnoticable;

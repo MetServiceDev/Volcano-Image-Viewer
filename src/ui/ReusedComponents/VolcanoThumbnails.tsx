@@ -4,9 +4,10 @@ import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Typography, LinearProgress, Zoom, Theme, IconButton, Tooltip } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import { Volcano } from '@metservice/aviationtypes';
 
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
-import { Volcano, Thumbnail } from '../../api/volcano/headers';
+import { Thumbnail } from '../../api/volcano/headers';
 import { fetchImages } from '../../api/images/fetchImages';
 import apiCall, { HTTPMethod } from '../../api/APICall';
 import authClient from '../../api/auth/Auth';

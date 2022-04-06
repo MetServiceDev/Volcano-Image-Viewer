@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 
 import VolcanoCard from './VolcanoCard';
 import SatelliteCard from './SatelliteCard';
-import { VolcanoLocation } from '../../api/volcano/headers';
+import { VolcanoLocation } from '@metservice/aviationtypes';
 import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles(() => ({

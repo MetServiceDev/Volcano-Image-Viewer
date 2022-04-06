@@ -7,7 +7,7 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import MapIcon from '@mui/icons-material/Map';
 import { API } from 'aws-amplify'
 
-import { GeoJSON, LightningState } from '../../../api/lightning/headers';
+import { LightningGeoJSON, LightningState } from '@metservice/aviationtypes';
 import formatLightningData from '../../../api/lightning/formatLightningData';
 
 import { LandingPageContext } from '../Context';
@@ -58,7 +58,7 @@ const LightningAlerts: React.FC = () => {
     const manualPoll = async(): Promise<void> => {
         try {
             setAlerts(null);
-            const data: GeoJSON = await API.get('volcanoamplifyapi', '/lightning', {})
+            const data: LightningGeoJSON = await API.get('volcanoamplifyapi', '/lightning', {})
             const formattedData = formatLightningData(data);
             setAlerts(lightningAlerts);
             setLightningState(formattedData);

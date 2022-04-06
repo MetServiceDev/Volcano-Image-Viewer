@@ -1,6 +1,6 @@
 import React from 'react';
 import apiCall, { HTTPMethod } from "../APICall";
-import { EmissionData } from "./headers";
+import { EmissionData } from "@metservice/aviationtypes";
 import useAPICall from '../hooks/useAPICall';
 
 const fetchGasEmissions = async(token: string): Promise<EmissionData[]> => {

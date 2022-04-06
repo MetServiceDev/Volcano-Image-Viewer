@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles, createStyles, WithStyles } from '@material-ui/styles';
 import { Paper, Typography, Theme, Tooltip } from '@material-ui/core';
+import MapIcon from '@mui/icons-material/Map';
+import { Volcano } from '@metservice/aviationtypes';
 
 import AlertIcon from '../ReusedComponents/AlertIcon';
-import MapIcon from '@mui/icons-material/Map';
 import VolcanoThumbnails from '../ReusedComponents/VolcanoThumbnails';
-import { Volcano } from '../../api/volcano/headers';
 import formatS3Tags from '../../api/images/formatS3Tags';
 import { FITS_ENDPOINT } from '../../metadata/Endpoints';
 import { AppContext } from '../../AppContext';

@@ -2,8 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Theme, Paper, Table, TableBody, TableCell, TableRow, TableHead, TableContainer } from '@material-ui/core';
-
-import { Quake } from '../../../api/quakes/headers';
+import { QuakeFeature } from '@metservice/aviationtypes';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -16,13 +15,13 @@ const styles = (theme: Theme) => createStyles({
 })
 
 interface Props extends WithStyles<typeof styles> {
-    quakes: Quake[];
+    quakes: QuakeFeature[];
 }
 
 const HistoryTable: React.FC<Props> = ({ classes, quakes }) => {
     const roundValue = (value: number) => Math.round(value * 100) / 100;
 
-    const historyItem = (quake: Quake) => {
+    const historyItem = (quake: QuakeFeature) => {
         const { properties } = quake;
         return (
             <TableRow key={properties.publicID}>
