@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
-import { MenuList, MenuItem, ListItemText, Theme, Select, Divider, Switch, Tooltip, Typography, Paper } from '@material-ui/core';
+import { MenuList, MenuItem, ListItemText, Theme, Divider, Switch } from '@material-ui/core';
 
 import { AppContext } from '../../AppContext';
 

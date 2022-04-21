@@ -7,6 +7,7 @@ import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
 import { ApolloProvider } from '@apollo/client';
 import { Volcano, QuakeDict } from '@metservice/aviationtypes';
+
 import './ui/App.css';
 import authClient from './api/auth/Auth';
 import { HTTPMethod } from "./api/APICall";
@@ -24,11 +25,9 @@ import useFetchLinks from './api/hooks/useFetchLinks';
 import fetchQuakeHistory from "./api/quakes/fetchQuakeHistory";
 import { AppContext } from './AppContext';
 import { navOptionsReducer } from './api/display/headers';
-// import { QuakeDict } from './api/quakes/headers';
 import useAuthState from './api/hooks/useAuthState';
 import useLocalStorage from './api/hooks/useLocalStorage';
 import useFilter from './api/hooks/useFilter';
-// import { volcanoQuery } from './graphQL/queries';
 import useAPICall from './api/hooks/useAPICall';
 
 const App: React.FC = () => {
@@ -37,11 +36,6 @@ const App: React.FC = () => {
 
   const [styleTheme, toggleTheme] = React.useState<boolean>(themeBool);
   const muiTheme = appTheme(styleTheme);
-  // const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
-  // const volcanoesQuery = useQuery(volcanoQuery);
-  // React.useEffect(() => {
-  //   setVolcanoes(volcanoesQuery?.data?.fetchVolcanoes);
-  // }, [volcanoesQuery]);
   
 
   const user = useAuthState();

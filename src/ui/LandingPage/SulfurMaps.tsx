@@ -63,16 +63,6 @@ const SulfurMaps: React.FC<Props> = ({ sulfurMaps }) => {
                     </Paper>
                 </Link>
             ))}
-            {/* {[1,2,3,4,5,6,7].map((index) => {
-                const imgLink = 'https://satepsanone.nesdis.noaa.gov/pub/OMI/OMISO2/images/newzealandc_prev'
-                return (
-                    <img
-                        src={`${imgLink}${index === 1 ? '' : index}.gif`}
-                        alt='img'
-                        width='10%'
-                    />
-                )
-            })} */}
         </div>
     )
 };

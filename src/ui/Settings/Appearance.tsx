@@ -54,15 +54,6 @@ const Appearance: React.FC<Props> = ({ classes, theme, toggleTheme }) => {
             <Divider/>
             <MenuItem>
                 <ListItemText>
-                    Show Lighting Alerts
-                </ListItemText>
-                <Switch
-                    color="primary"
-                />
-            </MenuItem>
-            <Divider/>
-            <MenuItem>
-                <ListItemText>
                     Volcano Grid
                 </ListItemText>
                 <Select
