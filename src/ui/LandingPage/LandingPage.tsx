@@ -88,10 +88,10 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps }) => {
     }
 
     return (
-        <LandingPageContext.Provider value={{ lightningAlerts, setAlerts }}>
+        <LandingPageContext.Provider value={{ lightningAlerts: lightningAlerts?.[0], setAlerts }}>
             <div className={classes.root} style={style}>
                 <div className={classes.headerTags} style={headerStyle}>
-                    {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts/>}
+                    {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts lightningAlerts={lightningAlerts?.[0] ?? null}/>}
                     {currentDisplay !== CurrentDisplay.ALERT_MAP && showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
                         action={<CloseIcon className={classes.minimize} onClick={() => toggleRefreshWarning(false)} />}>
                         Next poll: {counter} minutes

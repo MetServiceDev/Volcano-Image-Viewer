@@ -1,32 +1,5 @@
 import * as L from 'leaflet';
 
-export interface VAL {
-	level: string;
-	activity: string;
-	hazards: string;
-	acc: string;
-	volcanoID?: string;
-	msg?: string;
-}
-
-export interface Volcano {
-	code: string;
-	coordinates: {
-		lat: number;
-		long: number;
-	};
-	drumLink?: string;
-	index: number;
-	location: string;
-	mountain?: string;
-	name: string;
-	s3Link: string;
-	volcanicAlerts?: VAL;
-	relatedVolcanoes?: string[];
-	gnsID?: string;
-	FIT_ID?: string;
-};
-
 export interface Note {
     id: string;
     postedBy: string;
@@ -35,13 +8,6 @@ export interface Note {
     attachments?: string[];
     volcano: string;
     valid: string;
-};
-
-export enum VolcanoLocation {
-	VANUATU = 'Vanuatu',
-	NZ = 'NZ',
-	CENTRAL_NI = 'Central NI',
-	WI = 'WI',
 };
 
 export enum OverviewDisplay {
@@ -59,17 +25,6 @@ export interface Thumbnail {
 	hasntUpdated?: boolean
 	uploadedAt?: string;
 };
-
-export interface EmissionMeasures {
-	time: string;
-	measurement: number;
-	error: Number;
-};
-
-export interface EmissionData {
-	volcano: string;
-	emissions: Record<string, EmissionMeasures[]>;
-}
 
 export enum PlotType {
     Scatter = 'scatter',

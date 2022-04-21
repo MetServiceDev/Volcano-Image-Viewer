@@ -2,6 +2,7 @@ import React from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import { Redirect } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
 import authClient from '../../api/auth/Auth';
 
@@ -85,6 +86,9 @@ const Login: React.FC = () => {
 
     return (
         <div className={classes.root}>
+            <Typography>
+                Redirecting to Metservice, please wait...
+            </Typography>
         </div>
     );
 };

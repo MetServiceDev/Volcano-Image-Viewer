@@ -1,8 +1,11 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { DialogTitle, Dialog, Theme, Divider, DialogContent } from '@material-ui/core';
-import { SettingsOptions } from '../../api/settings/headers';
+import { MonitorOptions } from '../../api/monitor/headers';
 import ImageScanLog from './ImageScanLog';
+import LightningLog from './LightningLog';
+import CurrentImages from './CurrentImages';
+import Sidebar from './Sidebar';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -27,7 +30,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const MonitorDialog: React.FC<Props> = ({ classes, handleClose, open }) => {
-    const [currentDisplay, setDisplay] = React.useState<SettingsOptions>(SettingsOptions.Display);
+    const [currentDisplay, setDisplay] = React.useState<MonitorOptions>(MonitorOptions.Poller);
 
     return(
         <Dialog
@@ -42,11 +45,16 @@ const MonitorDialog: React.FC<Props> = ({ classes, handleClose, open }) => {
             </DialogTitle>
             <Divider/>
             <DialogContent className={classes.content}>
+                <Sidebar currentDisplay={currentDisplay} setDisplay={setDisplay}/>
                 <div className={classes.innerContent}>
                     {(() => {
                         switch(currentDisplay){
-                            case SettingsOptions.Display:
+                            case MonitorOptions.Poller:
                                 return <ImageScanLog />
+                            case MonitorOptions.Lightning:
+                                return <LightningLog />
+                            case MonitorOptions.CurrentImages:
+                                return <CurrentImages />
                         }
                     })()}
                 </div>

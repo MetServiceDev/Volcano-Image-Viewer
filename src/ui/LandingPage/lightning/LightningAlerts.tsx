@@ -3,14 +3,8 @@ import Alert from '@material-ui/lab/Alert';
 import { Color } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/styles';
 import { Typography, CircularProgress, IconButton, Tooltip, Theme } from '@material-ui/core';
-import ReplayIcon from '@material-ui/icons/Replay';
 import MapIcon from '@mui/icons-material/Map';
-import { API } from 'aws-amplify'
-
-import { LightningGeoJSON, LightningState } from '@metservice/aviationtypes';
-import formatLightningData from '../../../api/lightning/formatLightningData';
-
-import { LandingPageContext } from '../Context';
+import { LightningResponse } from '@metservice/aviationtypes';
 import LightningMapDialog from './LightningMapDialog';
 
 const useStyles =  makeStyles((theme: Theme) => ({
@@ -40,32 +34,13 @@ const useStyles =  makeStyles((theme: Theme) => ({
     },
 }));
 
-const LightningAlerts: React.FC = () => {
+interface Props {
+    lightningAlerts: LightningResponse;
+}
+
+const LightningAlerts: React.FC<Props> = ({ lightningAlerts }) => {
     const classes = useStyles();
-
-    const { lightningAlerts, setAlerts } = React.useContext(LandingPageContext);
-
-    const [lightningState, setLightningState] = React.useState<LightningState>();
     const [showMap, toggleMap] = React.useState<boolean>(false);
-
-    React.useEffect(() => {
-        if (lightningAlerts) {
-            const formattedData = formatLightningData(lightningAlerts);
-            setLightningState(formattedData);
-        }
-    }, [lightningAlerts])
-
-    const manualPoll = async(): Promise<void> => {
-        try {
-            setAlerts(null);
-            const data: LightningGeoJSON = await API.get('volcanoamplifyapi', '/lightning', {})
-            const formattedData = formatLightningData(data);
-            setAlerts(lightningAlerts);
-            setLightningState(formattedData);
-        } catch (err) {
-            setLightningState({severity: 'error', msg: 'Error: Failed to fetch lightning data'});
-        }   
-    }
 
     if(!lightningAlerts){
         return (
@@ -75,21 +50,6 @@ const LightningAlerts: React.FC = () => {
             </div>
         );
     };
-
-    const replyIcon = (
-        <Tooltip
-            title="refresh lightning alerts"
-            key="refreshIcon"
-            arrow
-        >
-            <IconButton
-                onClick={manualPoll}
-                className={classes.reload}
-            >
-                <ReplayIcon />
-            </IconButton>
-        </Tooltip>
-    );
 
     const mapIcon = (
         <Tooltip
@@ -112,16 +72,17 @@ const LightningAlerts: React.FC = () => {
             <div className={classes.root}>
                 <Alert
                     className={classes.alert}
-                    severity={lightningState?.severity as Color}
-                    action={[lightningState?.severity !== 'success' ? mapIcon : null, replyIcon].filter(Boolean)}
+                    severity={lightningAlerts?.formattedResponse.severity as Color}
+                    action={[lightningAlerts?.formattedResponse.severity !== 'success' ? mapIcon : null].filter(Boolean)}
                 >
-                    {lightningState?.msg}
+                    {lightningAlerts?.formattedResponse.msg}
                 </Alert>
             </div>}
             <LightningMapDialog
+                timestamp={lightningAlerts?.timestamp}
                 open={showMap}
                 handleClose={() => toggleMap(false)}
-                strikeLocations={lightningState?.strikeLocations}
+                strikeLocations={lightningAlerts?.strikes.features ?? []}
             />
        </div>
     );

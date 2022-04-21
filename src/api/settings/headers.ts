@@ -2,7 +2,7 @@ import { Color } from '@material-ui/lab';
 
 export enum SettingsOptions {
     Display = 'Display',
-    Monitor = 'Monitor',
+    NavOptions = 'Nav Options',
 }
 
 export interface RecentScanStatus {

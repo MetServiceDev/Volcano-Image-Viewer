@@ -24,6 +24,16 @@ interface Context {
     dispatchFilter: any;
     counter: number;
     fetchLinks: () => void;
+    currentImages: {
+        imageLog: any;
+        setImageLog: any;
+    };
+    navFilterState: {
+        showNavFilter: boolean;
+        showNavGrid: boolean;
+        showThemeToggle: boolean;
+        dispatchNavOption: any;
+    };
 };
 
 export const AppContext = createContext<Context>({
@@ -47,5 +57,15 @@ export const AppContext = createContext<Context>({
     },
     dispatchFilter: () => null,
     counter: 10,
-    fetchLinks: () => null
+    fetchLinks: () => null,
+    currentImages: {
+        imageLog: {},
+        setImageLog: () => null,
+    },
+    navFilterState: {
+        showNavFilter: false,
+        showNavGrid: false,
+        showThemeToggle: false,
+        dispatchNavOption: () => null,
+    },
 });

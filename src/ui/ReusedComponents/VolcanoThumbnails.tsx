@@ -97,7 +97,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<ErrorType>(false);
 
-    const { user } = React.useContext(AppContext);
+    const { user, currentImages: { imageLog, setImageLog } } = React.useContext(AppContext);
 
     const [imgSaved, setImgSaved] = React.useState<boolean>(false);
 
@@ -113,6 +113,15 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
         }
         setLoading(false);
     };
+
+    React.useEffect(() => {
+        if (!imageLog || !imageLog[volcano.name]) {
+            setImageLog({
+                ...imageLog,
+                [volcano.name]: { allThumbnails: allThumbnails.reverse(), s3Tags: s3Tags.reverse() }
+            })
+        }
+    }, [allThumbnails]);
 
     React.useEffect(() => {
         if (s3Tags.length > 0) {
