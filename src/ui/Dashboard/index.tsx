@@ -1,13 +1,12 @@
 import React from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import { Redirect, Link } from 'react-router-dom';
+import { Volcano, RecentQuake } from '@metservice/aviationtypes';
 
 import { SulfurMaps } from '../../metadata/SulfurMaps';
 import Navbar from '../Navbar/Navbar';
 import Sidebar from '../Sidebar/Sidebar';
 import LandingPage from '../LandingPage/LandingPage';
-import { Volcano, RecentQuake } from '@metservice/aviationtypes';
-
 import { redirectUri } from '../../metadata/Endpoints';
 import findQuakes from '../../api/quakes/findRecentQuakes';
 import EruptionPopup from './EruptionPopup';

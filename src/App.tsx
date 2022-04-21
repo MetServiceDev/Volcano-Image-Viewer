@@ -5,13 +5,14 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
-import Amplify from 'aws-amplify';
-
+import { ApolloProvider } from '@apollo/client';
+import { Volcano, QuakeDict } from '@metservice/aviationtypes';
 import './ui/App.css';
 import authClient from './api/auth/Auth';
+import { HTTPMethod } from "./api/APICall";
 import appTheme from './AppTheme';
 import store from './redux/store/index';
-
+import client from './graphQL/client';
 import Dashboard from './ui/Dashboard';
 import VolcanoOverview from './ui/Overview';
 import Login from './ui/LoginForm/Login';
@@ -19,19 +20,16 @@ import AshMapOverview from './ui/Overview/AshMap';
 import UserDashboard from './ui/UserDashboard';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
 import { redirectUri } from './metadata/Endpoints';
-import { HTTPMethod } from './api/APICall';
-
 import useFetchLinks from './api/hooks/useFetchLinks';
 import fetchQuakeHistory from "./api/quakes/fetchQuakeHistory";
 import { AppContext } from './AppContext';
+import { navOptionsReducer } from './api/display/headers';
 // import { QuakeDict } from './api/quakes/headers';
 import useAuthState from './api/hooks/useAuthState';
 import useLocalStorage from './api/hooks/useLocalStorage';
 import useFilter from './api/hooks/useFilter';
+// import { volcanoQuery } from './graphQL/queries';
 import useAPICall from './api/hooks/useAPICall';
-import { Volcano, QuakeDict } from '@metservice/aviationtypes';
-import config from './aws-exports';
-Amplify.configure(config);
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -39,6 +37,12 @@ const App: React.FC = () => {
 
   const [styleTheme, toggleTheme] = React.useState<boolean>(themeBool);
   const muiTheme = appTheme(styleTheme);
+  // const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+  // const volcanoesQuery = useQuery(volcanoQuery);
+  // React.useEffect(() => {
+  //   setVolcanoes(volcanoesQuery?.data?.fetchVolcanoes);
+  // }, [volcanoesQuery]);
+  
 
   const user = useAuthState();
 
@@ -52,10 +56,18 @@ const App: React.FC = () => {
 
   const { links, polling, counter, fetchLinks } = useFetchLinks();
 
+  const [imageLog, setImageLog] = React.useState<any>();
+
   const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', '');
   const [gridDisplay, setGrid] = useLocalStorage('gridSize', 4);
 
-  const { filters, dispatchFilter }  = useFilter()
+  const { filters, dispatchFilter }  = useFilter();
+
+  const [{ showNavFilter, showNavGrid, showThemeToggle }, dispatchNavOption] = React.useReducer(navOptionsReducer, {
+    showNavFilter: false,
+    showNavGrid: false,
+    showThemeToggle: false,
+});
 
   const setTheme = () => {
     toggleTheme(!styleTheme);
@@ -86,7 +98,14 @@ const App: React.FC = () => {
     filters,
     dispatchFilter,
     counter,
-    fetchLinks
+    fetchLinks,
+    currentImages: { imageLog, setImageLog },
+    navFilterState: {
+      showNavFilter,
+      showNavGrid,
+      showThemeToggle,
+      dispatchNavOption,
+    },
   };
 
   return (
@@ -139,9 +158,11 @@ const AppWithRouterAccess = () => {
 };
 
 const Wrapper = () => (
-  <Provider store={store}>
-    <AppWithRouterAccess/>
-  </Provider>
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <AppWithRouterAccess/>
+    </Provider>
+  </ApolloProvider>
 );
 
 export default Wrapper;

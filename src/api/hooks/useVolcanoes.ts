@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import apiCall, { HTTPMethod } from '../APICall';
 import { Volcano } from '@metservice/aviationtypes';
+
+import apiCall, { HTTPMethod } from '../APICall';
 
 const useVolcanoes = (token: string | undefined) => {
     const [volcanoes, setVolcanoes] = useState<Volcano[]>([]);
