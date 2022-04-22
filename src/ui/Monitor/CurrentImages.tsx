@@ -1,9 +1,7 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
-import { Theme, Typography, TextField, Divider, IconButton } from '@material-ui/core';
+import { Theme, Typography, TextField, Divider } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import moment from 'moment';
 import { AppContext } from '../../AppContext';
 
@@ -14,7 +12,7 @@ const styles = (theme: Theme) => createStyles({
         marginBottom: theme.spacing(2),
     },
     thumbnailRows: {
-        height: '42vh',
+        height: '46vh',
         overflow: 'auto',
         marginTop: theme.spacing(1)
     },
@@ -47,7 +45,7 @@ const CurrentImages: React.FC<Props> = ({ classes }) => {
         const dateTag = s3Tag.split('/')[1].split('.').splice(0, 3);
         const day = moment(dateTag[0]).startOf('year').add(dateTag[1], 'days').format('DD/MM/YY');
         return `${dateTag[2].substring(0, 2) + ':' + dateTag[2].substring(2, 4)} ${day} UTC`;
-    }
+    };
 
     return (
         <div>
@@ -71,15 +69,6 @@ const CurrentImages: React.FC<Props> = ({ classes }) => {
                         </Typography>
                     </div>
                 ))}
-            </div>
-            {selectedVolcano && <Divider />}
-            <div className={classes.bottomSec}>
-                <IconButton color="primary">
-                    <ArrowBackIosNewIcon/>
-                </IconButton>
-                <IconButton color="primary">
-                    <ArrowForwardIosIcon />
-                </IconButton>
             </div>
         </div>
     );

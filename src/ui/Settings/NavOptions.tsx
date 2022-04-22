@@ -36,7 +36,7 @@ const NavOptions: React.FC<Props> = ({ classes }) => {
 
     return (
         <MenuList>
-            <MenuItem onClick={() => navFilterState.dispatchNavOption({ type: NavOptionsList.ToggleFilters, payload: !navFilterState.showNavFilter })}>
+            <MenuItem onClick={() => navFilterState.dispatchNavOption('showNavFilter', NavOptionsList.ToggleFilters, !navFilterState.showNavFilter)}>
                 <ListItemText>
                     Show Filters
                 </ListItemText>
@@ -46,7 +46,7 @@ const NavOptions: React.FC<Props> = ({ classes }) => {
                 />
             </MenuItem>
             <Divider/>
-            <MenuItem onClick={() => navFilterState.dispatchNavOption({ type: NavOptionsList.ToggleGrid, payload: !navFilterState.showNavGrid })}>
+            <MenuItem onClick={() => navFilterState.dispatchNavOption('showNavGrid', NavOptionsList.ToggleGrid, !navFilterState.showNavGrid)}>
                 <ListItemText>
                     Show Grid Select
                 </ListItemText>
@@ -56,7 +56,7 @@ const NavOptions: React.FC<Props> = ({ classes }) => {
                 />
             </MenuItem>
             <Divider/>
-            <MenuItem onClick={() => navFilterState.dispatchNavOption({ type: NavOptionsList.ToggleTheme, payload: !navFilterState.showThemeToggle })}>
+            <MenuItem onClick={() => navFilterState.dispatchNavOption('showThemeToggle', NavOptionsList.ToggleTheme, !navFilterState.showThemeToggle)}>
                 <ListItemText>
                     Show Theme Toggle
                 </ListItemText>

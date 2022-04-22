@@ -32,7 +32,7 @@ interface Context {
         showNavFilter: boolean;
         showNavGrid: boolean;
         showThemeToggle: boolean;
-        dispatchNavOption: any;
+        dispatchNavOption: (keyName: string, type: any, payload: boolean) => void;
     };
 };
 

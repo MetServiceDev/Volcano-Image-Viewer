@@ -30,6 +30,12 @@ import useLocalStorage from './api/hooks/useLocalStorage';
 import useFilter from './api/hooks/useFilter';
 import useAPICall from './api/hooks/useAPICall';
 
+enum NavOptions {
+  ToggleFilters = 'Toggle Filters',
+  ToggleGrid = 'Toggle Grid',
+  ToggleTheme = 'Toggle Theme',
+}
+
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
   const themeBool = JSON.parse(theme as string)
@@ -54,14 +60,26 @@ const App: React.FC = () => {
 
   const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', '');
   const [gridDisplay, setGrid] = useLocalStorage('gridSize', 4);
-
-  const { filters, dispatchFilter }  = useFilter();
-
-  const [{ showNavFilter, showNavGrid, showThemeToggle }, dispatchNavOption] = React.useReducer(navOptionsReducer, {
+  const [filterNavSettings] = useLocalStorage('filterNavSettings', {
     showNavFilter: false,
     showNavGrid: false,
     showThemeToggle: false,
-});
+  });
+
+  const { filters, dispatchFilter }  = useFilter();
+
+  const [{ showNavFilter, showNavGrid, showThemeToggle }, dispatchNavOption] = React.useReducer(navOptionsReducer, { ...filterNavSettings });
+
+  const dispatchNavOptionLocal = (keyName: string, type: NavOptions, payload: boolean) => {
+    var newObj = {
+      showNavFilter,
+      showNavGrid,
+      showThemeToggle,
+      [keyName]: payload
+    };
+    localStorage.setItem('filterNavSettings', JSON.stringify(newObj))
+    dispatchNavOption({ type, payload })
+  }
 
   const setTheme = () => {
     toggleTheme(!styleTheme);
@@ -69,7 +87,6 @@ const App: React.FC = () => {
   };
 
   React.useEffect(()=> {
-    console.log(process.env.REACT_APP_RESTEP, process.env.REACT_APP_VERSION, process.env.REACT_APP_USER_CDN)
     async function fetchData(): Promise<void> {
       const volcanoIds = volcanoes?.map(v => v.gnsID);
       const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
@@ -99,7 +116,7 @@ const App: React.FC = () => {
       showNavFilter,
       showNavGrid,
       showThemeToggle,
-      dispatchNavOption,
+      dispatchNavOption: dispatchNavOptionLocal,
     },
   };
 
