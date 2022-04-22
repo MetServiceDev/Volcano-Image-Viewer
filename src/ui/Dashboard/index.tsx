@@ -29,7 +29,6 @@ const Dashboard: React.FC<Props> = ({ theme, toggleTheme }) => {
     const volcanoRef = React.useRef<HTMLAnchorElement>(null);
 
     React.useEffect(() => {
-        logout();
         if (user) {
             setRecentQuakes(findQuakes(quakes));
         };
