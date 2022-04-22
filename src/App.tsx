@@ -69,6 +69,7 @@ const App: React.FC = () => {
   };
 
   React.useEffect(()=> {
+    console.log(process.env.REACT_APP_RESTEP, process.env.REACT_APP_VERSION, process.env.REACT_APP_USER_CDN)
     async function fetchData(): Promise<void> {
       const volcanoIds = volcanoes?.map(v => v.gnsID);
       const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
