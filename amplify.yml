@@ -9,7 +9,7 @@ frontend:
     build:
       commands:
         - echo "I am running 🏃 on prod"
-        - npm run build:sanpit
+        - npm run build:sandpit
   artifacts:
     baseDirectory: build
     files:
