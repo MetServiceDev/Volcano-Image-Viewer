@@ -50,7 +50,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start:sandpit": "REACT_APP_RESTEP=https://koztdf20e6.execute-api.ap-southeast-2.amazonaws.com/prod/v0/rest REACT_APP_IMG_CDN=https://d3tdg999z8uo5q.cloudfront.net REACT_APP_USER_CDN=https://d1xsjyv3hh3owx.cloudfront.net react-scripts start",
-    "build": "REACT_APP_RESTEP=https://koztdf20e6.execute-api.ap-southeast-2.amazonaws.com/prod/v0/rest REACT_APP_IMG_CDN=https://d3tdg999z8uo5q.cloudfront.net REACT_APP_USER_CDN=https://d1xsjyv3hh3owx.cloudfront.net react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "docker-compose up -d --build",
