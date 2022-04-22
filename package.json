@@ -27,6 +27,7 @@
     "chart.js": "^3.6.0",
     "classnames": "^2.3.1",
     "dotenv": "^10.0.0",
+    "env-cmd": "^10.1.0",
     "graphql": "^16.3.0",
     "leaflet": "^1.7.1",
     "material-ui-image": "^3.3.2",
@@ -49,8 +50,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:sandpit": "REACT_APP_IMG_CDN=https://d3tdg999z8uo5q.cloudfront.net REACT_APP_USER_CDN=https://d1xsjyv3hh3owx.cloudfront.net react-scripts start",
+    "start:sandpit": "env-cmd -f .env.sandpit react-scripts start",
+    "start:prod": "env-cmd -f .env.prod react-scripts start",
     "build": "react-scripts build",
+    "build:sanpit": "env-cmd -f .env.development react-scripts build",
+    "build:production": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "docker-compose up -d --build"

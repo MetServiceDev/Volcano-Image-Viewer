@@ -9,10 +9,7 @@ frontend:
     build:
       commands:
         - echo "I am running 🏃 on prod"
-        - REACT_APP_RESTEP=$REACT_APP_RESTEP >> .env
-        - REACT_APP_IMG_CDN=$REACT_APP_IMG_CDN >> .env
-        - REACT_APP_USER_CDN=$REACT_APP_USER_CDN >> .env
-        - npm run build
+        - npm run build:sanpit
   artifacts:
     baseDirectory: build
     files:
