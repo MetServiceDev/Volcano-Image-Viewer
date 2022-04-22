@@ -1,7 +1,9 @@
 import React from 'react';
-import { Menu, MenuItem, Typography, Divider } from '@material-ui/core';
+import { Menu, MenuItem, Typography, Divider, ListItemText, ListItemIcon } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import GridViewIcon from '@mui/icons-material/GridView';
+import CollectionsIcon from '@mui/icons-material/Collections';
+import SettingsIcon from '@mui/icons-material/Settings';
+import MonitorIcon from '@mui/icons-material/Monitor';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import { Theme } from '@material-ui/core/styles';
@@ -10,10 +12,10 @@ import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
     menuItem: {
+        color: theme.palette.text.secondary,
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        width: '100%',
-        color: theme.palette.text.secondary
     },
     header: {
         fontWeight: 'bold',
@@ -30,9 +32,11 @@ interface Props {
     open: boolean,
     handleClose: () => void,
     logout: () => Promise<void>;
+    openSettings: () => void;
+    openMonitor: () => void;
 }
 
-const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout }) => {
+const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout, openSettings, openMonitor }) => {
     const classes = useStyles();
     const { user } = React.useContext(AppContext);
 
@@ -47,18 +51,43 @@ const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout }) => {
             }}
         >
             <MenuItem className={classes.menuItem}>
-                <Typography className={classes.header}>Signed in as {user?.name}</Typography>
+                <Typography className={classes.header}>{user?.name}</Typography>
             </MenuItem>
             <Divider/>
             <Link to={`/user/${user?.aud}`} className={classes.link}>
                 <MenuItem className={classes.menuItem}>
-                    <Typography>Dashboard</Typography>
-                    <GridViewIcon/>
+                    <ListItemText>
+                        Images
+                    </ListItemText>
+                    <ListItemIcon>
+                        <CollectionsIcon/>
+                    </ListItemIcon>
                 </MenuItem>
             </Link>
+            <MenuItem className={classes.menuItem} onClick={openMonitor}>
+                <ListItemText>
+                    Monitor
+                </ListItemText>
+                <ListItemIcon>
+                    <MonitorIcon/>
+                </ListItemIcon>
+            </MenuItem>
+            <MenuItem className={classes.menuItem} onClick={openSettings}>
+                <ListItemText>
+                    Settings
+                </ListItemText>
+                <ListItemIcon>
+                    <SettingsIcon/>
+                </ListItemIcon>
+            </MenuItem>
+            <Divider/>
             <MenuItem className={classes.menuItem} onClick={logout}>
-                <Typography>Logout</Typography>
-                <ExitToAppIcon/>
+                <ListItemText>
+                    Logout
+                </ListItemText>
+                <ListItemIcon>
+                        <ExitToAppIcon/>
+                </ListItemIcon>
             </MenuItem>
         </Menu>
     )

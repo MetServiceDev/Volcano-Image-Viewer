@@ -1,13 +1,12 @@
 import React from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import { Redirect, Link } from 'react-router-dom';
+import { Volcano, RecentQuake } from '@metservice/aviationtypes';
 
 import { SulfurMaps } from '../../metadata/SulfurMaps';
 import Navbar from '../Navbar/Navbar';
 import Sidebar from '../Sidebar/Sidebar';
 import LandingPage from '../LandingPage/LandingPage';
-import { Volcano } from '../../api/volcano/headers';
-import { RecentQuake } from '../../api/quakes/headers';
 import { redirectUri } from '../../metadata/Endpoints';
 import findQuakes from '../../api/quakes/findRecentQuakes';
 import EruptionPopup from './EruptionPopup';
@@ -39,7 +38,7 @@ const Dashboard: React.FC<Props> = ({ theme, toggleTheme }) => {
     if(!authState) {
         return <div>Loading...</div>
     }
-
+    
     if(!authState.isAuthenticated){
         return <Redirect to='/login'/>
     };

@@ -3,11 +3,15 @@ frontend:
   phases:
     preBuild:
       commands:
+        - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
         - npm install
         - npm ci
     build:
       commands:
-        - echo "I am running 🏃 on prod" 
+        - echo "I am running 🏃 on prod"
+        - REACT_APP_RESTEP=$REACT_APP_RESTEP >> .env
+        - REACT_APP_IMG_CDN=$REACT_APP_IMG_CDN >> .env
+        - REACT_APP_USER_CDN=$REACT_APP_USER_CDN >> .env
         - npm run build
   artifacts:
     baseDirectory: build

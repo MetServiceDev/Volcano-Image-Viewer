@@ -1,11 +1,10 @@
 import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core';
+import { Observation, EmissionElements } from '@metservice/aviationtypes';
 
 import EmissionChart from './EmissionChart';
-import { EmissionElements } from '../../../api/quakes/headers';
 import PopupChart from './PopupChart';
-import { EmissionData, EmissionMeasures } from '../../../api/volcano/headers';
 import { FITS_ENDPOINT } from '../../../metadata/Endpoints';
 
 const styles = (theme: Theme) => createStyles({
@@ -23,7 +22,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {
     FIT_ID: string;
-    emissionData?: EmissionData;
+    emissionData?: any;
 }
 
 interface SelectedChart {
@@ -60,12 +59,12 @@ const GasEmission: React.FC<Props> = ({ classes, FIT_ID, emissionData }) => {
     const renderGraphs = () => {
         return (
             <div className={classes.wrapper}>
-                {[EmissionElements.SO2, EmissionElements.CO2, EmissionElements.H2S].map(gas => {
-                    
+                {Object.values(EmissionElements).map(gas => {
                     const src = imgSrc(gas);
+                    
                     const title = formatTitle(gas);
                     const dataLink = csvLink(gas);
-                    const emissionMeasures = emissionData?.emissions[gas] as EmissionMeasures[];
+                    const emissionMeasures = emissionData?.emissions[gas] as Observation[];
                     return (
                         <EmissionChart
                             key={gas}

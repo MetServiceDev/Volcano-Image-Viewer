@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volcano } from '../../api/volcano/headers';
+import { Volcano } from '@metservice/aviationtypes';
 
 const VolcanoContext = React.createContext<Volcano[]>([]);
 

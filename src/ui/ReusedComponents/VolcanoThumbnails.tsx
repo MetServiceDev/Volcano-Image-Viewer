@@ -4,11 +4,12 @@ import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Typography, LinearProgress, Zoom, Theme, IconButton, Tooltip } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import { Volcano } from '@metservice/aviationtypes';
 
 import ErrorMessage from '../ErrorComponents/ErrorMessage';
-import { Volcano, Thumbnail } from '../../api/volcano/headers';
+import { Thumbnail } from '../../api/volcano/headers';
 import { fetchImages } from '../../api/images/fetchImages';
-import apiCall from '../../api/APICall';
+import apiCall, { HTTPMethod } from '../../api/APICall';
 import authClient from '../../api/auth/Auth';
 import { AppContext } from '../../AppContext';
 
@@ -65,7 +66,7 @@ const styles = (theme: Theme) => createStyles({
         width: '100%',
         bottom:'0%',
         position: 'absolute',
-        backgroundColor:'rgba(255, 187, 0, 0.5)',
+        backgroundColor: theme.palette.primary.dark,
     },
     loadingDiv: {
         height:'24vh',
@@ -96,7 +97,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<ErrorType>(false);
 
-    const { user } = React.useContext(AppContext);
+    const { user, currentImages: { imageLog, setImageLog } } = React.useContext(AppContext);
 
     const [imgSaved, setImgSaved] = React.useState<boolean>(false);
 
@@ -112,6 +113,15 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
         }
         setLoading(false);
     };
+
+    React.useEffect(() => {
+        if (!imageLog || !imageLog[volcano.name]) {
+            setImageLog({
+                ...imageLog,
+                [volcano.name]: { allThumbnails: allThumbnails.reverse(), s3Tags: s3Tags.reverse() }
+            })
+        }
+    }, [allThumbnails]);
 
     React.useEffect(() => {
         if (s3Tags.length > 0) {
@@ -160,7 +170,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
         const saveImage = async(): Promise<void> => {
             const token = authClient.getAccessToken() as string;
             const fileKey = s3Tags[currentIndex];
-            await apiCall<null>('user/images', 'POST', token, { userId: user?.aud as string, fileKey });
+            await apiCall('user/images', HTTPMethod.POST, token, { userId: user?.aud as string, fileKey });
             setImgSaved(true);
             setTimeout(() => setImgSaved(false), 2000);
         };

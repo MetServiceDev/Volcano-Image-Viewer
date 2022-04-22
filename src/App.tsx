@@ -5,28 +5,36 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
+import { ApolloProvider } from '@apollo/client';
+import { Volcano, QuakeDict } from '@metservice/aviationtypes';
 
 import './ui/App.css';
 import authClient from './api/auth/Auth';
+import { HTTPMethod } from "./api/APICall";
 import appTheme from './AppTheme';
 import store from './redux/store/index';
-
+import client from './graphQL/client';
 import Dashboard from './ui/Dashboard';
 import VolcanoOverview from './ui/Overview';
 import Login from './ui/LoginForm/Login';
 import AshMapOverview from './ui/Overview/AshMap';
 import UserDashboard from './ui/UserDashboard';
 import ErrorPage from './ui/ErrorComponents/ErrorPage';
-import { Volcano } from './api/volcano/headers';
-import { poll } from './api/poller';
 import { redirectUri } from './metadata/Endpoints';
-
 import useFetchLinks from './api/hooks/useFetchLinks';
 import fetchQuakeHistory from "./api/quakes/fetchQuakeHistory";
 import { AppContext } from './AppContext';
-import { QuakeDict } from './api/quakes/headers';
+import { navOptionsReducer } from './api/display/headers';
 import useAuthState from './api/hooks/useAuthState';
 import useLocalStorage from './api/hooks/useLocalStorage';
+import useFilter from './api/hooks/useFilter';
+import useAPICall from './api/hooks/useAPICall';
+
+enum NavOptions {
+  ToggleFilters = 'Toggle Filters',
+  ToggleGrid = 'Toggle Grid',
+  ToggleTheme = 'Toggle Theme',
+}
 
 const App: React.FC = () => {
   const theme = localStorage.getItem('ui-theme');
@@ -34,24 +42,44 @@ const App: React.FC = () => {
 
   const [styleTheme, toggleTheme] = React.useState<boolean>(themeBool);
   const muiTheme = appTheme(styleTheme);
+  
 
   const user = useAuthState();
 
-  const [volcanoes, setVolcanoes] = React.useState<Volcano[]>([]);
+  const volcanoes = useAPICall<Volcano[]>({
+    route: 'volcanoes',
+    method: HTTPMethod.GET,
+    token: user?.token
+  });
+
   const [quakes, setQuakes] = React.useState<QuakeDict>({});
 
-  const { links, polling } = useFetchLinks();
+  const { links, polling, counter, fetchLinks } = useFetchLinks();
+
+  const [imageLog, setImageLog] = React.useState<any>();
 
   const [expandSidebar, toggleSidebar] = useLocalStorage('expandSidebar', '');
-  const [gridDisplay, setGrid] = useLocalStorage('gridSize', '');
+  const [gridDisplay, setGrid] = useLocalStorage('gridSize', 4);
+  const [filterNavSettings] = useLocalStorage('filterNavSettings', {
+    showNavFilter: false,
+    showNavGrid: false,
+    showThemeToggle: false,
+  });
 
-  React.useEffect(() => {
-    if (user) {
-      poll(user.token).then(async(res) => {
-        setVolcanoes(res);
-      }).catch(err => console.log(err))
-    }
-  },[user]);
+  const { filters, dispatchFilter }  = useFilter();
+
+  const [{ showNavFilter, showNavGrid, showThemeToggle }, dispatchNavOption] = React.useReducer(navOptionsReducer, { ...filterNavSettings });
+
+  const dispatchNavOptionLocal = (keyName: string, type: NavOptions, payload: boolean) => {
+    var newObj = {
+      showNavFilter,
+      showNavGrid,
+      showThemeToggle,
+      [keyName]: payload
+    };
+    localStorage.setItem('filterNavSettings', JSON.stringify(newObj))
+    dispatchNavOption({ type, payload })
+  }
 
   const setTheme = () => {
     toggleTheme(!styleTheme);
@@ -60,7 +88,7 @@ const App: React.FC = () => {
 
   React.useEffect(()=> {
     async function fetchData(): Promise<void> {
-      const volcanoIds = volcanoes.map(v => v.gnsID);
+      const volcanoIds = volcanoes?.map(v => v.gnsID);
       const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
       const quakes = await fetchQuakeHistory(gnsIDs);
       setQuakes(quakes);
@@ -77,7 +105,19 @@ const App: React.FC = () => {
     expandSidebar,
     toggleSidebar,
     gridDisplay,
-    setGrid
+    setGrid,
+    theme:styleTheme,
+    filters,
+    dispatchFilter,
+    counter,
+    fetchLinks,
+    currentImages: { imageLog, setImageLog },
+    navFilterState: {
+      showNavFilter,
+      showNavGrid,
+      showThemeToggle,
+      dispatchNavOption: dispatchNavOptionLocal,
+    },
   };
 
   return (
@@ -130,9 +170,11 @@ const AppWithRouterAccess = () => {
 };
 
 const Wrapper = () => (
-  <Provider store={store}>
-    <AppWithRouterAccess/>
-  </Provider>
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <AppWithRouterAccess/>
+    </Provider>
+  </ApolloProvider>
 );
 
 export default Wrapper;

@@ -2,8 +2,10 @@ import React from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import { Redirect } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Typography, LinearProgress } from '@material-ui/core';
 
 import authClient from '../../api/auth/Auth';
+import appLogo from '../../images/volcano.png';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -14,50 +16,15 @@ const useStyles = makeStyles((theme: Theme) => ({
         top:'0%',
         left:'0%'
     },
-    loginForm: {
-        width:'30%',
-        position:'fixed',
-        top:'10%',
-        left:'35%',
-        height: '65vh',
-        borderRadius: '0px'
+    wrapper: {
+        textAlign: 'center',
+        position: 'absolute',
+        left: '35%',
+        top: '5%'
     },
-    icon: {
-        display: 'block',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '30%',
-        paddingTop:'5px'
-    },
-    input: {
-        width: '90%',
-        position:'absolute',
-        left:'5%'
-    },
-    button: {
-        width: '90%',
-        position:'absolute',
-        left:'5%',
-        top:'70%',
-        border: `1px solid ${theme.palette.primary.main}`,
-        backgroundColor: 'rgba(255, 187, 0, 0.25)',
-        borderRadius:'0px',
-        height:'10vh',
-        '&:hover': {
-            backgroundColor: theme.palette.primary.dark
-        }    
-    },
-    loader: {
-        position:'absolute',
-        bottom:'0%',
-        width:'100%',
-        backgroundColor: theme.palette.primary.dark,
-    },
-    errorMsg: {
-        position: 'fixed',
-        width:'30%',
-        top:'80%',
-        left:'35%'
+    img: {
+        width: '65%',
+        marginTop: theme.spacing(2)
     }
 }));
 
@@ -85,6 +52,13 @@ const Login: React.FC = () => {
 
     return (
         <div className={classes.root}>
+            <div className={classes.wrapper}>
+                <Typography variant="h6">
+                    Redirecting to Metservice, please wait...
+                </Typography>
+                <LinearProgress color='primary' />
+                <img src={appLogo} alt="logo" className={classes.img} />
+            </div>
         </div>
     );
 };

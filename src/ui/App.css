@@ -33,7 +33,7 @@ body {
   width: 96px;
   height: 96px;
   border-radius: 0%;
-  background: #ffbb00;
+  background: #14d98a;
   animation: lds-grid 1.2s linear infinite;
 }
 .lds-grid div:nth-child(1) {

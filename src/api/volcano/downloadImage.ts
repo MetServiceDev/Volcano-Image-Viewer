@@ -7,14 +7,14 @@ const downloadImage = async(link: string, idx: number): Promise<Thumbnail> => {
     const timestamp = call.headers.get('x-amz-meta-timestamp');
     let hasntUpdated = JSON.parse(call.headers.get('x-amz-meta-hasntupdated') as string);
     const uploadedAt =  call.headers.get('x-amz-meta-uploadedat');
-    if (idx === 11) {
-        if (uploadedAt) {
-            const uploadTime = moment(uploadedAt).toDate();
-            if(moment().diff(uploadTime, 'minutes') >= 16) {
-                hasntUpdated = true;
-            }
-        }
-    }
+    // if (idx === 11) {
+    //     if (uploadedAt) {
+    //         const uploadTime = moment(uploadedAt).toDate();
+    //         if(moment().diff(uploadTime, 'minutes') >= 36) {
+    //             hasntUpdated = true;
+    //         }
+    //     }
+    // }
     const blob = await call.blob();
     const src = URL.createObjectURL(blob);
     return { src, size, timestamp, uploadedAt, hasntUpdated } as Thumbnail;

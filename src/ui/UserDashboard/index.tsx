@@ -6,7 +6,7 @@ import moment from 'moment';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InboxIcon from '@mui/icons-material/Inbox';
 
-import apiCall from '../../api/APICall';
+import apiCall, { HTTPMethod } from '../../api/APICall';
 import authClient from '../../api/auth/Auth';
 import { userSavedImagesCDN } from '../../metadata/Endpoints';
 import { formatDate } from '../../api/volcano/formatThumbnail';
@@ -117,7 +117,7 @@ const UserDashboard: React.FC<Props> = ({ classes }) => {
     const fetchImages = React.useCallback(
         async(): Promise<void> => {
             try {
-                const savedImages = await apiCall<string[]>(`user?userId=${user?.aud}`, 'GET', token);
+                const savedImages = await apiCall<string[]>(`user?userId=${user?.aud}`, HTTPMethod.GET, token);
                 setLoaded(true);
                 setSavedImages(savedImages);
             } catch(err) {
@@ -155,7 +155,7 @@ const UserDashboard: React.FC<Props> = ({ classes }) => {
             files: selectedImages
         };
         try {
-            await apiCall<null, DeleteBody>('user/images', 'DELETE', token, body);
+            await apiCall<null, DeleteBody>('user/images', HTTPMethod.DELETE, token, body);
             setDeleteComplete(true);
             fetchImages();
             dispatch({ type: ActionType.EMPTY_ARRAY, image: '' });

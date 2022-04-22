@@ -1,22 +1,36 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import WindowIcon from '@mui/icons-material/Window';
 import MapIcon from '@material-ui/icons/Map';
-import { Theme } from '@material-ui/core';
+import { Theme, Paper } from '@material-ui/core';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import { styled } from '@mui/material/styles';
 
 import { useDispatch  } from 'react-redux';
 import { setDisplay } from '../../redux/effects/displayEffect';
 import { CurrentDisplay } from '../../api/display/headers';
 
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+    '& .MuiToggleButtonGroup-grouped': {
+      margin: theme.spacing(0.5),
+      border: 0,
+      '&.Mui-disabled': {
+        border: 0,
+      },
+      '&:not(:first-of-type)': {
+        borderRadius: theme.shape.borderRadius,
+      },
+      '&:first-of-type': {
+        borderRadius: theme.shape.borderRadius,
+      },
+    },
+  }));
+
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
-        verticalAlign: 'middle',
-    },
-    button:{
-        height:'4vh'
     },
 }));
 
@@ -33,20 +47,28 @@ const MapToggle = () => {
     const toggleButton = (display: CurrentDisplay, icon: JSX.Element | string, value: string) => (
         <ToggleButton
             onClick={() => setCurrentDisplay(display)}
-            value={value}
             aria-label="left aligned"
-            className={classes.button}
+            value={value}
+            size='small'
         >
             {icon}
         </ToggleButton>
     )
 
     return (
-        <ToggleButtonGroup className={classes.root} value={alignment} exclusive onChange={handleAlignment}>
-            {toggleButton(CurrentDisplay.VOLCANO_MATRIX, <DashboardIcon/>, 'left')}
-            {toggleButton(CurrentDisplay.SULFUR_MAPS, 'So2', 'center')}
-            {toggleButton(CurrentDisplay.ALERT_MAP, <MapIcon/>, 'right')}
-        </ToggleButtonGroup>
+        <Paper className={classes.root}>
+            <StyledToggleButtonGroup
+                size="small"
+                value={alignment}
+                exclusive
+                onChange={handleAlignment}
+                aria-label="text alignment"
+            >
+                {toggleButton(CurrentDisplay.VOLCANO_MATRIX, <WindowIcon/>, 'left')}
+                {toggleButton(CurrentDisplay.SULFUR_MAPS, <ScatterPlotIcon/>, 'center')}
+                {toggleButton(CurrentDisplay.ALERT_MAP, <MapIcon/>, 'right')}
+            </StyledToggleButtonGroup>
+        </Paper>
     );
 };
 

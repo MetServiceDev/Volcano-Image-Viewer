@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 
-import { VAL } from '../../api/volcano/headers';
+import { VolcanicAlert } from '@metservice/aviationtypes';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -22,27 +22,29 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-const setAlertStatus = (data: VAL) => {
-    switch(data.level){
-        case '0':
-        case '1':
-            return { severity: 'success', msg: data.msg, icon:<ReportProblemOutlinedIcon/> }
-        case '2':
-        case '3':
-            return { severity: 'warning', msg: data.msg }
-        case '4':
-        case '5':
-            return { severity: 'error', msg: data.msg }
+const setAlertStatus = (data: VolcanicAlert) => {
+    const { activity, msg, level } = data;
+    const activityMessage = activity ? activity : msg;
+    switch(Number(level)){
+        case 0:
+        case 1:
+            return { severity: 'success', msg: activityMessage, icon:<ReportProblemOutlinedIcon/> }
+        case 2:
+        case 3:
+            return { severity: 'warning', msg: activityMessage }
+        case 4:
+        case 5:
+            return { severity: 'error', msg: activityMessage }
         default:
-            return { severity: 'success', msg: data.msg, icon:<ReportProblemOutlinedIcon/> }
+            return { severity: 'success', msg: activityMessage, icon:<ReportProblemOutlinedIcon/> }
     };
 };
 
 interface Props {
-    data: VAL;
+    data: VolcanicAlert;
 };
 
-const VolcanicAlert: React.FC<Props> = ({ data }) => {
+const VolcanicAlertComponent: React.FC<Props> = ({ data }) => {
     const classes = useStyles();
     const alert = setAlertStatus(data);
 
@@ -58,4 +60,4 @@ const VolcanicAlert: React.FC<Props> = ({ data }) => {
     );
 };
 
-export default VolcanicAlert;
+export default VolcanicAlertComponent;
