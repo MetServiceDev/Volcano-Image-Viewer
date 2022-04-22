@@ -38,6 +38,9 @@ const FilterMenu: React.FC<Props> = ({ anchorEl, open, handleClose }) => {
             <MenuItem>
                 <Filter check={filters.showSAT} toggle={() => dispatchFilter({ type: FilterActionType.SAT, payload: !filters.showSAT })} text='Satellite' />
             </MenuItem>
+            <MenuItem>
+                <Filter check={filters.showARC} toggle={() => dispatchFilter({ type: FilterActionType.ARC, payload: !filters.showARC })} text='Erebus' />
+            </MenuItem>
         </Menu>
     )
 };

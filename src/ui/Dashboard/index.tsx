@@ -38,7 +38,7 @@ const Dashboard: React.FC<Props> = ({ theme, toggleTheme }) => {
     if(!authState) {
         return <div>Loading...</div>
     }
-
+    
     if(!authState.isAuthenticated){
         return <Redirect to='/login'/>
     };

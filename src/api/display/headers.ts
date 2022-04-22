@@ -1,5 +1,3 @@
-import useLocalStorage from '../hooks/useLocalStorage';
-
 export enum CurrentDisplay {
     VOLCANO_MATRIX = 'VOLCANO_MATRIX',
     SULFUR_MAPS = 'SULFUR_MAPS',
