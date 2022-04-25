@@ -4,8 +4,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Running Locally
-
-In the project directory, you can run:
+Once you have cloned the project run `npm install` inside the project directory, then you can run either:
 
 ### `npm run start:sandpit`
 Runs the app in sandpit mode using .env.sandpit.
