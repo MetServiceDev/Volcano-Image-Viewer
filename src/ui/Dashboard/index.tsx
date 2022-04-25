@@ -22,7 +22,7 @@ const Dashboard: React.FC<Props> = ({ theme, toggleTheme }) => {
 
     const { volcanoes, quakes, user } = React.useContext(AppContext);
 
-    const logout = async (): Promise<void> => await oktaAuth.signOut({postLogoutRedirectUri: redirectUri });
+    const logout = async (): Promise<void> => await oktaAuth.signOut({ postLogoutRedirectUri: redirectUri });
     
     const [recentQuakes, setRecentQuakes] = React.useState<RecentQuake[]>([]);
     const [volcanoToOpen, setVolcano] = React.useState<string>('');
