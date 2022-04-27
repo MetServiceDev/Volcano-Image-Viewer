@@ -5,7 +5,9 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography, LinearProgress } from '@material-ui/core';
 
 import authClient from '../../api/auth/Auth';
+import { redirectUri } from '../../metadata/Endpoints';
 import appLogo from '../../images/volcano.png';
+import RefreshSession from './RefreshSessionManually';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -33,6 +35,8 @@ const Login: React.FC = () => {
 
     const { oktaAuth, authState } = useOktaAuth();
 
+    const [oldSession, setExpiredSession] = React.useState(false);
+
     const checkLogin = React.useCallback(
         async (): Promise<void> => {
             const activeSession = await authClient.session.exists();
@@ -43,7 +47,15 @@ const Login: React.FC = () => {
         [oktaAuth]
     );
 
-    React.useEffect(() => { checkLogin() }, [checkLogin]);
+    React.useEffect(() => {
+        checkLogin()
+    }, [checkLogin]);
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            setExpiredSession(true);
+        }, 4000);
+    }, [])
 
     if(authState && authState.isAuthenticated) {
         return <Redirect to='/'/>
@@ -56,6 +68,11 @@ const Login: React.FC = () => {
                 <Typography variant="h6">
                     Redirecting to Metservice, please wait...
                 </Typography>
+                <RefreshSession
+                    open={oldSession}
+                    handleClose={() => setExpiredSession(false)}
+                    refresh={() => oktaAuth.signOut({postLogoutRedirectUri: redirectUri })}
+                />
                 <LinearProgress color='primary' />
                 <img src={appLogo} alt="logo" className={classes.img} />
             </div>
