@@ -10,7 +10,7 @@ const downloadImage = async(link: string, idx: number): Promise<Thumbnail> => {
     if (idx === 11) {
         if (uploadedAt) {
             const uploadTime = moment(uploadedAt).toDate();
-            if(moment().diff(uploadTime, 'minutes') >= 36) {
+            if(moment().diff(uploadTime, 'minutes') >= 16) {
                 hasntUpdated = true;
             }
         }
