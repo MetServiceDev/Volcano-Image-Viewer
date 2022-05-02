@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { LightningData } from '../../api/lightning/headers';
+import { LightningResponse } from '@metservice/aviationtypes';
 
 interface Context {
-    lightningAlerts: LightningData | null | undefined;
+    lightningAlerts: LightningResponse | null | undefined;
     setAlerts: any;
 };
 

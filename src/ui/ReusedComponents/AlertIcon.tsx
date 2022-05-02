@@ -19,23 +19,24 @@ interface Props extends WithStyles<typeof styles> {
     fontSize: string;
     data: {
         level: string,
-        msg: string
+        activity: string
     };
 }
 
-const AlertIcon: React.FC<Props> = ({ classes, data, fontSize }) => { 
+const AlertIcon: React.FC<Props> = ({ classes, data, fontSize }) => {
     const getIcon = (): JSX.Element => {
-        switch(data.level){
-            case '0':
-            case '1':
+        switch(Number(data.level)){
+            case 0:
+            case 1:
                 return <ReportProblemOutlinedIcon className={classes.noWarning} style={{fontSize}}/>;
-            case '2':
-            case '3':
+            case 2:
+            case 3:
                 return <ReportProblemOutlinedIcon className={classes.mediumWarning} style={{fontSize}}/>;
-            case '4':
-            case '5':
+            case 4:
+            case 5:
                 return <ErrorOutlineOutlinedIcon className={classes.severeWarning} style={{fontSize}}/>;
             default:
+                console.log('defaulting to no warning', data);
                 return <ReportProblemOutlinedIcon className={classes.noWarning} style={{fontSize}}/>;
         };
     };
@@ -46,7 +47,7 @@ const AlertIcon: React.FC<Props> = ({ classes, data, fontSize }) => {
                 Alert level {data.level}
             </Typography>
             <Typography style={{ fontWeight:'bold' }}>
-                {data.msg}
+                {data.activity}
             </Typography>
         </>
     )

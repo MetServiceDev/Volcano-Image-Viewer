@@ -2,13 +2,14 @@ import React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Theme, Paper } from '@material-ui/core';
 import moment from 'moment';
+import { QuakeFeature, QuakeIntesity, QuakeDict, Volcano } from '@metservice/aviationtypes';
 
 import GraphComponent from '../../Graphs';
 import { GraphType, LineData } from '../../../api/graph/headers';
-import { Quake, quakeMarker, VolcanoLevels, IntensityFreq } from '../../../api/quakes/headers';
-import { Volcano } from '../../../api/volcano/headers';
+import { quakeMarker } from '../../../api/quakes/headers';
 import { gnsRestEndpoint } from '../../../metadata/Endpoints';
 import HistoryTable from './HistoryTable';
+import colorPalette from '../../../ColorPalette';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -48,13 +49,13 @@ interface Props extends WithStyles<typeof styles> {
 };
 
 const barlabels = [
-    VolcanoLevels.UNNOTICABLE,
-    VolcanoLevels.WEAK,
-    VolcanoLevels.LIGHT,
-    VolcanoLevels.MODERATE,
-    VolcanoLevels.STRONG,
-    VolcanoLevels.SEVERE,
-    VolcanoLevels.EXTREME
+    QuakeIntesity.UNNOTICABLE,
+    QuakeIntesity.WEAK,
+    QuakeIntesity.LIGHT,
+    QuakeIntesity.MODERATE,
+    QuakeIntesity.STRONG,
+    QuakeIntesity.SEVERE,
+    QuakeIntesity.EXTREME
 ]
 
 const backgroundColors = [
@@ -78,25 +79,25 @@ const borderColors = [
 ]
 
 const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
-    const [quakes, setQuakes] = React.useState<Quake[]>([]);
+    const [quakes, setQuakes] = React.useState<QuakeFeature[]>([]);
 
     const allLevels = [
-        VolcanoLevels.UNNOTICABLE, VolcanoLevels.WEAK, VolcanoLevels.LIGHT, VolcanoLevels.MODERATE,
-        VolcanoLevels.STRONG, VolcanoLevels.SEVERE, VolcanoLevels.EXTREME
+        QuakeIntesity.UNNOTICABLE, QuakeIntesity.WEAK, QuakeIntesity.LIGHT, QuakeIntesity.MODERATE,
+        QuakeIntesity.STRONG, QuakeIntesity.SEVERE, QuakeIntesity.EXTREME
     ];
 
-    const fetchData = async(): Promise<Quake[]> => {
+    const fetchData = async(): Promise<QuakeFeature[]> => {
         const call = await fetch(`${gnsRestEndpoint}/volcano/quake/${volcano?.gnsID}`);
         const data = await call.json();
         return data.features.reverse();
     };
 
-    const groupBy = (): IntensityFreq => {
+    const groupBy = (): QuakeDict => {
         return quakes.reduce((memo: any, x: any) => {
           if (!memo[x['properties']['intensity']]) { memo[x['properties']['intensity']] = []; }
           memo[x['properties']['intensity']].push(x);
           return memo;
-        }, {}) as IntensityFreq;
+        }, {}) as QuakeDict;
     };
     const quakeFrequency = Object.entries(groupBy()).map((obj) => {
         return {
@@ -115,8 +116,8 @@ const QuakePanel: React.FC<Props> = ({ classes, volcano }) => {
     const magnitudeLevels: LineData<number[]> = {
         label: 'Magnitude (ML)',
         data: quakes.map(quake => quake.properties.magnitude),
-        backgroundColor: 'rgba(255, 187, 0, 0.5)',
-        borderColor: '#ffbb00',
+        backgroundColor: colorPalette.dark,
+        borderColor: colorPalette.main,
         pointRadius: 8,
         yAxisID: 'A',
     };

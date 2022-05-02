@@ -2,8 +2,8 @@ import React from 'react';
 import { Grow, Typography, Theme, CircularProgress } from '@material-ui/core';
 import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
+import { Volcano } from '@metservice/aviationtypes';
 
-import { Volcano } from '../../../api/volcano/headers';
 import { fetchImages } from '../../../api/images/fetchImages';
 import formatS3Tags from '../../../api/images/formatS3Tags';
 import { AppContext } from '../../../AppContext';

@@ -3,12 +3,13 @@ frontend:
   phases:
     preBuild:
       commands:
+        - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
         - npm install
         - npm ci
     build:
       commands:
-        - echo "I am running 🏃 on prod" 
-        - npm run build
+        - echo "I am running 🏃 on prod"
+        - npm run build:prod
   artifacts:
     baseDirectory: build
     files:

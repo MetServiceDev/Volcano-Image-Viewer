@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 
 import { useEmissionsEffect } from '../../api/volcano/fetchGasEmissions';
 import VolcanicAlert from './VolcanicAlert';
-import { Volcano, OverviewDisplay, VolcanoLocation } from '../../api/volcano/headers';
+import { Volcano, VolcanoLocation } from '@metservice/aviationtypes';
+import { OverviewDisplay } from '../../api/volcano/headers';
 import Sidebar from './Sidebar';
 
 import LiveImages from './live-images';
@@ -67,10 +68,10 @@ interface Props extends WithStyles<typeof styles> {}
 const VolcanoOverview: React.FC<Props> = ({ classes }) => {
     let query = useQuery();
     const volcano = query.get('volcano');
-    const { volcanoes } = React.useContext(AppContext);
+    const { volcanoes, user } = React.useContext(AppContext);
 
-    const volcanoObject = volcanoes.find(v => v.name === volcano) as Volcano || {};
-    const [gasEmissions] = useEmissionsEffect(volcanoObject?.FIT_ID as string);
+    const volcanoObject = volcanoes?.find(v => v.name === volcano) as Volcano || {};
+    const gasEmissions = useEmissionsEffect(volcanoObject?.FIT_ID as string, user?.token);
     const { name, volcanicAlerts } = volcanoObject;
     
     const [currentDisplay, setCurrentDisplay] = React.useState<OverviewDisplay>(OverviewDisplay.THUMBNAIL);
@@ -97,7 +98,7 @@ const VolcanoOverview: React.FC<Props> = ({ classes }) => {
                         </Link>
                         <Typography variant='h6'>{name}</Typography>
                     </div>
-                    {volcanicAlerts && <VolcanicAlert data={volcanicAlerts}/>}
+                    {volcanicAlerts && <VolcanicAlert data={ volcanicAlerts }/>}
                 </div>
                 <div className={classes.mainPanel}>
                     {(() => {

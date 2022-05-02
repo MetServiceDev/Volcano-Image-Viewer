@@ -4,8 +4,9 @@ import { Theme, Paper, Typography, IconButton, Collapse, Tooltip } from '@materi
 import BarChartIcon from '@mui/icons-material/BarChart';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import { Observation } from '@metservice/aviationtypes';
 
-import { EmissionMeasures, PlotType } from '../../../api/volcano/headers';
+import { PlotType } from '../../../api/volcano/headers';
 import EmissionTable from './EmissonsTable';
 import Toolbar from './Toolbar';
 
@@ -43,7 +44,7 @@ interface Props extends WithStyles<typeof styles> {
     csvLink: string;
     open: (a?: any) => void;
     title: string;
-    emissionMeasures?: EmissionMeasures[];
+    emissionMeasures?: Observation[];
 }
 
 const EmissionChart: React.FC<Props> = ({ classes, src, element, csvLink, open, title, emissionMeasures }) => {

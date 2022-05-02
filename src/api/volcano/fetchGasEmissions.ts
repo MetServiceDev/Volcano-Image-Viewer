@@ -1,26 +1,25 @@
 import React from 'react';
-import apiCall from "../APICall";
-import { EmissionData } from "./headers";
-import authClient from '../auth/Auth';
+import apiCall, { HTTPMethod } from "../APICall";
+import { EmissionData } from "@metservice/aviationtypes";
+import useAPICall from '../hooks/useAPICall';
 
 const fetchGasEmissions = async(token: string): Promise<EmissionData[]> => {
-    const data = await apiCall<EmissionData[]>('volcanoes/emissions', 'GET', token);
+    const data = await apiCall<EmissionData[]>('volcanoes/emissions', HTTPMethod.GET, token);
     return data;
 };
 
-export const useEmissionsEffect = (fitID: string) => {
-    const token = authClient.getAccessToken() as string;
-    const [data, setData] = React.useState<EmissionData>();
+export const useEmissionsEffect = (fitID: string, token: string | undefined) => {
+    const allEmissions = useAPICall<EmissionData[]>({
+        route: 'volcanoes/emissions',
+        method: HTTPMethod.GET,
+        token
+    });
 
-    React.useEffect(() => {
-        fetchGasEmissions(token)
-            .then(res => {
-                const emissionData = res.find(i => i.volcano === fitID);
-                setData(emissionData)
-            });
-    }, [token, fitID]);
+    const emissionData = React.useMemo(() => {
+        return allEmissions?.find(i => i.volcano === fitID);
+    }, [allEmissions, fitID]);
 
-    return [data];
+    return emissionData as EmissionData;
 };
 
 export default fetchGasEmissions;

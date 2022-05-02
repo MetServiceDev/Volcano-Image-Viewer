@@ -1,26 +1,5 @@
 import * as L from 'leaflet';
 
-export interface Volcano {
-	code: string;
-	coordinates: {
-		lat: number;
-		long: number;
-	};
-	drumLink?: string;
-	index: number;
-	location: string;
-	mountain?: string;
-	name: string;
-	s3Link: string;
-	volcanicAlerts?: {
-		level: string;
-		msg: string;
-	};
-	relatedVolcanoes?: string[];
-	gnsID?: string;
-	FIT_ID?: string;
-};
-
 export interface Note {
     id: string;
     postedBy: string;
@@ -29,13 +8,6 @@ export interface Note {
     attachments?: string[];
     volcano: string;
     valid: string;
-};
-
-export enum VolcanoLocation {
-	VANUATU = 'Vanuatu',
-	NZ = 'NZ',
-	CENTRAL_NI = 'Central NI',
-	WI = 'WI',
 };
 
 export enum OverviewDisplay {
@@ -53,24 +25,6 @@ export interface Thumbnail {
 	hasntUpdated?: boolean
 	uploadedAt?: string;
 };
-
-export interface VAL {
-	msg: string;
-	level: string;
-	volcanoID?: string;
-	hazards?: string;
-};
-
-export interface EmissionMeasures {
-	time: string;
-	measurement: number;
-	error: Number;
-};
-
-export interface EmissionData {
-	volcano: string;
-	emissions: Record<string, EmissionMeasures[]>;
-}
 
 export enum PlotType {
     Scatter = 'scatter',
@@ -94,3 +48,62 @@ export const redIcon = new L.Icon({
     popupAnchor: [1, -30],
     iconAnchor: [10, 30]
 });
+
+export enum FilterActionType {
+	VA = 'VANUATU',
+	NZ = 'NZ',
+	CNI = 'CNI',
+	WI = 'WI',
+	SAT = 'SAT',
+	ARC = 'ARC'
+}
+
+export interface FilterAction {
+	type: FilterActionType;
+	payload: any;
+};
+
+
+export interface FilterState {
+	showVA: boolean;
+	showNZ: boolean;
+	showCNI: boolean;
+	showWI: boolean;
+	showSAT: boolean;
+	showARC: boolean;
+}
+  
+export const filtersReducer = (state: FilterState, action: FilterAction) => {
+	switch(action.type) {
+		case FilterActionType.VA:
+			return {
+				...state,
+				showVA: action.payload
+			};
+		case FilterActionType.NZ:
+			return {
+				...state,
+				showNZ: action.payload
+			};
+		case FilterActionType.CNI:
+			return {
+				...state,
+				showCNI: action.payload
+			}
+		case FilterActionType.WI:
+			return {
+				...state,
+				showWI: action.payload
+			};
+		case FilterActionType.SAT:
+			return {
+				...state,
+				showSAT: action.payload
+			};
+		case FilterActionType.ARC:
+			return {
+				...state,
+				showARC: action.payload
+			};
+	}
+};

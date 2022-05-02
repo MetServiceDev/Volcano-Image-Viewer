@@ -1,4 +1,4 @@
-import { Volcano } from "./volcano/headers";
+import { Volcano } from "@metservice/aviationtypes";
 
 export const filter = (e: any, items: any, searchMatch: any) => {
     var a, i, txtValue;

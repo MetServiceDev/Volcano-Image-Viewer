@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
-import { LightningData } from '../../api/lightning/headers';
-import fetchLightning from '../../api/lightning/FetchLightning';
+import { useQuery } from '@apollo/client';
+import { LightningResponse } from '@metservice/aviationtypes';
+
+import { lightningQuery } from '../../graphQL/queries';
 import authClient from '../auth/Auth';
 
 const useLightningFetch = () => {
-    const [lightningAlerts, setAlerts] = useState<LightningData | null>();
+    const [lightningAlerts, setAlerts] = useState<LightningResponse[]>([]);
     const [token, setToken] = useState('');
+    const lightningDataQuery = useQuery(lightningQuery);
+    useEffect(() => {
+        setAlerts(lightningDataQuery?.data?.fetchLightning);
+    }, [lightningDataQuery]);
+
+    // const testQ = useQuery(lightningQuery);
+    // console.log(testQ.data.fetchLightning);
 
     const POLL_INTERVAL = 60000 * 10;
 
@@ -27,20 +36,21 @@ const useLightningFetch = () => {
         setInterval(() => pollSession(), POLL_INTERVAL);
     }, [POLL_INTERVAL]);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                setAlerts(null)
-                const data = await fetchLightning(token);
-                setAlerts(data);
-            } catch (err) {
-                setAlerts({severity: 'error', msg: 'Error: Failed to fetch lightning data'});
-            }   
-        }
-        if (token) {
-            fetchData();
-        }
-    }, [token]);
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         try {
+    //             setAlerts(null)
+    //             const lightningStrikes = await API.get('volcanoamplifyapi', '/lightning', {});
+    //             setAlerts(lightningStrikes);
+    //             throw new Error('Testing new graphql');
+    //         } catch (err) {
+    //             setAlerts(null);
+    //         }   
+    //     }
+    //     if (token) {
+    //         fetchData();
+    //     }
+    // }, [token]);
 
     return { lightningAlerts, setAlerts };
 };

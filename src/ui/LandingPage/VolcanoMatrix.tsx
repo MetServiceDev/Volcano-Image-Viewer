@@ -1,11 +1,9 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { useSelector } from 'react-redux';
 
 import VolcanoCard from './VolcanoCard';
 import SatelliteCard from './SatelliteCard';
-import { AppState } from '../../redux/store';
-import { VolcanoLocation } from '../../api/volcano/headers';
+import { VolcanoLocation } from '@metservice/aviationtypes';
 import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles(() => ({
@@ -15,9 +13,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const VolcanoMatrix: React.FC = () => {
-    const { volcanoes, gridDisplay } = React.useContext(AppContext);
+    const { volcanoes, gridDisplay, filters } = React.useContext(AppContext);
     const classes = useStyles();
-    const { showNZ, showVA, showCNI, showWI, showSAT } = useSelector((state: AppState) => state.filters);
 
     const gridLayout = {
         gridTemplateColumns: `repeat(${gridDisplay}, 1fr)`,
@@ -30,14 +27,14 @@ const VolcanoMatrix: React.FC = () => {
             {volcanoes.map((volcano) => {
                 return(
                     <Fragment key={volcano.code}>
-                        {volcano.location === VolcanoLocation.VANUATU && showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                        {volcano.location === VolcanoLocation.NZ && showNZ && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                        {volcano.location === VolcanoLocation.CENTRAL_NI && showCNI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
-                        {volcano.location === VolcanoLocation.WI && showWI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === VolcanoLocation.VANUATU && filters.showVA && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === VolcanoLocation.NZ && filters.showNZ && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === VolcanoLocation.CENTRAL_NI && filters.showCNI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
+                        {volcano.location === VolcanoLocation.WI && filters.showWI && <VolcanoCard volcano={volcano} fontSize={fontSize}/>}
                     </Fragment>
                 );
             })}
-            {showSAT && <SatelliteCard fontSize={fontSize}/>}
+            {filters.showSAT && <SatelliteCard fontSize={fontSize}/>}
         </div>
     );
 };

@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 import VolcanoMatrix from './VolcanoMatrix';
 import SulfurMaps from './SulfurMaps';
-import LightningAlerts from './LightningAlerts';
+import LightningAlerts from './lightning/LightningAlerts';
 import VolcanoMap from './VolcanoMap';
 import LoaderUI from '../ReusedComponents/LoadingUI';
 import { CurrentDisplay } from '../../api/display/headers';
@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme: Theme) => ({
         marginLeft:'10px',
         fontSize:'12px',
         boxShadow: '1px 1px 2px #404040',
+        display: 'flex',
+        alignItems: 'center',
     },
     minimize: {
         position: 'relative',
@@ -75,7 +77,7 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps }) => {
 
     const { lightningAlerts, setAlerts } = useLightningFetch();
 
-    const { polling, expandSidebar } = React.useContext(AppContext);
+    const { polling, expandSidebar, counter } = React.useContext(AppContext);
 
     const style = { width: `${!expandSidebar ? '98':'85'}%` };
 
@@ -86,13 +88,13 @@ const LandingPage: React.FC<Props> = ({ sulfurMaps }) => {
     }
 
     return (
-        <LandingPageContext.Provider value={{ lightningAlerts, setAlerts }}>
+        <LandingPageContext.Provider value={{ lightningAlerts: lightningAlerts?.[0], setAlerts }}>
             <div className={classes.root} style={style}>
                 <div className={classes.headerTags} style={headerStyle}>
-                    {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts/>}
+                    {currentDisplay !== CurrentDisplay.ALERT_MAP && <LightningAlerts lightningAlerts={lightningAlerts?.[0] ?? null}/>}
                     {currentDisplay !== CurrentDisplay.ALERT_MAP && showRefreshWarning && <Alert severity='warning' className={classes.refreshWarning} 
                         action={<CloseIcon className={classes.minimize} onClick={() => toggleRefreshWarning(false)} />}>
-                        This page will poll for new images every 10 minutes
+                        Next poll: {counter} minutes
                     </Alert>}
                 </div>
                 <>

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { QuakeDict, RecentQuake } from './headers';
+import { QuakeDict, RecentQuake } from '@metservice/aviationtypes';
 
 const findRecentQuakes = (quakes: QuakeDict): RecentQuake[] => {
     const now = moment();
