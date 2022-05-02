@@ -110,4 +110,13 @@ query MyQuery {
     }
 }`
 
-export { volcanoQuery, lightningQuery, emissionsQuery };
+const volcatSubscription = gql`
+subscription MySubscription {
+  onNewVolcat {
+    id
+    volcano
+    country
+  }
+}`
+
+export { volcanoQuery, lightningQuery, emissionsQuery, volcatSubscription };

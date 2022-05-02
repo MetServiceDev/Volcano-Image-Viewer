@@ -8,13 +8,11 @@ import authClient from '../auth/Auth';
 const useLightningFetch = () => {
     const [lightningAlerts, setAlerts] = useState<LightningResponse[]>([]);
     const [token, setToken] = useState('');
+
     const lightningDataQuery = useQuery(lightningQuery);
     useEffect(() => {
         setAlerts(lightningDataQuery?.data?.fetchLightning);
     }, [lightningDataQuery]);
-
-    // const testQ = useQuery(lightningQuery);
-    // console.log(testQ.data.fetchLightning);
 
     const POLL_INTERVAL = 60000 * 10;
 

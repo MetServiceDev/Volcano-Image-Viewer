@@ -29,6 +29,7 @@
     "dotenv": "^10.0.0",
     "env-cmd": "^10.1.0",
     "graphql": "^16.3.0",
+    "graphql-ws": "^5.8.1",
     "leaflet": "^1.7.1",
     "material-ui-image": "^3.3.2",
     "moment": "^2.29.1",

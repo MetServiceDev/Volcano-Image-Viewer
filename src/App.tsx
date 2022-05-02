@@ -7,6 +7,7 @@ import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
 import { ApolloProvider } from '@apollo/client';
 import { Volcano, QuakeDict } from '@metservice/aviationtypes';
+import { useSubscription } from '@apollo/client';
 
 import './ui/App.css';
 import authClient from './api/auth/Auth';
@@ -29,6 +30,7 @@ import useAuthState from './api/hooks/useAuthState';
 import useLocalStorage from './api/hooks/useLocalStorage';
 import useFilter from './api/hooks/useFilter';
 import useAPICall from './api/hooks/useAPICall';
+import { volcatSubscription } from './graphQL/queries';
 
 enum NavOptions {
   ToggleFilters = 'Toggle Filters',
@@ -43,6 +45,8 @@ const App: React.FC = () => {
   const [styleTheme, toggleTheme] = React.useState<boolean>(themeBool);
   const muiTheme = appTheme(styleTheme);
   
+  const { loading, error, data } = useSubscription(volcatSubscription);
+  console.log({ loading, error, data });
 
   const user = useAuthState();
 
