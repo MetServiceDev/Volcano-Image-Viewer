@@ -71,7 +71,7 @@ const Login: React.FC = () => {
                 <RefreshSession
                     open={oldSession}
                     handleClose={() => setExpiredSession(false)}
-                    refresh={() => oktaAuth.signOut({postLogoutRedirectUri: redirectUri })}
+                    refresh={() => oktaAuth.signOut({ postLogoutRedirectUri: redirectUri })}
                 />
                 <LinearProgress color='primary' />
                 <img src={appLogo} alt="logo" className={classes.img} />
