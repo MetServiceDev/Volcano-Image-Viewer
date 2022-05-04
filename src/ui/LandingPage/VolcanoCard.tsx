@@ -50,7 +50,6 @@ interface Props extends WithStyles<typeof styles> {
 const VolcanoCard: React.FC<Props> = ({ classes, volcano, fontSize }) => {
     const alert = volcano.volcanicAlerts;
     const { links } = React.useContext(AppContext);
-    
     const [s3Tags, setTags] = React.useState<string[]>([]);
 
     React.useEffect(() => {
