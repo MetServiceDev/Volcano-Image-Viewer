@@ -118,7 +118,7 @@ const VolcanoThumbnail: React.FC<Props> = ({ classes, volcano, s3Tags, captureIm
         if (!imageLog || !imageLog[volcano.name]) {
             setImageLog({
                 ...imageLog,
-                [volcano.name]: { allThumbnails: allThumbnails.reverse(), s3Tags: s3Tags.reverse() }
+                [volcano.name]: { allThumbnails, s3Tags }
             })
         }
     }, [allThumbnails]);
