@@ -44,7 +44,7 @@ const App: React.FC = () => {
 
   const [styleTheme, toggleTheme] = React.useState<boolean>(themeBool);
   const muiTheme = appTheme(styleTheme);
-  
+
   const { loading, error, data } = useSubscription(volcatSubscription);
   console.log({ loading, error, data });
 

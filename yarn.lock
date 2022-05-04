@@ -5132,6 +5132,15 @@
     "@aws-sdk/util-hex-encoding" "^3.29.0"
     "debug" "2.6.9"
 
+"aws-appsync-subscription-link@^3.0.11":
+  "integrity" "sha512-JHSYR4I9x0wtfm6aW+JGb654DzF25J4hp/vvm1ZhpVqd1jjnIAEBQvn2dg+SJO+46Js9f8b8QhEWyBnyAn0afg=="
+  "resolved" "https://registry.npmjs.org/aws-appsync-subscription-link/-/aws-appsync-subscription-link-3.0.11.tgz"
+  "version" "3.0.11"
+  dependencies:
+    "aws-appsync-auth-link" "^3.0.7"
+    "debug" "2.6.9"
+    "url" "^0.11.0"
+
 "axe-core@^4.0.2":
   "integrity" "sha512-WKTW1+xAzhMS5dJsxWkliixlO/PqC4VhmO9T4juNYcaTg9jzWiJsou6m5pxWYGfigWbwzJWeFY6z47a+4neRXA=="
   "resolved" "https://registry.npmjs.org/axe-core/-/axe-core-4.3.5.tgz"

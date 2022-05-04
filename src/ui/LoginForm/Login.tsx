@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     root: {
         width:'100%',
         height:'100%',
-        backgroundColor:theme.palette.background.default,
+        backgroundColor: theme.palette.background.default,
         position:'fixed',
         top:'0%',
         left:'0%'
