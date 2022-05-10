@@ -49,10 +49,12 @@ const Volcat: React.FC<Props> = ({ volcat }) => {
         <div className={classes.root}>
             <div className={classes.wrapper}>
                 <Typography variant="body1">
-                    <ReportGmailerrorredIcon
-                        sx={{ display: 'inline', marginRight: '4px' }}
-                        color="error"
-                    />
+                    <IconButton disabled={true}>
+                        <ReportGmailerrorredIcon
+                            sx={{ display: 'inline', marginRight: '4px' }}
+                            color="error"
+                        />
+                    </IconButton>
                     {volcat?.header}
                 </Typography>
                 <Typography variant="body1">

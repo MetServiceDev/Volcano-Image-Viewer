@@ -1,11 +1,9 @@
-import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink, HttpLink, split } from '@apollo/client';
+import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink, split } from '@apollo/client';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 import { createAuthLink } from 'aws-appsync-auth-link';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { SubscriptionClient } from "subscriptions-transport-ws";
 
 import AppSyncConfig from '../aws-exports';
 
@@ -29,19 +27,6 @@ const wsLink = new GraphQLWsLink(createClient({
     },  
 }));
 
-const socketLink = new WebSocketLink(
-    new SubscriptionClient(realtime_url, {
-        options: {
-            reconnect: true,
-        },
-        connectionParams: {
-            headers: {
-              'x-api-key': "da2-hfgen5dsjjdwjgndi4uypxdmze",
-              'Sec-WebSocket-Protocol': 'graphql-ws'
-            },
-        },
-    })
-);
 
 const splitLink = split(
     ({ query }) => {
