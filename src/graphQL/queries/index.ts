@@ -113,10 +113,28 @@ query MyQuery {
 const volcatSubscription = gql`
 subscription MySubscription {
   onNewVolcat {
+    header
     id
-    volcano
-    country
+    viewed
+    vaacRegion
+    content
+    startDate
+    coordinates
   }
 }`
 
-export { volcanoQuery, lightningQuery, emissionsQuery, volcatSubscription };
+const volcatQuery = gql`
+query MyQuery {
+  fetchVolcats {
+    header
+    id
+    viewed
+    vaacRegion
+    content
+    startDate
+    coordinates
+  }
+}
+`
+
+export { volcanoQuery, lightningQuery, emissionsQuery, volcatSubscription, volcatQuery };

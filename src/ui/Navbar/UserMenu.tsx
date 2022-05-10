@@ -1,7 +1,8 @@
 import React from 'react';
-import { Menu, MenuItem, Typography, Divider, ListItemText, ListItemIcon } from '@material-ui/core';
+import { Menu, MenuItem, Typography, Divider, ListItemText, ListItemIcon, Badge } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CollectionsIcon from '@mui/icons-material/Collections';
+import VolcanoIcon from '@mui/icons-material/Volcano';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import { makeStyles } from '@material-ui/styles';
@@ -38,7 +39,7 @@ interface Props {
 
 const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout, openSettings, openMonitor }) => {
     const classes = useStyles();
-    const { user } = React.useContext(AppContext);
+    const { user, toggleVolcat, allVolcats } = React.useContext(AppContext);
 
     return (
         <Menu
@@ -72,6 +73,17 @@ const UserMenu: React.FC<Props> = ({ anchorEl, open, handleClose, logout, openSe
                     <MonitorIcon/>
                 </ListItemIcon>
             </MenuItem>
+            <MenuItem className={classes.menuItem} onClick={() => toggleVolcat(true)}>
+                <ListItemText>
+                    Volcat
+                </ListItemText>
+                <ListItemIcon>
+                    <Badge badgeContent={allVolcats?.length} color="primary">
+                        <VolcanoIcon/>
+                    </Badge>
+                </ListItemIcon>
+            </MenuItem>
+            <Divider/>
             <MenuItem className={classes.menuItem} onClick={openSettings}>
                 <ListItemText>
                     Settings

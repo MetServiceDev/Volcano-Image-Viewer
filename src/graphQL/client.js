@@ -12,7 +12,7 @@ import AppSyncConfig from '../aws-exports';
 const url = AppSyncConfig.aws_appsync_graphqlEndpoint;
 const region = AppSyncConfig.aws_appsync_region;
 const auth = {
-    type: AppSyncConfig.aws_appsync_authenticationType,
+    type: 'API_KEY',
     apiKey: AppSyncConfig.aws_appsync_apiKey,
 };
 
@@ -30,7 +30,7 @@ const wsLink = new GraphQLWsLink(createClient({
 }));
 
 const socketLink = new WebSocketLink(
-    new SubscriptionClient("wss://st4f2nirdnbapd42zyrwfomogu.appsync-realtime-api.ap-southeast-2.amazonaws.com/graphql", {
+    new SubscriptionClient(realtime_url, {
         options: {
             reconnect: true,
         },
@@ -43,22 +43,6 @@ const socketLink = new WebSocketLink(
     })
 );
 
-const httpLink = new HttpLink({
-    uri: url
-});
-
-// const splitLink = split(
-//     ({ query }) => {
-//         const definition = getMainDefinition(query);
-//         return (
-//             definition.kind === 'OperationDefinition' &&
-//             definition.operation === 'subscription'
-//         );
-//     },
-//     socketLink,
-//     httpLink,
-// );
-
 const splitLink = split(
     ({ query }) => {
       const definition = getMainDefinition(query);
@@ -68,23 +52,20 @@ const splitLink = split(
       );
     },
     ApolloLink.from([
-       createAuthLink({ realtime_url, region, auth }), 
-       socketLink
+        createHttpLink({ uri: url }),
+        wsLink
     ]),
-    ApolloLink.from([
-       createAuthLink({ url, region, auth }), 
-       createHttpLink({ uri: url })
-    ])
-  );
+);
 
 const link = ApolloLink.from([
     createAuthLink({ url, region, auth }),
-    createSubscriptionHandshakeLink(url, httpLink),
+    createSubscriptionHandshakeLink({ url, region, auth }),
     splitLink,
 ]);
 const client = new ApolloClient({
     link,
     cache: new InMemoryCache(),
+    defaultHttpLink: false,
 });
 
 export default client;

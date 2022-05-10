@@ -5,9 +5,8 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import { SecureRoute, Security, LoginCallback } from '@okta/okta-react';
 import { toRelativeUrl } from '@okta/okta-auth-js';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider, useQuery } from '@apollo/client';
 import { Volcano, QuakeDict } from '@metservice/aviationtypes';
-import { useSubscription } from '@apollo/client';
 
 import './ui/App.css';
 import authClient from './api/auth/Auth';
@@ -30,7 +29,8 @@ import useAuthState from './api/hooks/useAuthState';
 import useLocalStorage from './api/hooks/useLocalStorage';
 import useFilter from './api/hooks/useFilter';
 import useAPICall from './api/hooks/useAPICall';
-import { volcatSubscription } from './graphQL/queries';
+import VolcatWindow from './ui/Volcat';
+import { volcatSubscription, volcatQuery } from './graphQL/queries';
 
 enum NavOptions {
   ToggleFilters = 'Toggle Filters',
@@ -45,10 +45,10 @@ const App: React.FC = () => {
   const [styleTheme, toggleTheme] = React.useState<boolean>(themeBool);
   const muiTheme = appTheme(styleTheme);
 
-  const { loading, error, data } = useSubscription(volcatSubscription);
-  console.log({ loading, error, data });
-
   const user = useAuthState();
+
+  // const { loading, error, data } = useSubscription(volcatSubscription, {});
+  // console.log({ loading, error, data });
 
   const volcanoes = useAPICall<Volcano[]>({
     route: 'volcanoes',
@@ -73,7 +73,34 @@ const App: React.FC = () => {
   const { filters, dispatchFilter }  = useFilter();
 
   const [{ showNavFilter, showNavGrid, showThemeToggle }, dispatchNavOption] = React.useReducer(navOptionsReducer, { ...filterNavSettings });
+  const volcatDataQuery = useQuery(volcatQuery);
 
+  const [showVolcat, toggleVolcat] = React.useState(false);
+  const [selectedVolcat, setVolcat] = React.useState(null);
+  const [allVolcats, setAllVolcats] = React.useState<any>([]);
+  
+  React.useEffect(() => {
+    setAllVolcats(volcatDataQuery?.data?.fetchVolcats);
+  }, [volcatDataQuery]);
+
+  React.useEffect(() => {
+    client.subscribe({
+      query: volcatSubscription
+    }).subscribe({
+      next(data) {
+        toggleVolcat(true);
+        setVolcat(data.data.onNewVolcat);
+        setAllVolcats([...allVolcats, data.data.onNewVolcat]);
+      },
+      complete(){
+        console.log('complete');
+      },
+      error(err) {
+        console.log('error', err);
+      }
+    })
+  }, []);
+  
   const dispatchNavOptionLocal = (keyName: string, type: NavOptions, payload: boolean) => {
     var newObj = {
       showNavFilter,
@@ -91,13 +118,12 @@ const App: React.FC = () => {
   };
 
   React.useEffect(()=> {
-    async function fetchData(): Promise<void> {
+    ;(async() => {
       const volcanoIds = volcanoes?.map(v => v.gnsID);
       const gnsIDs = [...new Set(volcanoIds)].filter(Boolean) as string[];
       const quakes = await fetchQuakeHistory(gnsIDs);
       setQuakes(quakes);
-    }
-    fetchData();
+    })()
   }, [volcanoes]);
 
   const contextValue = {
@@ -122,11 +148,16 @@ const App: React.FC = () => {
       showThemeToggle,
       dispatchNavOption: dispatchNavOptionLocal,
     },
+    toggleVolcat,
+    selectedVolcat,
+    setVolcat,
+    allVolcats
   };
 
   return (
     <ThemeProvider theme={muiTheme}>
       <AppContext.Provider value={contextValue}>
+        <VolcatWindow open={showVolcat} handleClose={() => toggleVolcat(false)}/>
         <Paper style={{ height: '250vh' }} elevation={0}>
             <Switch>
               <Route exact path='/'>

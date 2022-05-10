@@ -34,6 +34,10 @@ interface Context {
         showThemeToggle: boolean;
         dispatchNavOption: (keyName: string, type: any, payload: boolean) => void;
     };
+    toggleVolcat: any;
+    selectedVolcat: any;
+    setVolcat: any;
+    allVolcats: any[];
 };
 
 export const AppContext = createContext<Context>({
@@ -68,4 +72,8 @@ export const AppContext = createContext<Context>({
         showThemeToggle: false,
         dispatchNavOption: () => null,
     },
+    toggleVolcat: () => null,
+    selectedVolcat: null,
+    setVolcat: () => null,
+    allVolcats: []
 });
