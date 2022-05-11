@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { Theme, Typography, IconButton } from '@material-ui/core';
+import { Theme, Typography, IconButton, Button } from '@material-ui/core';
 import LaunchIcon from '@mui/icons-material/Launch';
 
 import { AppContext } from '../../AppContext';
@@ -21,6 +21,21 @@ const useStyles =  makeStyles((theme: Theme) => ({
         alignItems: 'center',
         gap: theme.spacing(4),
         width: '100%'
+    },
+    openButton: {
+        textTransform: 'none',
+        backgroundColor: theme.palette.background.default,
+        border: `1px solid ${theme.palette.grey[600]}`,
+        padding: theme.spacing(1),
+        '&:hover': {
+            backgroundColor: theme.palette.background.paper,
+        }
+    },
+    iconDiv: {
+        display: 'flex'
+    },
+    timeText: {
+        color: theme.palette.text.secondary,
     }
 }));
 
@@ -48,27 +63,28 @@ const Volcat: React.FC<Props> = ({ volcat }) => {
     return (
         <div className={classes.root}>
             <div className={classes.wrapper}>
-                <Typography variant="body1">
+                <div className={classes.iconDiv}>
                     <IconButton disabled={true}>
                         <ReportGmailerrorredIcon
                             sx={{ display: 'inline', marginRight: '4px' }}
                             color="error"
                         />
                     </IconButton>
+                <div>
+                <Typography variant="subtitle1"> 
                     {volcat?.header}
                 </Typography>
-                <Typography variant="body1">
-                    VAAC Region: {volcat?.vaacRegion}
+                <Typography variant="subtitle2" className={classes.timeText}>
+                    {volcat?.startDate}
                 </Typography>
-                <Typography variant="body1">
-                    Start Time: {volcat?.startDate}
-                </Typography>
-                <div>
-                    <IconButton onClick={() => setVolcat(volcat)}>
-                        <LaunchIcon/>
-                    </IconButton>
-                </div>
             </div>
+        </div>              
+        <div>
+            <Button className={classes.openButton} onClick={() => setVolcat(volcat)}>
+                View Alert <LaunchIcon sx={{ marginLeft: '4px' }}/>
+            </Button>
+        </div>
+        </div>
         </div>
     );
 };

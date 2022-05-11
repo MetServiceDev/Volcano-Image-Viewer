@@ -19,3 +19,8 @@ The build and deployment phase has been fully automated with CI/CD and amplify u
 
 ## Amplify
 The amplify environment can be viewed through the amplify console [here](https://ap-southeast-2.console.aws.amazon.com/amplify/home?region=ap-southeast-2#/d3n00b2u57xs6u)
+
+
+## Volcat
+The Diagram below outlines the cloud infrastructure feeding new volcats and updating the volcano viewer in realtime
+![Volcat Cloud Infrastructure](public/volcat-diagram.png)

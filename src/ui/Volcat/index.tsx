@@ -20,6 +20,9 @@ const styles = (theme:Theme) => createStyles({
         position: 'absolute',
         top: '10%',
         width: '100%'
+    },
+    toolbarHeader: {
+        fontWeight: 'bold'
     }
 })
 
@@ -48,7 +51,7 @@ const VolcatWindow: React.FC<Props> = ({ classes, open, handleClose }) => {
             >
                 <AppBar>
                     <Toolbar className={classes.toolbar}>
-                        <Typography>
+                        <Typography className={classes.toolbarHeader}>
                             VOLCAT Event Dashboard
                         </Typography>
                         <IconButton
